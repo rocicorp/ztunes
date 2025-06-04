@@ -4,8 +4,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev",
+    "dev": "concurrently -n \"pg,ts\" -c \"#32648c,#7ce645\" \"npm run dev:db\" \"npm run dev:ui\"",
     "dev:db": "node ./scripts/run-db.js",
+    "dev:ui": "vinxi dev",
     "build": "vinxi build",
     "start": "vinxi start"
   },
