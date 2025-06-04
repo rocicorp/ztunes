@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",
+    "dev:db": "node ./scripts/run-db.js",
     "build": "vinxi build",
     "start": "vinxi start"
   },
@@ -19,6 +20,8 @@
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
     "@vitejs/plugin-react": "^4.5.1",
+    "concurrently": "^9.1.2",
+    "@dotenvx/dotenvx": "^1.44.1",
     "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^5.1.4"
   }

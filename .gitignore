@@ -1,3 +1,4 @@
+.env
 .vscode
 count.txt
 node_modules
