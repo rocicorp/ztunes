@@ -1,6 +1,6 @@
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 
-export const artistTable = pgTable("artist", {
+export const artist = pgTable("artist", {
   id: varchar().primaryKey(),
   name: varchar().notNull(),
   sortName: varchar("sort_name").notNull(),
@@ -9,9 +9,9 @@ export const artistTable = pgTable("artist", {
   endDate: varchar("end_date"),
 });
 
-export const albumTable = pgTable("album", {
+export const album = pgTable("album", {
   id: varchar().primaryKey(),
-  artistId: varchar("artist_id").notNull().references(() => artistTable.id),
+  artistId: varchar("artist_id").notNull().references(() => artist.id),
   title: varchar().notNull(),
   year: integer(),
 });

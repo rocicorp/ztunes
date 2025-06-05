@@ -4,23 +4,25 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -n \"pg,ts,sd\" -c \"#32648c,#7ce645,#ff5515\" \"npm run dev:db\" \"npm run dev:ui\" \"wait-on tcp:localhost:5432 && npx drizzle-kit push --force && npm run seed\"",
-    "dev:db": "docker start -a ztunes || docker run --name ztunes -e POSTGRES_PASSWORD=pwd -p 5432:5432 postgres",
+    "dev": "concurrently -n \"pg,ts,sd,z0\" -c \"#32648c,#7ce645,#ff5515,#ff11cc\" \"npm run dev:clean && npm run dev:db\" \"npm run dev:ui\" \"wait-on tcp:localhost:5432 && sleep 1 && npx drizzle-kit push --force && npm run seed\" \"wait-on tcp:localhost:5432 && sleep 1 && npm run dev:zero\"",
+    "dev:db": "docker start -a ztunes || docker run --name ztunes -e POSTGRES_PASSWORD=pwd -p 5432:5432 postgres -c wal_level=logical",
+    "dev:zero": "npx zero-cache-dev",
     "dev:ui": "vinxi dev",
-    "dev:clean": "docker rm -f ztunes",
+    "dev:clean": "rm /tmp/ztunes.db* && docker rm -f ztunes",
     "seed": "tsx scripts/seed.ts",
+    "generate-zero-schema": "drizzle-zero generate --format -o zero/schema.gen.ts",
     "build": "vinxi build",
     "start": "vinxi start"
   },
   "dependencies": {
+    "@rocicorp/zero": "^0.20.2025052100",
     "@tanstack/react-router": "^1.120.15",
     "@tanstack/react-start": "^1.120.15",
     "drizzle-orm": "^0.44.1",
     "pg": "^8.16.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "vinxi": "^0.5.6",
-    "wait-on": "^8.0.3"
+    "vinxi": "^0.5.6"
   },
   "devDependencies": {
     "@types/pg": "^8.15.4",
@@ -29,8 +31,11 @@
     "@vitejs/plugin-react": "^4.5.1",
     "concurrently": "^9.1.2",
     "drizzle-kit": "^0.31.1",
+    "drizzle-zero": "^0.10.5",
+    "prettier": "^3.5.3",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "wait-on": "^8.0.3"
   }
 }

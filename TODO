@@ -1,2 +1,8 @@
+app todos
 - figure out env vars, omg - they are hard-coded everywhere
+  - need to interpolate for zero_upstream_db
 - use real drizzle migrations
+
+zero todos
+- it is weird that zero itself reads .env. maybe it should do, but shouldn't be an error.
+- you should be able to start w/o a schema.ts
