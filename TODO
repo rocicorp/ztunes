@@ -6,3 +6,5 @@ app todos
 zero todos
 - it is weird that zero itself reads .env. maybe it should do, but shouldn't be an error.
 - you should be able to start w/o a schema.ts
+- stupid to have to useZero() just to form queries
+- debug panel would be super useful for just "why don't i have data??"

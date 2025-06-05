@@ -1,4 +1,4 @@
-import { ANYONE_CAN_DO_ANYTHING, PermissionsConfig, type Row, definePermissions } from "@rocicorp/zero";
+import { ANYONE_CAN, PermissionsConfig, type Row, definePermissions } from "@rocicorp/zero";
 import { schema, type Schema } from "./schema.gen";
 
 export { schema, type Schema };
@@ -13,7 +13,15 @@ type AuthData = {
 
 export const permissions = definePermissions<{}, Schema>(schema, () => {
   return {
-    album: ANYONE_CAN_DO_ANYTHING,
-    artist: ANYONE_CAN_DO_ANYTHING,
+    album: {
+      row: {
+        select: ANYONE_CAN,
+      }
+    },
+    artist: {
+      row: {
+        select: ANYONE_CAN,
+      }
+    }
   } satisfies PermissionsConfig<AuthData, Schema>;
 });
