@@ -1,11 +1,21 @@
 app todos
+
 - figure out env vars, omg - they are hard-coded everywhere
   - need to interpolate for zero_upstream_db
 - use real drizzle migrations
+- nicer styles
+- pull css into separate files
+- weird scroll margin thing on virtualizer
+- it would be nicer to sort by popularity/rating - can we get this data somehow? then we'd probably also preload less.
 
 zero todos
+
 - it is weird that zero itself reads .env. maybe it should do, but shouldn't be an error.
 - you should be able to start w/o a schema.ts
 - stupid to have to useZero() just to form queries
 - debug panel would be super useful for just "why don't i have data??"
 - schema should just be a plain json format, not so fancy
+- fix preload api
+- data stored seems to be growing on each reload!! is this supposed to happen??
+  - i sorta vaguely feel this is fallout of offline support
+  - but also i see us redownloading the entire albumset on every refresh - this definitely not supposed to happen

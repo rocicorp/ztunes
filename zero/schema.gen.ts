@@ -133,7 +133,28 @@ export const schema = {
       primaryKey: ["id"],
     },
   },
-  relationships: {},
+  relationships: {
+    album: {
+      artist: [
+        {
+          sourceField: ["artistId"],
+          destField: ["id"],
+          destSchema: "artist",
+          cardinality: "one",
+        },
+      ],
+    },
+    artist: {
+      albums: [
+        {
+          sourceField: ["id"],
+          destField: ["artistId"],
+          destSchema: "album",
+          cardinality: "many",
+        },
+      ],
+    },
+  },
 } as const;
 
 /**
