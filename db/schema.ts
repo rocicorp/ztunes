@@ -1,4 +1,4 @@
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { index, integer, pgTable, varchar } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 export const artist = pgTable("artist", {
@@ -8,7 +8,9 @@ export const artist = pgTable("artist", {
   type: varchar(),
   beginDate: varchar("begin_date"),
   endDate: varchar("end_date"),
-});
+}, table => [
+  index('artist_name_idx').on(table.name),
+]);
 
 export const artistRelations = relations(artist, ({ many }) => ({
   albums: many(album),
