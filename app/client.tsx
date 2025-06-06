@@ -16,6 +16,7 @@ const z = new Zero({
 });
 
 (window as any).__zero = z;
+(window as any).__inspector = await z.inspect();
 
 // TODO: OK this is not great 😅 and will be improved.
 //
