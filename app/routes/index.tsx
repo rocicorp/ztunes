@@ -1,6 +1,6 @@
 import {useQuery, useZero} from '@rocicorp/zero/react';
 import {type Schema} from '../../zero/schema';
-import {createFileRoute, useRouter} from '@tanstack/react-router';
+import {createFileRoute, useRouter, Link} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
 
@@ -26,7 +26,7 @@ function Home() {
 
   let q = z.query.artist.related('albums').orderBy('name', 'asc').limit(100);
   if (search) {
-    q = q.where('name', 'ILIKE', `%${search}%`);
+    q = q.where('name', 'ILIKE', `${search}%`);
   }
 
   const [artists] = useQuery(q, {ttl: '1m'});
@@ -50,7 +50,11 @@ function Home() {
       <input type="text" value={search} onChange={onSearchChange} />
       <ul>
         {artists.map(artist => (
-          <li key={artist.id}>{artist.name}</li>
+          <li key={artist.id}>
+            <Link to="/artist" search={{id: artist.id}}>
+              {artist.name}
+            </Link>
+          </li>
         ))}
       </ul>
     </>
