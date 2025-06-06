@@ -8,3 +8,4 @@ zero todos
 - you should be able to start w/o a schema.ts
 - stupid to have to useZero() just to form queries
 - debug panel would be super useful for just "why don't i have data??"
+- schema should just be a plain json format, not so fancy
