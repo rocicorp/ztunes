@@ -1,4 +1,4 @@
-import {authClient} from '../lib/auth-client';
+import {authClient} from '../../auth/client';
 
 export function LoginButton() {
   const session = authClient.useSession();
