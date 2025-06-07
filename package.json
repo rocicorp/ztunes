@@ -19,6 +19,7 @@
     "@tanstack/react-router": "^1.120.15",
     "@tanstack/react-start": "^1.120.15",
     "@tanstack/react-virtual": "^3.13.9",
+    "better-auth": "^1.2.8",
     "drizzle-orm": "^0.44.1",
     "pg": "^8.16.0",
     "react": "^19.1.0",

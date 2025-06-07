@@ -14,6 +14,7 @@ app bugs
 - it would be nicer to sort by popularity/rating - can we get this data somehow? then we'd probably also preload less.
 - the search ui is surprisingly slow
 - is there a watch mode for drizzle-zero
+- can we move better-auth to a better-directory-name? why does it have to be in app/lib!?
 
 zero bugs
 
