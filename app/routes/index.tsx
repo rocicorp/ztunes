@@ -28,7 +28,7 @@ function Home() {
 
   let q = z.query.artist.related('albums').orderBy('name', 'asc').limit(100);
   if (search) {
-    q = q.where('name', 'ILIKE', `${search}%`);
+    q = q.where('name', 'ILIKE', `%${search}%`);
   }
 
   const [artists] = useQuery(q, {ttl: '1m'});

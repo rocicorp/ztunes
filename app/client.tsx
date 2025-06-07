@@ -3,7 +3,7 @@
 import {hydrateRoot} from 'react-dom/client';
 import {StartClient} from '@tanstack/react-start';
 import {createRouter} from './router';
-import {Zero} from '@rocicorp/zero';
+import {dropAllDatabases, Zero} from '@rocicorp/zero';
 import {schema} from '../zero/schema';
 import {ZeroProvider} from '@rocicorp/zero/react';
 
@@ -58,7 +58,7 @@ window.setTimeout(() => {
   // to reconsider this. Perhaps in that case we'd preload a prefix of artists
   // and albums sorted by popularity, so that when you search, popular results
   // will show up first.
-  z.query.artist.preload({
+  z.query.artist.limit(10_000).preload({
     ttl: '1m',
   });
 }, 1000);

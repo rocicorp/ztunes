@@ -15,6 +15,8 @@ app bugs
 - the search ui is surprisingly slow
 - is there a watch mode for drizzle-zero
 - can we move better-auth to a better-directory-name? why does it have to be in app/lib!?
+- should we be auto-pushing the schema in dev?
+  - and if we are not, does that mean we should not be auto-generating the zero-schema?
 
 zero bugs
 
@@ -30,3 +32,5 @@ zero bugs
 - fix @rocicorp/zero-sqlite3 for up arrow to work and document better
 - several bugs with query caching (reported on zbugs)
 - conditional query (for when session is null and using userID in query)
+- remove 20k limit, or at least put a warning or something. behavior is super weird when you cross it, zero immediately nukes the preload and starts over.
+- warn about missing FKs it makes zero crazy slow.

@@ -20,19 +20,26 @@ export const album = pgTable("album", {
   artistId: varchar("artist_id").notNull().references(() => artist.id),
   title: varchar().notNull(),
   year: integer(),
-});
+}, table => [
+  index('album_artist_id_idx').on(table.artistId),
+]);
 
 export const cart = pgTable("cart", {
   id: varchar().primaryKey(),
   userId: varchar("user_id").notNull().references(() => authSchema.user.id),
-});
+}, table => [
+  index('cart_user_id_idx').on(table.userId),
+]);
 
 export const cartItem = pgTable("cart_item", {
   id: varchar().primaryKey(),
   cartId: varchar("cart_id").notNull().references(() => cart.id),
   albumId: varchar("album_id").notNull().references(() => album.id),
   addedAt: timestamp("added_at").notNull().defaultNow(),
-});
+}, table => [
+  index('cart_item_cart_id_idx').on(table.cartId),
+  index('cart_item_album_id_idx').on(table.albumId),
+]);
 
 export const userRelations = relations(authSchema.user, ({ one }) => ({
   cart: one(cart, {
