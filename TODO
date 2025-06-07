@@ -29,3 +29,4 @@ zero bugs
 - numeric start so can do proper paging
 - fix @rocicorp/zero-sqlite3 for up arrow to work and document better
 - several bugs with query caching (reported on zbugs)
+- conditional query (for when session is null and using userID in query)

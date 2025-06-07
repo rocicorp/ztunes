@@ -6,13 +6,16 @@ export function Cart() {
   const session = authClient.useSession();
   const z = useZero<Schema>();
 
+  const [cart] = useQuery(
+    z.query.cart
+      .where('userId', session.data?.user.id ?? '')
+      .related('items')
+      .one(),
+  );
+
   if (!session.data) {
     return null;
   }
-
-  const [cart] = useQuery(
-    z.query.cart.where('userId', session.data.user.id).related('items').one(),
-  );
 
   return <div>Cart ({cart?.items.length ?? 0})</div>;
 }
