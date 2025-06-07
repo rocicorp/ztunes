@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -n \"pg,ts,sd,z0\" -c \"#32648c,#7ce645,#ff5515,#ff11cc\" \"npm run dev:clean && npm run dev:db\" \"npm run dev:ui\" \"wait-on tcp:localhost:5432 && sleep 1 && npx drizzle-kit push --force && npm run seed\" \"wait-on tcp:localhost:5432 && sleep 1 && npm run dev:zero\"",
+    "dev": "concurrently -n \"pg,ts,sd,z0,gz\" -c \"#32648c,#7ce645,#ff5515,#ff11cc,#11ffcc\" \"npm run dev:clean && npm run dev:db\" \"npm run dev:ui\" \"wait-on tcp:localhost:5432 && sleep 1 && npx drizzle-kit push --force && npm run seed\" \"wait-on tcp:localhost:5432 && sleep 1 && npm run dev:zero\" \"chokidar 'db/schema.ts' 'auth/schema.ts' -c 'npm run generate-zero-schema'\"",
     "dev:db": "docker start -a ztunes || docker run --rm --name ztunes -e POSTGRES_PASSWORD=pwd -p 5432:5432 postgres -c wal_level=logical",
     "dev:zero": "npx zero-cache-dev",
     "dev:ui": "vinxi dev",
@@ -32,6 +32,7 @@
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
     "@vitejs/plugin-react": "^4.5.1",
+    "chokidar-cli": "^3.0.0",
     "concurrently": "^9.1.2",
     "drizzle-kit": "^0.31.1",
     "drizzle-zero": "^0.10.5",

@@ -1,4 +1,4 @@
-import { ANYONE_CAN, PermissionsConfig, type Row, definePermissions } from "@rocicorp/zero";
+import { ANYONE_CAN, ExpressionBuilder, PermissionsConfig, type Row, definePermissions } from "@rocicorp/zero";
 import { schema, type Schema } from "./schema.gen";
 
 export { schema, type Schema };
@@ -11,6 +11,11 @@ type AuthData = {
   sub: string;
 };
 
+const allowIfCartOwner = (
+  authData: AuthData,
+  { cmp }: ExpressionBuilder<Schema, 'cart'>,
+) => cmp('userId', authData.sub);
+
 export const permissions = definePermissions<{}, Schema>(schema, () => {
   return {
     album: {
@@ -21,6 +26,11 @@ export const permissions = definePermissions<{}, Schema>(schema, () => {
     artist: {
       row: {
         select: ANYONE_CAN,
+      }
+    },
+    cart: {
+      row: {
+        select: [allowIfCartOwner],
       }
     }
   } satisfies PermissionsConfig<AuthData, Schema>;
