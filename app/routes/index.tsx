@@ -4,6 +4,7 @@ import {createFileRoute, useRouter, Link} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
 import {LoginButton} from '../components/login-button';
+import {Cart} from '../components/cart';
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -62,6 +63,7 @@ function Home() {
           onChange={onSearchChange}
           style={{flex: 1}}
         />
+        <Cart />
         <LoginButton />
       </div>
       <ul>
