@@ -16,6 +16,11 @@ const allowIfCartOwner = (
   { cmp }: ExpressionBuilder<Schema, 'cart'>,
 ) => cmp('userId', authData.sub);
 
+const allowIfCartItemOwner = (
+  authData: AuthData,
+  { cmp, exists }: ExpressionBuilder<Schema, 'cartItem'>,
+) => exists('cart', q => q.where(eb => allowIfCartOwner(authData, eb)));
+
 export const permissions = definePermissions<{}, Schema>(schema, () => {
   return {
     album: {
@@ -31,6 +36,11 @@ export const permissions = definePermissions<{}, Schema>(schema, () => {
     cart: {
       row: {
         select: [allowIfCartOwner],
+      }
+    },
+    cartItem: {
+      row: {
+        select: [allowIfCartItemOwner],
       }
     }
   } satisfies PermissionsConfig<AuthData, Schema>;
