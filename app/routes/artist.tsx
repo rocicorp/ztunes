@@ -43,7 +43,9 @@ function RouteComponent() {
       <h1>{artist.name}</h1>
       <ul>
         {artist.albums.map(album => (
-          <li key={album.id}>{album.title}</li>
+          <li key={album.id}>
+            {album.title} ({album.year}){' '}
+          </li>
         ))}
       </ul>
     </SiteLayout>

@@ -3,8 +3,6 @@ import {type Schema} from '../../zero/schema';
 import {createFileRoute, useRouter, Link} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
-import {LoginButton} from '../components/login-button';
-import {Cart} from '../components/cart';
 import {SiteLayout} from '../components/site-layout';
 
 export const Route = createFileRoute('/')({
@@ -53,17 +51,18 @@ function Home() {
 
   return (
     <SiteLayout>
-      <div>
+      <div style={{display: 'flex', flexDirection: 'column'}}>
+        <h3 style={{margin: '1em 0 0.2em 0'}}>Search 85,000 Artists...</h3>
         <input
           type="text"
           value={search}
           onChange={onSearchChange}
-          style={{flex: 1}}
+          style={{fontSize: '125%'}}
         />
       </div>
-      <ul>
+      <ul style={{listStyle: 'none', padding: 0}}>
         {artists.map(artist => (
-          <li key={artist.id}>
+          <li key={artist.id} style={{marginBottom: '0.2em'}}>
             <Link
               to="/artist"
               search={{id: artist.id}}

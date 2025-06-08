@@ -18,9 +18,12 @@ app bugs
 - can we move better-auth to a better-directory-name? why does it have to be in app/lib!?
 - should we be auto-pushing the schema in dev?
   - and if we are not, does that mean we should not be auto-generating the zero-schema?
+- extract inline styles out in whatever way is standard for tanstack start - module css? something else?
 
 zero bugs
 
+- what's required to get zero userID working right in react feels like way too much. what can we abstract?
+- setting up better-auth jwt is alot. better-auth guy says we should use tanstack query? does it help?
 - it is weird that zero itself reads .env. maybe it should do, but shouldn't be an error.
 - you should be able to start w/o a schema.ts
 - stupid to have to useZero() just to form queries
