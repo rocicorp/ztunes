@@ -15,6 +15,7 @@ app bugs
   - and if we are not, does that mean we should not be auto-generating the zero-schema?
 - why doesn't formatter run on zero dir
 - change all the relative paths to use ~ shortcut - tanstack start has docs on this
+- the name of this app should change, it's no longer and itunes app. should it be zero-records? ts follow a convention like tanstack-sample-trelleaux-convex, so an alternate could be like zero-sample-tanstack-drizzle-betterauth ? kinda long but nice in that it is very self-explanatory.
 
 zero bugs
 
