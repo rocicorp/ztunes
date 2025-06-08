@@ -5,36 +5,29 @@ app todos
 
 app bugs
 
-- factor mousedown into reusable <Link> element
+- factor mousedown into reusable <FastLink> element
 - figure out env vars, omg - they are hard-coded everywhere
   - need to interpolate for zero_upstream_db
 - use real drizzle migrations
 - nicer styles
-- pull css into separate files
-- weird scroll margin thing on virtualizer
-- it would be nicer to sort by popularity/rating - can we get this data somehow? then we'd probably also preload less.
-- the search ui is surprisingly slow
-- is there a watch mode for drizzle-zero
-- can we move better-auth to a better-directory-name? why does it have to be in app/lib!?
+- pull inline styles out into whatever is standard for tanstack start - module css? something else?
 - should we be auto-pushing the schema in dev?
   - and if we are not, does that mean we should not be auto-generating the zero-schema?
-- extract inline styles out in whatever way is standard for tanstack start - module css? something else?
+- why doesn't formatter run on zero dir
+- change all the relative paths to use ~ shortcut - tanstack start has docs on this
 
 zero bugs
 
-- what's required to get zero userID working right in react feels like way too much. what can we abstract?
+- the pattern of making the zero instance reactive feels right but had to hack around current code in zero/react. Can we make this easier? Need to consider having multiple zero instances live.
 - setting up better-auth jwt is alot. better-auth guy says we should use tanstack query? does it help?
-- it is weird that zero itself reads .env. maybe it should do, but shouldn't be an error.
+- it is weird that zero itself reads .env. maybe it should do, but shouldn't be an error if env not present.
 - you should be able to start w/o a schema.ts
 - stupid to have to useZero() just to form queries
+  - this would make sharing query fragments more elegant too (see artist.tsx)
 - debug panel would be super useful for just "why don't i have data??"
-- fix preload api
-- data stored seems to be growing on each reload!! is this supposed to happen??
-  - i sorta vaguely feel this is fallout of offline support
-  - but also i see us redownloading the entire albumset on every refresh - this definitely not supposed to happen
-- numeric start so can do proper paging
+- fix preload api to not block ui queries
+- exceeding 20k limit causes all data to get dropped - pretty surprising. we should remove the limit in ttl v2.
 - fix @rocicorp/zero-sqlite3 for up arrow to work and document better
-- several bugs with query caching (reported on zbugs)
 - conditional query (for when session is null and using userID in query)
-- remove 20k limit, or at least put a warning or something. behavior is super weird when you cross it, zero immediately nukes the preload and starts over.
 - warn about missing FKs it makes zero crazy slow.
+- it would be nice if tx.insert() returned the value.
