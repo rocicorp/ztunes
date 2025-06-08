@@ -1,6 +1,7 @@
 import {useQuery, useZero} from '@rocicorp/zero/react';
 import {createFileRoute} from '@tanstack/react-router';
 import {Schema} from '../../zero/schema';
+import {SiteLayout} from '../components/site-layout';
 
 export const Route = createFileRoute('/artist')({
   component: RouteComponent,
@@ -38,13 +39,13 @@ function RouteComponent() {
   }
 
   return (
-    <>
+    <SiteLayout>
       <h1>{artist.name}</h1>
       <ul>
         {artist.albums.map(album => (
           <li key={album.id}>{album.title}</li>
         ))}
       </ul>
-    </>
+    </SiteLayout>
   );
 }

@@ -5,6 +5,7 @@ import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
 import {LoginButton} from '../components/login-button';
 import {Cart} from '../components/cart';
+import {SiteLayout} from '../components/site-layout';
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -51,23 +52,14 @@ function Home() {
   };
 
   return (
-    <>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          width: '100%',
-          gap: 10,
-        }}
-      >
+    <SiteLayout>
+      <div>
         <input
           type="text"
           value={search}
           onChange={onSearchChange}
           style={{flex: 1}}
         />
-        <Cart />
-        <LoginButton />
       </div>
       <ul>
         {artists.map(artist => (
@@ -82,6 +74,6 @@ function Home() {
           </li>
         ))}
       </ul>
-    </>
+    </SiteLayout>
   );
 }
