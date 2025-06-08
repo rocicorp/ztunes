@@ -5,6 +5,7 @@ app todos
 
 app bugs
 
+- factor mousedown into reusable <Link> element
 - figure out env vars, omg - they are hard-coded everywhere
   - need to interpolate for zero_upstream_db
 - use real drizzle migrations

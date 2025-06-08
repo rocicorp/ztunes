@@ -72,7 +72,11 @@ function Home() {
       <ul>
         {artists.map(artist => (
           <li key={artist.id}>
-            <Link to="/artist" search={{id: artist.id}}>
+            <Link
+              to="/artist"
+              search={{id: artist.id}}
+              onMouseDown={e => e.currentTarget.click()}
+            >
               {artist.name}
             </Link>
           </li>
