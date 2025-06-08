@@ -262,6 +262,15 @@ export const schema = {
           >,
           serverName: "end_date",
         },
+        popularity: {
+          type: "number",
+          optional: true,
+          customType: null as unknown as ZeroCustomType<
+            ZeroSchema,
+            "artist",
+            "popularity"
+          >,
+        },
       },
       primaryKey: ["id"],
     },

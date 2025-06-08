@@ -11,8 +11,10 @@ export const artist = pgTable("artist", {
   type: varchar(),
   beginDate: varchar("begin_date"),
   endDate: varchar("end_date"),
+  popularity: integer(),
 }, table => [
   index('artist_name_idx').on(table.name),
+  index('artist_popularity_idx').on(table.popularity),
 ]);
 
 export const album = pgTable("album", {

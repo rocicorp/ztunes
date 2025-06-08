@@ -26,7 +26,10 @@ function Home() {
     setSearch(searchParam ?? '');
   }, [searchParam]);
 
-  let q = z.query.artist.related('albums').orderBy('name', 'asc').limit(100);
+  let q = z.query.artist
+    .related('albums')
+    .orderBy('popularity', 'desc')
+    .limit(100);
   if (search) {
     q = q.where('name', 'ILIKE', `%${search}%`);
   }

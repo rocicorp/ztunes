@@ -58,7 +58,7 @@ window.setTimeout(() => {
   // to reconsider this. Perhaps in that case we'd preload a prefix of artists
   // and albums sorted by popularity, so that when you search, popular results
   // will show up first.
-  z.query.artist.limit(10_000).preload({
+  z.query.artist.orderBy('popularity', 'desc').limit(1_000).preload({
     ttl: '1m',
   });
 }, 1000);
