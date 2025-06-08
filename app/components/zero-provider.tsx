@@ -6,33 +6,13 @@ import {useEffect, useState} from 'react';
 
 export function ZeroProvider({children}: {children: React.ReactNode}) {
   const session = authClient.useSession();
-
-  const [zero, setZero] = useState<Zero<Schema> | null>(null);
-
-  useEffect(() => {
-    // Don't want to create an anon zero client, then immediately create a
-    // auth'd one instead, so wait for session to resolve.
-    if (session.isPending) {
-      return;
-    }
-
-    const z = new Zero({
-      userID: session.data?.user.id ?? 'anon',
-      server: import.meta.env.VITE_PUBLIC_SERVER,
-      schema,
-    });
-
-    setZero(z);
-    preload(z);
-
-    const deinstrument = instrument(z);
-
-    return () => {
-      zero?.close();
-      setZero(null);
-      deinstrument();
-    };
-  }, [session.data?.user.id]);
+  const jwt = useJWT();
+  const zero = useZero(
+    {id: session.data?.user.id, pending: session.isPending},
+    jwt,
+  );
+  useExposeZero(zero);
+  usePreload(zero);
 
   if (!zero) {
     return null;
@@ -41,16 +21,100 @@ export function ZeroProvider({children}: {children: React.ReactNode}) {
   return <ZeroProviderImpl zero={zero}>{children}</ZeroProviderImpl>;
 }
 
-function instrument(z: Zero<Schema>) {
-  (window as any).__zero = z;
-  z.inspect().then(inspector => {
-    (window as any).__inspector = inspector;
+function useJWT() {
+  const [jwt, setJwt] = useState<string | undefined>(undefined);
+  const [pending, setPending] = useState(true);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const fetchToken = async () => {
+      const res = await fetch('/api/auth/token', {
+        credentials: 'include',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (isCancelled) {
+          return;
+        }
+        if (!data.token) {
+          throw new Error('No token');
+        }
+        setJwt(data.token);
+      }
+      setPending(false);
+    };
+
+    fetchToken();
+
+    return () => {
+      isCancelled = true;
+    };
   });
 
-  return () => {
-    (window as any).__zero = undefined;
-    (window as any).__inspector = undefined;
-  };
+  return {value: jwt, pending};
+}
+
+function useZero(
+  user: {id: string | undefined; pending: boolean},
+  jwt: {value: string | undefined; pending: boolean},
+) {
+  const [zero, setZero] = useState<Zero<Schema> | undefined>(undefined);
+
+  useEffect(() => {
+    // Don't want to create an anon zero client, then immediately create a
+    // auth'd one instead, so wait for session to resolve.
+    if (user.pending || jwt.pending) {
+      return;
+    }
+
+    const z = new Zero({
+      userID: user.id ?? 'anon',
+      auth: jwt.value,
+      server: import.meta.env.VITE_PUBLIC_SERVER,
+      schema,
+    });
+
+    setZero(z);
+
+    return () => {
+      zero?.close();
+      setZero(undefined);
+    };
+  }, [user.id, user.pending, jwt.value, jwt.pending]);
+
+  return zero;
+}
+
+function useExposeZero(zero: Zero<Schema> | undefined) {
+  useEffect(() => {
+    let canceled = false;
+
+    if (!zero) {
+      return;
+    }
+
+    (window as any).__zero = zero;
+    zero.inspect().then(inspector => {
+      if (!canceled) {
+        (window as any).__inspector = inspector;
+      }
+    });
+
+    return () => {
+      (window as any).__zero = undefined;
+      (window as any).__inspector = undefined;
+      canceled = true;
+    };
+  }, [zero]);
+}
+
+function usePreload(zero: Zero<Schema> | undefined) {
+  useEffect(() => {
+    if (zero) {
+      preload(zero);
+    }
+  }, [zero]);
 }
 
 function preload(z: Zero<Schema>) {
@@ -68,32 +132,37 @@ function preload(z: Zero<Schema>) {
   //    but we keep syncing old queries with long ttls anyway even though the
   //    app doesn't need them.
   //
-  //    Anyway, the way ttl works is it only comes into play when a query is *not*
-  //    active (when a window is running that does *not* include the query). So
-  //    for the common preload case the ttl doesn't need to be long, because the
-  //    preload query is always running. Basically it just needs to be long enough
-  //    so that the query doesn't accidentally get evicted during page navigation.
-  //    A minute is plenty.
+  //    Anyway, the way ttl works is it only comes into play when a query is
+  //    *not* active (when a window is running that does *not* include the
+  //    query). So for the common preload case the ttl doesn't need to be long,
+  //    because the preload query is always running. Basically it just needs to
+  //    be long enough so that the query doesn't accidentally get evicted during
+  //    page navigation. A minute is plenty.
   //
   // We are going to rework the ttl API to take both of these into account, but
   // for now we do not recomend ttls longer than 1h, and for preload we only
   // recommend 1m.
+  //
+  // PS: You are probably wondering about calling preload() multiple times here
+  // due to re-renders. It's fine. Zero dedupes queries.
   setTimeout(() => {
     // Why this particular preload?
     //
     // The goal of Zero generally is for every user interaction to be instant.
     // This relies fundamentally on preloading data. But we cannot preload
     // everything, so preloading is at core about guessing data user will most
-    // likely need. This is different in every app, and Zero gives you the full
-    // power of queries to express it.
+    // likely need. This is different in every app. Zero gives you the full
+    // power of queries to express and orchestrate whatever preload sequence you
+    // want.
     //
     // For this app, the primary interface is a search box. Users are more
     // likely to search for popular artists than unpopular so we preload the
     // first 1k artists by popularity.
     //
     // Note that we don't also preload their albums. We could, but there's no
-    // reason to as the list UI will do that, and we know the user can't nav
-    // to an album they don't see in the UI.
+    // reason to as the list UI will do that. We know the user can't navigate to
+    // an album they don't see in the UI, so there's no point in preloading
+    // more.
     //
     // There is also an interesting interaction with the UI. Since we will get
     // instant local results and full server results async, we ideally want to

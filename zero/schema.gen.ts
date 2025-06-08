@@ -345,6 +345,51 @@ export const schema = {
       primaryKey: ["id"],
       serverName: "cart_item",
     },
+    jwks: {
+      name: "jwks",
+      columns: {
+        id: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            ZeroSchema,
+            "jwks",
+            "id"
+          >,
+        },
+        publicKey: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            ZeroSchema,
+            "jwks",
+            "publicKey"
+          >,
+          serverName: "public_key",
+        },
+        privateKey: {
+          type: "string",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            ZeroSchema,
+            "jwks",
+            "privateKey"
+          >,
+          serverName: "private_key",
+        },
+        createdAt: {
+          type: "number",
+          optional: false,
+          customType: null as unknown as ZeroCustomType<
+            ZeroSchema,
+            "jwks",
+            "createdAt"
+          >,
+          serverName: "created_at",
+        },
+      },
+      primaryKey: ["id"],
+    },
     session: {
       name: "session",
       columns: {
