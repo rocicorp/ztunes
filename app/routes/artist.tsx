@@ -1,7 +1,10 @@
 import {useQuery, useZero} from '@rocicorp/zero/react';
+import {Query} from '@rocicorp/zero';
 import {createFileRoute} from '@tanstack/react-router';
 import {Schema} from '../../zero/schema';
 import {SiteLayout} from '../components/site-layout';
+import {Mutators} from '../../zero/mutators';
+import {authClient} from '../../auth/client';
 
 export const Route = createFileRoute('/artist')({
   component: RouteComponent,
@@ -13,8 +16,15 @@ export const Route = createFileRoute('/artist')({
   },
 });
 
+export function artistQuery(query: Query<Schema, 'artist'>) {
+  return query.related('albums', album =>
+    album.related('cartItems', ci => ci.one()).orderBy('year', 'desc'),
+  );
+}
+
 function RouteComponent() {
-  const z = useZero<Schema>();
+  const session = authClient.useSession();
+  const z = useZero<Schema, Mutators>();
   const search = Route.useSearch();
   const id = search.id;
 
@@ -23,10 +33,7 @@ function RouteComponent() {
   }
 
   const [artist, {type}] = useQuery(
-    z.query.artist
-      .where('id', id)
-      .related('albums', album => album.orderBy('year', 'desc'))
-      .one(),
+    artistQuery(z.query.artist.where('id', id)).one(),
   );
 
   if (!artist && type === 'complete') {
@@ -38,13 +45,33 @@ function RouteComponent() {
     return null;
   }
 
+  const cartButton = (album: (typeof artist.albums)[number]) => {
+    if (session.isPending) {
+      return null;
+    }
+
+    if (!session.data?.user.id) {
+      return <button disabled>Login to shop</button>;
+    }
+
+    const message = album.cartItems ? 'Remove from cart' : 'Add to cart';
+    const action = album.cartItems
+      ? () => z.mutate.cart.remove({albumID: album.id})
+      : () => z.mutate.cart.add({albumID: album.id, addedAt: Date.now()});
+    return (
+      <button onClick={action} onMouseDown={action}>
+        {message}
+      </button>
+    );
+  };
+
   return (
     <SiteLayout>
       <h1>{artist.name}</h1>
       <ul>
         {artist.albums.map(album => (
           <li key={album.id}>
-            {album.title} ({album.year}){' '}
+            {album.title} ({album.year}) {cartButton(album)}
           </li>
         ))}
       </ul>

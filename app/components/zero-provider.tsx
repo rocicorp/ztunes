@@ -3,6 +3,7 @@ import {schema, Schema} from '../../zero/schema';
 import {ZeroProvider as ZeroProviderImpl} from '@rocicorp/zero/react';
 import {authClient} from '../../auth/client';
 import {useEffect, useState} from 'react';
+import {createMutators, Mutators} from '../../zero/mutators';
 
 export function ZeroProvider({children}: {children: React.ReactNode}) {
   const session = authClient.useSession();
@@ -59,7 +60,9 @@ function useZero(
   user: {id: string | undefined; pending: boolean},
   jwt: {value: string | undefined; pending: boolean},
 ) {
-  const [zero, setZero] = useState<Zero<Schema> | undefined>(undefined);
+  const [zero, setZero] = useState<Zero<Schema, Mutators> | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     // Don't want to create an anon zero client, then immediately create a
@@ -73,6 +76,7 @@ function useZero(
       auth: jwt.value,
       server: import.meta.env.VITE_PUBLIC_SERVER,
       schema,
+      mutators: createMutators(user.id ? {sub: user.id} : undefined),
     });
 
     setZero(z);

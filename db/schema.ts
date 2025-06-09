@@ -1,4 +1,4 @@
-import { index, integer, pgTable, varchar, timestamp } from "drizzle-orm/pg-core";
+import { index, integer, pgTable, varchar, timestamp, primaryKey } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import * as authSchema from "../auth/schema";
 
@@ -26,52 +26,39 @@ export const album = pgTable("album", {
   index('album_artist_id_idx').on(table.artistId),
 ]);
 
-export const cart = pgTable("cart", {
-  id: varchar().primaryKey(),
-  userId: varchar("user_id").notNull().references(() => authSchema.user.id),
-}, table => [
-  index('cart_user_id_idx').on(table.userId),
-]);
-
 export const cartItem = pgTable("cart_item", {
-  id: varchar().primaryKey(),
-  cartId: varchar("cart_id").notNull().references(() => cart.id),
-  albumId: varchar("album_id").notNull().references(() => album.id),
-  addedAt: timestamp("added_at").notNull().defaultNow(),
+  userId: varchar("user_id").references(() => authSchema.user.id),
+  albumId: varchar("album_id").references(() => album.id),
+  addedAt: timestamp("added_at").notNull(),
 }, table => [
-  index('cart_item_cart_id_idx').on(table.cartId),
+  primaryKey({ columns: [table.userId, table.albumId] }),
+  index('cart_item_user_id_idx').on(table.userId),
   index('cart_item_album_id_idx').on(table.albumId),
 ]);
 
-export const userRelations = relations(authSchema.user, ({ one }) => ({
-  cart: one(cart, {
-    fields: [authSchema.user.id],
-    references: [cart.userId],
-  }),
+export const userRelations = relations(authSchema.user, ({ many }) => ({
+  cartItems: many(cartItem),
 }));
 
 export const artistRelations = relations(artist, ({ many }) => ({
   albums: many(album),
 }));
 
-export const albumRelations = relations(album, ({ one }) => ({
+export const albumRelations = relations(album, ({ one, many }) => ({
   artist: one(artist, {
     fields: [album.artistId],
     references: [artist.id],
   }),
-}));
-
-export const cartRelations = relations(cart, ({ many }) => ({
-  items: many(cartItem),
+  cartItems: many(cartItem),
 }));
 
 export const cartItemRelations = relations(cartItem, ({ one }) => ({
-  cart: one(cart, {
-    fields: [cartItem.cartId],
-    references: [cart.id],
-  }),
   album: one(album, {
     fields: [cartItem.albumId],
     references: [album.id],
+  }),
+  user: one(authSchema.user, {
+    fields: [cartItem.userId],
+    references: [authSchema.user.id],
   }),
 }));

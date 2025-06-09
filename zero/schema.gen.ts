@@ -274,56 +274,22 @@ export const schema = {
       },
       primaryKey: ["id"],
     },
-    cart: {
-      name: "cart",
+    cartItem: {
+      name: "cartItem",
       columns: {
-        id: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            ZeroSchema,
-            "cart",
-            "id"
-          >,
-        },
         userId: {
           type: "string",
-          optional: false,
+          optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "cart",
+            "cartItem",
             "userId"
           >,
           serverName: "user_id",
         },
-      },
-      primaryKey: ["id"],
-    },
-    cartItem: {
-      name: "cartItem",
-      columns: {
-        id: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            ZeroSchema,
-            "cartItem",
-            "id"
-          >,
-        },
-        cartId: {
-          type: "string",
-          optional: false,
-          customType: null as unknown as ZeroCustomType<
-            ZeroSchema,
-            "cartItem",
-            "cartId"
-          >,
-          serverName: "cart_id",
-        },
         albumId: {
           type: "string",
-          optional: false,
+          optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
             "cartItem",
@@ -333,7 +299,7 @@ export const schema = {
         },
         addedAt: {
           type: "number",
-          optional: true,
+          optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
             "cartItem",
@@ -342,7 +308,7 @@ export const schema = {
           serverName: "added_at",
         },
       },
-      primaryKey: ["id"],
+      primaryKey: ["userId", "albumId"],
       serverName: "cart_item",
     },
     jwks: {
@@ -620,6 +586,14 @@ export const schema = {
           cardinality: "one",
         },
       ],
+      cartItems: [
+        {
+          sourceField: ["id"],
+          destField: ["albumId"],
+          destSchema: "cartItem",
+          cardinality: "many",
+        },
+      ],
     },
     artist: {
       albums: [
@@ -632,14 +606,6 @@ export const schema = {
       ],
     },
     cartItem: {
-      cart: [
-        {
-          sourceField: ["cartId"],
-          destField: ["id"],
-          destSchema: "cart",
-          cardinality: "one",
-        },
-      ],
       album: [
         {
           sourceField: ["albumId"],
@@ -648,24 +614,22 @@ export const schema = {
           cardinality: "one",
         },
       ],
-    },
-    cart: {
-      items: [
+      user: [
         {
-          sourceField: ["id"],
-          destField: ["cartId"],
-          destSchema: "cartItem",
-          cardinality: "many",
+          sourceField: ["userId"],
+          destField: ["id"],
+          destSchema: "user",
+          cardinality: "one",
         },
       ],
     },
     user: {
-      cart: [
+      cartItems: [
         {
           sourceField: ["id"],
           destField: ["userId"],
-          destSchema: "cart",
-          cardinality: "one",
+          destSchema: "cartItem",
+          cardinality: "many",
         },
       ],
     },

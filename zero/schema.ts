@@ -6,20 +6,15 @@ export { schema, type Schema };
 export type Artist = Row<typeof schema.tables.artist>;
 export type Album = Row<typeof schema.tables.album>;
 
-type AuthData = {
+export type AuthData = {
   // The logged-in user.
   sub: string;
 };
 
 const allowIfCartOwner = (
   authData: AuthData,
-  { cmp }: ExpressionBuilder<Schema, 'cart'>,
+  { cmp }: ExpressionBuilder<Schema, 'cartItem'>,
 ) => cmp('userId', authData.sub);
-
-const allowIfCartItemOwner = (
-  authData: AuthData,
-  { cmp, exists }: ExpressionBuilder<Schema, 'cartItem'>,
-) => exists('cart', q => q.where(eb => allowIfCartOwner(authData, eb)));
 
 export const permissions = definePermissions<{}, Schema>(schema, () => {
   return {
@@ -33,14 +28,9 @@ export const permissions = definePermissions<{}, Schema>(schema, () => {
         select: ANYONE_CAN,
       }
     },
-    cart: {
-      row: {
-        select: [allowIfCartOwner],
-      }
-    },
     cartItem: {
       row: {
-        select: [allowIfCartItemOwner],
+        select: [allowIfCartOwner],
       }
     }
   } satisfies PermissionsConfig<AuthData, Schema>;

@@ -4,6 +4,7 @@ import {createFileRoute, useRouter, Link} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
 import {SiteLayout} from '../components/site-layout';
+import {artistQuery} from './artist';
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -25,10 +26,7 @@ function Home() {
     setSearch(searchParam ?? '');
   }, [searchParam]);
 
-  let q = z.query.artist
-    .related('albums')
-    .orderBy('popularity', 'desc')
-    .limit(100);
+  let q = artistQuery(z.query.artist).orderBy('popularity', 'desc').limit(100);
   if (search) {
     q = q.where('name', 'ILIKE', `%${search}%`);
   }

@@ -21,6 +21,8 @@
     "@tanstack/react-virtual": "^3.13.9",
     "better-auth": "^1.2.8",
     "drizzle-orm": "^0.44.1",
+    "jose": "^6.0.11",
+    "nanoid": "^5.1.5",
     "pg": "^8.16.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
