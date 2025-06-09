@@ -1,5 +1,6 @@
 import {Cart} from './cart';
 import {LoginButton} from './login-button';
+import {Link} from '@tanstack/react-router';
 
 export function SiteLayout({children}: {children: React.ReactNode}) {
   return (
@@ -12,7 +13,9 @@ export function SiteLayout({children}: {children: React.ReactNode}) {
           marginBottom: 10,
         }}
       >
-        <img src="/logo.png" alt="logo" style={{height: 100}} />
+        <Link to="/">
+          <img src="/logo.png" alt="logo" style={{height: 100}} />
+        </Link>
         <div style={{flex: 1}} />
         <Cart />
         <LoginButton />

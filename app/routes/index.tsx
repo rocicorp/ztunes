@@ -12,7 +12,7 @@ export const Route = createFileRoute('/')({
   validateSearch: (search: Record<string, unknown>) => {
     return {
       q: typeof search.q === 'string' ? search.q : undefined,
-    };
+    } as {q?: string | undefined};
   },
 });
 

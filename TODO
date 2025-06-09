@@ -1,10 +1,12 @@
 app todos
 
-- auth (better-auth? i think so, so that it can work locally too)
-- shopping cart
+- cart page
+- mooar data
+- can we integrate with router even better
 
 app bugs
 
+- add to cart button should be mousedown
 - factor mousedown into reusable <FastLink> element
 - figure out env vars, omg - they are hard-coded everywhere
   - need to interpolate for zero_upstream_db
@@ -21,14 +23,15 @@ zero bugs
 
 - the pattern of making the zero instance reactive feels right but had to hack around current code in zero/react. Can we make this easier? Need to consider having multiple zero instances live.
 - setting up better-auth jwt is alot. better-auth guy says we should use tanstack query? does it help?
-- it is weird that zero itself reads .env. maybe it should do, but shouldn't be an error if env not present.
-- you should be able to start w/o a schema.ts
 - stupid to have to useZero() just to form queries
   - this would make sharing query fragments more elegant too (see artist.tsx)
 - debug panel would be super useful for just "why don't i have data??"
+  - maybe it should also show mutations - would have fixed a bug i struggled with for a bit
 - fix preload api to not block ui queries
 - exceeding 20k limit causes all data to get dropped - pretty surprising. we should remove the limit in ttl v2.
 - fix @rocicorp/zero-sqlite3 for up arrow to work and document better
-- conditional query (for when session is null and using userID in query)
 - warn about missing FKs it makes zero crazy slow.
+- it is weird that zero itself reads .env. maybe it should do, but shouldn't be an error if env not present.
+- you should be able to start w/o a schema.ts
+- conditional query (for when session is null and using userID in query)
 - it would be nice if tx.insert() returned the value.
