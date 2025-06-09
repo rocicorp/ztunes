@@ -58,11 +58,7 @@ function RouteComponent() {
     const action = album.cartItems
       ? () => z.mutate.cart.remove({albumID: album.id})
       : () => z.mutate.cart.add({albumID: album.id, addedAt: Date.now()});
-    return (
-      <button onClick={action} onMouseDown={action}>
-        {message}
-      </button>
-    );
+    return <button onClick={action}>{message}</button>;
   };
 
   return (
