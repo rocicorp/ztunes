@@ -1,5 +1,8 @@
 app todos
 
+- CD to vercel/fly/supabase
+  - I guess this implies getting env vars working properly
+- Previews
 - mooar data
 - can we integrate with ts even better?
   - router would give nicer preloads
