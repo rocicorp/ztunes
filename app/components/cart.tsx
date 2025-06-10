@@ -1,6 +1,7 @@
 import {useZero, useQuery} from '@rocicorp/zero/react';
 import {Schema} from '../../zero/schema';
 import {authClient} from '../../auth/client';
+import {Link} from '@tanstack/react-router';
 
 export function Cart() {
   const session = authClient.useSession();
@@ -16,5 +17,5 @@ export function Cart() {
     return null;
   }
 
-  return <div>Cart ({items.length ?? 0})</div>;
+  return <Link to="/cart">Cart ({items.length ?? 0})</Link>;
 }

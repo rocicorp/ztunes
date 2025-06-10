@@ -11,10 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as CartImport } from './routes/cart'
 import { Route as ArtistImport } from './routes/artist'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const CartRoute = CartImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const ArtistRoute = ArtistImport.update({
   id: '/artist',
@@ -46,6 +53,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArtistImport
       parentRoute: typeof rootRoute
     }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +68,41 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/artist': typeof ArtistRoute
+  '/cart': typeof CartRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/artist': typeof ArtistRoute
+  '/cart': typeof CartRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/artist': typeof ArtistRoute
+  '/cart': typeof CartRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/artist'
+  fullPaths: '/' | '/artist' | '/cart'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/artist'
-  id: '__root__' | '/' | '/artist'
+  to: '/' | '/artist' | '/cart'
+  id: '__root__' | '/' | '/artist' | '/cart'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ArtistRoute: typeof ArtistRoute
+  CartRoute: typeof CartRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ArtistRoute: ArtistRoute,
+  CartRoute: CartRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +116,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/artist"
+        "/artist",
+        "/cart"
       ]
     },
     "/": {
@@ -105,6 +125,9 @@ export const routeTree = rootRoute
     },
     "/artist": {
       "filePath": "artist.tsx"
+    },
+    "/cart": {
+      "filePath": "cart.tsx"
     }
   }
 }
