@@ -20,6 +20,8 @@
     "@tanstack/react-start": "^1.120.15",
     "@tanstack/react-virtual": "^3.13.9",
     "better-auth": "^1.2.8",
+    "dotenv": "^16.5.0",
+    "dotenv-expand": "^12.0.2",
     "drizzle-orm": "^0.44.1",
     "jose": "^6.0.11",
     "nanoid": "^5.1.5",

@@ -1,3 +1,7 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
+import { must } from '../shared/must';
+import '../shared/env';
 
-export const db = drizzle("postgres://postgres:pwd@localhost:5432/postgres");
+const pgURL = must(process.env.PG_URL, 'PG_URL is required');
+
+export const db = drizzle(pgURL);
