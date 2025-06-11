@@ -1,5 +1,6 @@
 app todos
 
+- when nuking db state, auth token not accepted and seems like need to login/logout again. should this be more automated?
 - CD to vercel/fly/supabase
   - I guess this implies getting env vars working properly
 - Previews
