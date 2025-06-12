@@ -41,3 +41,4 @@ zero bugs
 - it would be nice if tx.insert() returned the value.
 - zero-deploy-permissions should also pay attention to .env
 - client-only queries
+- 500 errors in push don't cause revert - easy to not notice they aern't working
