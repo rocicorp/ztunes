@@ -1,4 +1,8 @@
 import { defineConfig } from 'drizzle-kit';
+import { must } from './shared/must';
+import './shared/env';
+
+const pgURL = must(process.env.PG_URL, 'PG_URL is required');
 
 export default defineConfig({
   out: './db/migrations',
@@ -6,6 +10,6 @@ export default defineConfig({
   dialect: 'postgresql',
   strict: true,
   dbCredentials: {
-    url: "postgres://postgres:pwd@localhost:5432/postgres",
+    url: pgURL,
   },
 });
