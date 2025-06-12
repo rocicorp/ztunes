@@ -40,3 +40,4 @@ zero bugs
 - conditional query (for when session is null and using userID in query)
 - it would be nice if tx.insert() returned the value.
 - zero-deploy-permissions should also pay attention to .env
+- client-only queries
