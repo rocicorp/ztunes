@@ -12,7 +12,7 @@ export function LoginButton() {
       </div>
     );
   }
-  const callbackURL = location.pathname + location.searchStr;
+  const callbackURL = location.href;
   return (
     <button
       onClick={() =>
