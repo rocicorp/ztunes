@@ -1,44 +1,48 @@
 app todos
 
-- when nuking db state, auth token not accepted and seems like need to login/logout again. should this be more automated?
-- CD to vercel/fly/supabase
-  - I guess this implies getting env vars working properly
+- When you run `clean` in dev and leave the UI open, the auth token starts failing to be accepted and you can only recover by logging out and in again. Should this be more automated somehow?
 - Previews
+  - Getting this working with github login is a big pita - you have to setup a separate dedicated auth.<yourserver>.com app to be a central place to do oauth. Or we could switch to secret link auth, but that seems to violate the spirit of the project a bit.
+  - Seems to require custom mutators because getting permissions working with previews will be a big change in Zero
 - mooar data
 - can we integrate with ts even better?
-  - router would give nicer preloads
-  - query would give suspense and maybe ssr!?
+  - If we integrate at the router layer we'll get automatic preloads!
+  - If we interate at the query layer, it seems like we'd get suspense (and maybe with a little bit of changes to Zero ssr!!?)
+- Add remove buttons to cart page
 
 app bugs
 
-- add to cart button should be mousedown
+- add to cart button should be on mousedown
 - factor mousedown into reusable <FastLink> element
 - use real drizzle migrations
-- nicer styles
+- nicer styles? (or do we care - maybe the non-styled nature is a feature)
 - pull inline styles out into whatever is standard for tanstack start - module css? something else?
-- should we be auto-pushing the schema in dev?
-  - and if we are not, does that mean we should not be auto-generating the zero-schema?
-- why doesn't formatter run on zero dir
+- auto-push drizzle schema on change in dev
+- clean up env vars more - it's super confusing right now which env vars are for which servers
 - change all the relative paths to use ~ shortcut - tanstack start has docs on this
-- the name of this app should change, it's no longer and itunes app. should it be zero-records? ts follow a convention like tanstack-sample-trelleaux-convex, so an alternate could be like zero-sample-tanstack-drizzle-betterauth ? kinda long but nice in that it is very self-explanatory.
+- the name of this app should change to zero-records, it's no longer and itunes app. it's vercel domain should also change.
 
 zero bugs
 
 - text search
-- the pattern of making the zero instance reactive feels right but had to hack around current code in zero/react. Can we make this easier? Need to consider having multiple zero instances live.
+  - we can implement a quick but effective version of this by adding a `search` operator to zql and implementing it with FTS5 in sqlite and `ILIKE` on the client.
+  - we dont have to do ranking, at least for this app, because we want to rank by popularity
+- the pattern of making the zero instance reactive in zero-provider.ts feels right but (a) had to hack around current code in zero/react, and (b) took a fair amount of code. Can we make this easier? Need to consider having multiple zero instances live.
 - setting up better-auth jwt is alot. better-auth guy says we should use tanstack query? does it help?
 - stupid to have to useZero() just to form queries
   - this would make sharing query fragments more elegant too (see artist.tsx)
 - debug panel would be super useful for just "why don't i have data??"
   - maybe it should also show mutations - would have fixed a bug i struggled with for a bit
 - fix preload api to not block ui queries
-- exceeding 20k limit causes all data to get dropped - pretty surprising. we should remove the limit in ttl v2.
+- exceeding 20k limit causes all data to get dropped - pretty surprising.
+  - we should remove the limit
+  - we should limit ttl to max 5m
 - fix @rocicorp/zero-sqlite3 for up arrow to work and document better
 - warn about missing index on FK it makes zero crazy slow.
-- it is weird that zero itself reads .env. maybe it should do, but shouldn't be an error if env not present.
-- you should be able to start w/o a schema.ts
+- errors about missing env vars shouldn't tell you to create .env. .env shouldn't be required.
+- you should be able to start w/o a schema.ts - it should at least replicate the data. schema not required for replication, only typing queries in client!
 - conditional query (for when session is null and using userID in query)
 - it would be nice if tx.insert() returned the value.
 - zero-deploy-permissions should also pay attention to .env
-- client-only queries
+- client-only queries would significantly reduce load while typing
 - 500 errors in push don't cause revert - easy to not notice they aern't working
