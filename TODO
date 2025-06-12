@@ -13,8 +13,6 @@ app bugs
 
 - add to cart button should be mousedown
 - factor mousedown into reusable <FastLink> element
-- figure out env vars, omg - they are hard-coded everywhere
-  - need to interpolate for zero_upstream_db
 - use real drizzle migrations
 - nicer styles
 - pull inline styles out into whatever is standard for tanstack start - module css? something else?
