@@ -10,16 +10,12 @@ export function createMutators(authData: AuthData | undefined) {
         if (!authData) {
           throw new Error('Not authenticated');
         }
-        console.log('adding cart item', albumID, authData.sub, addedAt);
         try {
-          console.log('foobar', await tx.query.album.limit(1));
-
           await tx.mutate.cartItem.insert({
             userId: authData.sub,
             albumId: albumID,
             addedAt: tx.location === 'client' ? addedAt : Date.now(),
           });
-          console.log('cart item added', albumID, authData.sub, addedAt);
         } catch (err) {
           console.error('error adding cart item', err);
           throw err;

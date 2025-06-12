@@ -5,6 +5,9 @@ import { must } from "../shared/must";
 import * as schema from "./schema";
 import { jwt } from "better-auth/plugins"
 
+const clientID = must(process.env.GITHUB_CLIENT_ID, 'GITHUB_CLIENT_ID is required');
+const clientSecret = must(process.env.GITHUB_CLIENT_SECRET, 'GITHUB_CLIENT_SECRET is required');
+
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -19,8 +22,8 @@ export const auth = betterAuth({
   },
   socialProviders: {
     github: {
-      clientId: must(process.env.GITHUB_CLIENT_ID),
-      clientSecret: must(process.env.GITHUB_CLIENT_SECRET),
+      clientId: clientID,
+      clientSecret: clientSecret,
     },
   },
 });

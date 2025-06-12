@@ -11,11 +11,12 @@ import { createMutators } from '../../../../zero/mutators';
 import * as jose from 'jose';
 import { must } from '../../../../shared/must';
 
+const upstreamDB = must(process.env.ZERO_UPSTREAM_DB, 'ZERO_UPSTREAM_DB is required');
 const jwksURL = must(process.env.ZERO_AUTH_JWKS_URL, 'ZERO_AUTH_JWKS_URL is required');
 
 const processor = new PushProcessor(
   new ZQLDatabase(
-    new PostgresJSConnection(postgres(process.env.ZERO_UPSTREAM_DB! as string)),
+    new PostgresJSConnection(postgres(upstreamDB)),
     schema,
   ),
 );
