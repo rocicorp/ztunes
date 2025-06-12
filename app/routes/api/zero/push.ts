@@ -12,7 +12,6 @@ import * as jose from 'jose';
 import { must } from '../../../../shared/must';
 
 const pgURL = must(process.env.PG_URL, 'PG_URL is required');
-const jwksURL = must(process.env.AUTH_JWKS_URL, 'AUTH_JWKS_URL is required');
 
 const processor = new PushProcessor(
   new ZQLDatabase(
@@ -52,7 +51,7 @@ async function getUserID(request: Request) {
   }
 
   const token = authHeader.slice(prefix.length);
-  const jwks = jose.createRemoteJWKSet(new URL(jwksURL));
+  const jwks = jose.createRemoteJWKSet(new URL('/api/auth/jwks', request.url));
 
   const { payload } = await jose.jwtVerify(token, jwks);
   return must(payload.sub, 'Empty sub in token');
