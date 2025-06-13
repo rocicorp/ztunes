@@ -27,8 +27,8 @@ export const album = pgTable("album", {
 ]);
 
 export const cartItem = pgTable("cart_item", {
-  userId: varchar("user_id").references(() => authSchema.user.id),
-  albumId: varchar("album_id").references(() => album.id),
+  userId: varchar("user_id").notNull().references(() => authSchema.user.id),
+  albumId: varchar("album_id").notNull().references(() => album.id),
   addedAt: timestamp("added_at").notNull(),
 }, table => [
   primaryKey({ columns: [table.userId, table.albumId] }),

@@ -279,7 +279,7 @@ export const schema = {
       columns: {
         userId: {
           type: "string",
-          optional: true,
+          optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
             "cartItem",
@@ -289,7 +289,7 @@ export const schema = {
         },
         albumId: {
           type: "string",
-          optional: true,
+          optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
             "cartItem",
