@@ -23,4 +23,4 @@ jobs:
         run: npm ci
 
       - name: Run migrations
-        run: npx drizzle-kit push
+        run: npx drizzle-kit push --force
