@@ -23,4 +23,20 @@ jobs:
         run: npm ci
 
       - name: Run migrations
-        run: npx drizzle-kit push --force
+        run: |
+          set -o pipefail
+
+          # Run drizzle-kit, capture stdout and stderr separately
+          npx drizzle-kit push --force >stdout.log 2>stderr.log
+
+          echo "STDOUT:"
+          cat stdout.log
+
+          echo "STDERR:"
+          cat stderr.log
+
+          # If stderr is not empty, fail
+          if [ -s stderr.log ]; then
+            echo "❌ drizzle-kit emitted errors to stderr"
+            exit 1
+          fi
