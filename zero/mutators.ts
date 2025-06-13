@@ -22,11 +22,11 @@ export function createMutators(authData: AuthData | undefined) {
         }
       },
 
-      remove: async (tx, { albumID }: { albumID: string }) => {
+      remove: async (tx, albumId: string) => {
         if (!authData) {
           throw new Error('Not authenticated');
         }
-        const cartItem = await tx.query.cartItem.where('userId', authData.sub).where('albumId', albumID).one();
+        const cartItem = await tx.query.cartItem.where('userId', authData.sub).where('albumId', albumId).one();
         if (!cartItem) {
           return;
         }

@@ -21,13 +21,22 @@ function RouteComponent() {
       .where('userId', session.data?.user.id),
   );
 
+  const onRemove = (albumID: string) => {
+    z.mutate.cart.remove(albumID);
+  };
+
   return (
     <SiteLayout>
       <h1>Cart</h1>
       <ul>
-        {cartItems.map(item => (
-          <li key={item.albumId}>{item.album?.title}</li>
-        ))}
+        {cartItems.map(item =>
+          item.album ? (
+            <li key={item.albumId}>
+              {item.album?.title}{' '}
+              <button onMouseDown={() => onRemove(item.albumId)}>Remove</button>
+            </li>
+          ) : null,
+        )}
       </ul>
     </SiteLayout>
   );
