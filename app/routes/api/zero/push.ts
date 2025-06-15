@@ -1,5 +1,4 @@
 import { json } from '@tanstack/react-start'
-import { createAPIFileRoute } from '@tanstack/react-start/api'
 import {
   PushProcessor,
   ZQLDatabase,
@@ -10,6 +9,7 @@ import { schema } from '../../../../zero/schema';
 import { createMutators } from '../../../../zero/mutators';
 import * as jose from 'jose';
 import { must } from '../../../../shared/must';
+import { createServerFileRoute } from '@tanstack/react-start/server';
 
 const pgURL = must(process.env.PG_URL, 'PG_URL is required');
 
@@ -20,7 +20,7 @@ const processor = new PushProcessor(
   ),
 );
 
-export const APIRoute = createAPIFileRoute('/api/zero/push')({
+export const ServerRoute = createServerFileRoute('/api/zero/push').methods({
   POST: async ({ request }) => {
     const userID = await getUserID(request);
     if (typeof userID === 'object') {

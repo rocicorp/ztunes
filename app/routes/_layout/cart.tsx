@@ -1,11 +1,11 @@
 import {useQuery, useZero} from '@rocicorp/zero/react';
 import {createFileRoute} from '@tanstack/react-router';
-import {Mutators} from '../../zero/mutators';
-import {authClient} from '../../auth/client';
-import {Schema} from '../../zero/schema';
-import {SiteLayout} from '../components/site-layout';
+import {Mutators} from '../../../zero/mutators';
+import {authClient} from '../../../auth/client';
+import {Schema} from '../../../zero/schema';
+import {SiteLayout} from '../../components/site-layout';
 
-export const Route = createFileRoute('/cart')({
+export const Route = createFileRoute('/_layout/cart')({
   component: RouteComponent,
 });
 

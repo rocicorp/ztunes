@@ -1,12 +1,12 @@
 import {useQuery, useZero} from '@rocicorp/zero/react';
 import {Query} from '@rocicorp/zero';
 import {createFileRoute} from '@tanstack/react-router';
-import {Schema} from '../../zero/schema';
-import {SiteLayout} from '../components/site-layout';
-import {Mutators} from '../../zero/mutators';
-import {authClient} from '../../auth/client';
+import {Schema} from '../../../zero/schema';
+import {SiteLayout} from '../../components/site-layout';
+import {Mutators} from '../../../zero/mutators';
+import {authClient} from '../../../auth/client';
 
-export const Route = createFileRoute('/artist')({
+export const Route = createFileRoute('/_layout/artist')({
   component: RouteComponent,
   ssr: false,
   validateSearch: (params: Record<string, unknown>) => {

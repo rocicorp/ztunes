@@ -1,37 +1,19 @@
 import {Zero} from '@rocicorp/zero';
 import {schema, Schema} from '../../zero/schema';
 import {ZeroProvider as ZeroProviderImpl} from '@rocicorp/zero/react';
-import {authClient} from '../../auth/client';
 import {useEffect, useState} from 'react';
 import {createMutators, Mutators} from '../../zero/mutators';
+import {useSession, SessionContextType} from './session-provider';
+import {must} from '../../shared/must';
 
-type Session = {
-  userID: string | undefined;
-  sessionToken: string | undefined;
-  pending: boolean;
-};
-
-type JWT = {value: string | undefined; pending: boolean};
-
-function toSession(betterAuthSession: {
-  data: {user: {id: string}; session: {token: string}} | null;
-  isPending: boolean;
-}): Session {
-  if (betterAuthSession.isPending) {
-    return {userID: undefined, sessionToken: undefined, pending: true};
-  }
-
-  return {
-    userID: betterAuthSession.data?.user.id,
-    sessionToken: betterAuthSession.data?.session.token,
-    pending: false,
-  };
-}
+const serverURL = must(
+  import.meta.env.VITE_PUBLIC_SERVER,
+  'VITE_PUBLIC_SERVER is required',
+);
 
 export function ZeroProvider({children}: {children: React.ReactNode}) {
-  const session = toSession(authClient.useSession());
-  const jwt = useJWT(session);
-  const zero = useZero(session, jwt);
+  const session = useSession();
+  const zero = useZero(session);
   if (zero) {
     console.timeStamp('got zero');
   }
@@ -45,70 +27,16 @@ export function ZeroProvider({children}: {children: React.ReactNode}) {
   return <ZeroProviderImpl zero={zero}>{children}</ZeroProviderImpl>;
 }
 
-function useJWT(session: Session): JWT {
-  const [jwt, setJwt] = useState<string | undefined>(undefined);
-  const [pending, setPending] = useState(true);
-
-  useEffect(() => {
-    let isCancelled = false;
-    setPending(true);
-
-    const fetchToken = async () => {
-      const res = await fetch('/api/auth/token', {
-        credentials: 'include',
-      });
-      if (res.ok) {
-        if (isCancelled) {
-          return;
-        }
-
-        const data = await res.json();
-        if (isCancelled) {
-          return;
-        }
-
-        if (!data.token) {
-          console.error('No token found in /api/auth/token response');
-          return;
-        }
-
-        setJwt(data.token);
-      }
-      setPending(false);
-    };
-
-    // We fetch even if session is pending because better-auth can return JWT
-    // in parallel. No need to wait for userID. When userID comes back, we
-    // will do another token request which is kinda lame but it will be same
-    // JWT so won't cause any impact on app. And better than waiting for a
-    // whole round trip for userID.
-    fetchToken();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [session.sessionToken]);
-
-  return {value: jwt, pending};
-}
-
-function useZero(session: Session, jwt: JWT) {
+function useZero(session: SessionContextType) {
   const [zero, setZero] = useState<Zero<Schema, Mutators> | undefined>(
     undefined,
   );
 
   useEffect(() => {
-    const isLoggedIn = session.userID && jwt.value;
-    const isLoginPending = session.pending || jwt.pending;
-
-    if (!isLoggedIn && isLoginPending) {
-      return;
-    }
-
     const z = new Zero({
       userID: session.userID ?? 'anon',
-      auth: jwt.value,
-      server: import.meta.env.VITE_PUBLIC_SERVER,
+      auth: session.jwt,
+      server: serverURL,
       schema,
       mutators: createMutators(
         session.userID ? {sub: session.userID} : undefined,
@@ -121,7 +49,7 @@ function useZero(session: Session, jwt: JWT) {
       zero?.close();
       setZero(undefined);
     };
-  }, [session.userID, session.pending, jwt.value, jwt.pending]);
+  }, [session.userID, session.jwt]);
 
   return zero;
 }
