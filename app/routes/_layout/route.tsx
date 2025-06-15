@@ -4,6 +4,7 @@ import {auth} from '../../../auth/auth';
 import {ZeroProvider} from '../../components/zero-provider';
 import {getWebRequest} from '@tanstack/react-start/server';
 import {createServerFn} from '@tanstack/react-start';
+import {SiteLayout} from '../../components/site-layout';
 
 export const getAuthFromHeaders = createServerFn().handler(async () => {
   const session = await auth.api.getSession({
@@ -51,7 +52,9 @@ function RouteComponent() {
   return (
     <SessionProvider initialUserID={userID} initialToken={token}>
       <ZeroProvider>
-        <Outlet />
+        <SiteLayout>
+          <Outlet />
+        </SiteLayout>
       </ZeroProvider>
     </SessionProvider>
   );

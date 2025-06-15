@@ -3,7 +3,6 @@ import {type Schema} from '../../../zero/schema';
 import {createFileRoute, useRouter, Link} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
-import {SiteLayout} from '../../components/site-layout';
 import {artistQuery} from './artist';
 
 export const Route = createFileRoute('/_layout/')({
@@ -48,7 +47,7 @@ function Home() {
   };
 
   return (
-    <SiteLayout>
+    <>
       <div style={{display: 'flex', flexDirection: 'column'}}>
         <h3 style={{margin: '1em 0 0.2em 0'}}>Search 85,000 Artists...</h3>
         <input
@@ -71,6 +70,6 @@ function Home() {
           </li>
         ))}
       </ul>
-    </SiteLayout>
+    </>
   );
 }

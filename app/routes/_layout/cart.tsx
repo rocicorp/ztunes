@@ -3,10 +3,10 @@ import {createFileRoute} from '@tanstack/react-router';
 import {Mutators} from '../../../zero/mutators';
 import {authClient} from '../../../auth/client';
 import {Schema} from '../../../zero/schema';
-import {SiteLayout} from '../../components/site-layout';
 
 export const Route = createFileRoute('/_layout/cart')({
   component: RouteComponent,
+  ssr: false,
 });
 
 function RouteComponent() {
@@ -26,7 +26,7 @@ function RouteComponent() {
   };
 
   return (
-    <SiteLayout>
+    <>
       <h1>Cart</h1>
       <ul>
         {cartItems.map(item =>
@@ -38,6 +38,6 @@ function RouteComponent() {
           ) : null,
         )}
       </ul>
-    </SiteLayout>
+    </>
   );
 }
