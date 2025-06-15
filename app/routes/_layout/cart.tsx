@@ -17,7 +17,9 @@ function RouteComponent() {
   const z = useZero<Schema, Mutators>();
   const [cartItems] = useQuery(
     z.query.cartItem
-      .related('album', album => album.one())
+      .related('album', album =>
+        album.one().related('artist', artist => artist.one()),
+      )
       .where('userId', session.data?.user.id),
   );
 
@@ -28,16 +30,22 @@ function RouteComponent() {
   return (
     <>
       <h1>Cart</h1>
-      <ul>
+      <table cellPadding={0} cellSpacing={0} border={0} style={{width: 500}}>
         {cartItems.map(item =>
           item.album ? (
-            <li key={item.albumId}>
-              {item.album?.title}{' '}
-              <button onMouseDown={() => onRemove(item.albumId)}>Remove</button>
-            </li>
+            <tr key={item.albumId}>
+              <td>
+                {item.album?.title} ({item.album?.artist?.name})
+              </td>
+              <td style={{paddingLeft: '1em'}}>
+                <button onMouseDown={() => onRemove(item.albumId)}>
+                  Remove
+                </button>
+              </td>
+            </tr>
           ) : null,
         )}
-      </ul>
+      </table>
     </>
   );
 }
