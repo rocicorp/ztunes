@@ -7,17 +7,16 @@
     "dev": "tsx scripts/dev.ts",
     "dev:db": "tsx scripts/dev-db.ts",
     "dev:zero": "npx zero-cache-dev",
-    "dev:ui": "vinxi dev",
+    "dev:ui": "vite dev",
     "dev:clean": "tsx scripts/clean.ts",
     "seed": "tsx scripts/seed.ts",
     "generate-zero-schema": "drizzle-zero generate --format -o zero/schema.gen.ts",
-    "build": "vinxi build",
-    "start": "vinxi start"
+    "build": "vite build"
   },
   "dependencies": {
     "@rocicorp/zero": "^0.20.2025052100",
-    "@tanstack/react-router": "^1.120.15",
-    "@tanstack/react-start": "^1.120.15",
+    "@tanstack/react-router": "^1.120.20",
+    "@tanstack/react-start": "^1.120.20",
     "@tanstack/react-virtual": "^3.13.9",
     "better-auth": "^1.2.8",
     "dotenv": "^16.5.0",
@@ -29,12 +28,13 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "use-debounce": "^10.0.4",
-    "vinxi": "^0.5.6"
+    "vinxi": "^0.5.6",
+    "vite": "^6.3.5"
   },
   "devDependencies": {
     "@types/pg": "^8.15.4",
-    "@types/react": "^19.1.6",
-    "@types/react-dom": "^19.1.5",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.5.1",
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.1.2",
