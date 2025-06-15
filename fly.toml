@@ -18,9 +18,7 @@ timeout = "5s"
 path = "/"
 
 [[vm]]
-memory = '2gb'
-cpu_kind = 'shared'
-cpus = 2
+size = "performance-1x"
 
 [mounts]
 source = "sqlite_db"
@@ -28,7 +26,7 @@ destination = "/data"
 initial_size = "100gb"
 
 [env]
-ZERO_REPLICA_FILE="/tmp/ztunes.db"
+ZERO_REPLICA_FILE="/data/ztunes.db"
 ZERO_SCHEMA_PATH="zero/schema.ts"
 ZERO_LOG_LEVEL="debug"
 # Set via fly secret
