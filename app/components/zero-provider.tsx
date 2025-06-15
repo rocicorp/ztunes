@@ -5,13 +5,36 @@ import {authClient} from '../../auth/client';
 import {useEffect, useState} from 'react';
 import {createMutators, Mutators} from '../../zero/mutators';
 
+type Session = {
+  userID: string | undefined;
+  sessionToken: string | undefined;
+  pending: boolean;
+};
+
+type JWT = {value: string | undefined; pending: boolean};
+
+function toSession(betterAuthSession: {
+  data: {user: {id: string}; session: {token: string}} | null;
+  isPending: boolean;
+}): Session {
+  if (betterAuthSession.isPending) {
+    return {userID: undefined, sessionToken: undefined, pending: true};
+  }
+
+  return {
+    userID: betterAuthSession.data?.user.id,
+    sessionToken: betterAuthSession.data?.session.token,
+    pending: false,
+  };
+}
+
 export function ZeroProvider({children}: {children: React.ReactNode}) {
-  const session = authClient.useSession();
-  const jwt = useJWT();
-  const zero = useZero(
-    {id: session.data?.user.id, pending: session.isPending},
-    jwt,
-  );
+  const session = toSession(authClient.useSession());
+  const jwt = useJWT(session);
+  const zero = useZero(session, jwt);
+  if (zero) {
+    console.timeStamp('got zero');
+  }
   useExposeZero(zero);
   usePreload(zero);
 
@@ -22,61 +45,74 @@ export function ZeroProvider({children}: {children: React.ReactNode}) {
   return <ZeroProviderImpl zero={zero}>{children}</ZeroProviderImpl>;
 }
 
-function useJWT() {
+function useJWT(session: Session): JWT {
   const [jwt, setJwt] = useState<string | undefined>(undefined);
   const [pending, setPending] = useState(true);
 
   useEffect(() => {
     let isCancelled = false;
+    setPending(true);
 
     const fetchToken = async () => {
       const res = await fetch('/api/auth/token', {
         credentials: 'include',
       });
       if (res.ok) {
+        if (isCancelled) {
+          return;
+        }
+
         const data = await res.json();
         if (isCancelled) {
           return;
         }
+
         if (!data.token) {
-          throw new Error('No token');
+          console.error('No token found in /api/auth/token response');
+          return;
         }
+
         setJwt(data.token);
       }
       setPending(false);
     };
 
+    // We fetch even if session is pending because better-auth can return JWT
+    // in parallel. No need to wait for userID. When userID comes back, we
+    // will do another token request which is kinda lame but it will be same
+    // JWT so won't cause any impact on app. And better than waiting for a
+    // whole round trip for userID.
     fetchToken();
 
     return () => {
       isCancelled = true;
     };
-  });
+  }, [session.sessionToken]);
 
   return {value: jwt, pending};
 }
 
-function useZero(
-  user: {id: string | undefined; pending: boolean},
-  jwt: {value: string | undefined; pending: boolean},
-) {
+function useZero(session: Session, jwt: JWT) {
   const [zero, setZero] = useState<Zero<Schema, Mutators> | undefined>(
     undefined,
   );
 
   useEffect(() => {
-    // Don't want to create an anon zero client, then immediately create a
-    // auth'd one instead, so wait for session to resolve.
-    if (user.pending || jwt.pending) {
+    const isLoggedIn = session.userID && jwt.value;
+    const isLoginPending = session.pending || jwt.pending;
+
+    if (!isLoggedIn && isLoginPending) {
       return;
     }
 
     const z = new Zero({
-      userID: user.id ?? 'anon',
+      userID: session.userID ?? 'anon',
       auth: jwt.value,
       server: import.meta.env.VITE_PUBLIC_SERVER,
       schema,
-      mutators: createMutators(user.id ? {sub: user.id} : undefined),
+      mutators: createMutators(
+        session.userID ? {sub: session.userID} : undefined,
+      ),
     });
 
     setZero(z);
@@ -85,7 +121,7 @@ function useZero(
       zero?.close();
       setZero(undefined);
     };
-  }, [user.id, user.pending, jwt.value, jwt.pending]);
+  }, [session.userID, session.pending, jwt.value, jwt.pending]);
 
   return zero;
 }
@@ -176,5 +212,5 @@ function preload(z: Zero<Schema>) {
     z.query.artist.orderBy('popularity', 'desc').limit(1_000).preload({
       ttl: '1m',
     });
-  }, 1000);
+  }, 1_000);
 }
