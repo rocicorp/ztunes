@@ -18,6 +18,7 @@ export const Route = createFileRoute('/_layout/')({
 function Home() {
   const z = useZero<Schema>();
   const router = useRouter();
+  const limit = 20;
 
   const [search, setSearch] = useState('');
   const searchParam = Route.useSearch().q;
@@ -25,12 +26,14 @@ function Home() {
     setSearch(searchParam ?? '');
   }, [searchParam]);
 
-  let q = artistQuery(z.query.artist).orderBy('popularity', 'desc').limit(20);
+  let q = artistQuery(z.query.artist)
+    .orderBy('popularity', 'desc')
+    .limit(limit);
   if (search) {
     q = q.where('name', 'ILIKE', `%${search}%`);
   }
 
-  const [artists] = useQuery(q, {ttl: '1m'});
+  const [artists, {type}] = useQuery(q, {ttl: '1m'});
 
   const setSearchParam = useDebouncedCallback((text: string) => {
     router.navigate({
@@ -69,6 +72,7 @@ function Home() {
             </Link>
           </li>
         ))}
+        {type === 'unknown' && artists.length < limit && <div>Loading...</div>}
       </ul>
     </>
   );
