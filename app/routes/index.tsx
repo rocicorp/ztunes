@@ -26,7 +26,7 @@ function Home() {
     setSearch(searchParam ?? '');
   }, [searchParam]);
 
-  let q = artistQuery(z.query.artist).orderBy('popularity', 'desc').limit(100);
+  let q = artistQuery(z.query.artist).orderBy('popularity', 'desc').limit(20);
   if (search) {
     q = q.where('name', 'ILIKE', `%${search}%`);
   }
