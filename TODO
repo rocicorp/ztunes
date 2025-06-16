@@ -24,6 +24,7 @@ app bugs
 
 zero bugs
 
+- it would be nice to be able to ssr: true for startup reasons. not to cause zero to actually run server side or even be instanced, but just ZeroProvider to run so that modules can be sent to browser. But ZeroProvider does'nt render children if Zero is undefined.
 - text search
   - we can implement a quick but effective version of this by adding a `search` operator to zql and implementing it with FTS5 in sqlite and `ILIKE` on the client.
   - we dont have to do ranking, at least for this app, because we want to rank by popularity
@@ -40,7 +41,7 @@ zero bugs
 - fix @rocicorp/zero-sqlite3 for up arrow to work and document better
 - warn about missing index on FK it makes zero crazy slow.
 - errors about missing env vars shouldn't tell you to create .env. .env shouldn't be required.
-- you should be able to start w/o a schema.ts - it should at least replicate the data. schema not required for replication, only typing queries in client!
+- you should be able to start zero-cache w/o a schema.ts - it should at least replicate the data. schema not required for replication, only typing queries in client!
 - conditional query (for when session is null and using userID in query)
 - it would be nice if tx.insert() returned the value.
 - zero-deploy-permissions should also pay attention to .env

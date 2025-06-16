@@ -6,6 +6,7 @@ import {Schema} from '../../../zero/schema';
 
 export const Route = createFileRoute('/_layout/cart')({
   component: RouteComponent,
+  ssr: false,
 });
 
 function RouteComponent() {

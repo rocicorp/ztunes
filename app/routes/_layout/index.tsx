@@ -7,6 +7,7 @@ import {artistQuery} from './artist';
 
 export const Route = createFileRoute('/_layout/')({
   component: Home,
+  ssr: false,
   validateSearch: (search: Record<string, unknown>) => {
     return {
       q: typeof search.q === 'string' ? search.q : undefined,
