@@ -1,11 +1,10 @@
 // app/routes/__root.tsx
-import {useEffect, type ReactNode} from 'react';
+import type {ReactNode} from 'react';
 import {
   Outlet,
   createRootRoute,
   HeadContent,
   Scripts,
-  useRouter,
 } from '@tanstack/react-router';
 
 export const Route = createRootRoute({
@@ -27,14 +26,6 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.loadRouteChunk(router.routesByPath['/']);
-    router.loadRouteChunk(router.routesByPath['/cart']);
-    router.loadRouteChunk(router.routesByPath['/artist']);
-  }, []);
-
   return (
     <RootDocument>
       <Outlet />
