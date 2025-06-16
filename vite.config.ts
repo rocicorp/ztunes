@@ -12,8 +12,6 @@ export default defineConfig({
     target: 'vercel',
     tsr: {
       srcDirectory: 'app',
-    }
-  }), tanstackRouter({
-    autoCodeSplitting: false,
+    },
   })],
 });

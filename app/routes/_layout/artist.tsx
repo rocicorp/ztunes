@@ -7,7 +7,6 @@ import {authClient} from '../../../auth/client';
 
 export const Route = createFileRoute('/_layout/artist')({
   component: RouteComponent,
-  ssr: false,
   validateSearch: (params: Record<string, unknown>) => {
     return {
       id: typeof params.id === 'string' ? params.id : undefined,
