@@ -6,35 +6,6 @@ import {
   HeadContent,
   Scripts,
 } from '@tanstack/react-router';
-import path from 'path';
-import fs from 'fs';
-
-let preloadFiles: string[] = [];
-
-if (import.meta.env.SSR && import.meta.env.PROD) {
-  const manifestPath = path.join(
-    process.cwd(),
-    '.tanstack/start/build/client-dist/.vite/manifest.json',
-  );
-
-  const manifest: Record<string, {file: string}> = JSON.parse(
-    fs.readFileSync(manifestPath, 'utf8'),
-  );
-
-  const preloads = ['artist.tsx', 'index.tsx', 'cart.tsx'].map(
-    r => `app/routes/_layout/${r}`,
-  );
-
-  preloadFiles = [
-    ...Object.entries(manifest)
-      .filter(([k]) => {
-        return preloads.some(r => k.startsWith(r));
-      })
-      .map(([, v]) => v.file),
-  ];
-
-  console.log('preloadFiles', preloadFiles);
-}
 
 export const Route = createRootRoute({
   head: () => ({
@@ -88,9 +59,6 @@ function RootDocument({children}: Readonly<{children: ReactNode}>) {
         `,
           }}
         />
-        {preloadFiles.map(f => (
-          <link key={f} rel="modulepreload" href={f} />
-        ))}
         <HeadContent />
       </head>
       <body>
