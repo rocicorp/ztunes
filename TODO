@@ -1,49 +1,51 @@
 app todos
 
+- It's still unfortunately slow because of: (a) surprisingly long initial page load (200ms in hawaii), (b) surprisinly slow asset loads (100ms in hawaii from cdn), (c) surprisingly slow db queries (30ms for top-20 vs near instant locally)
 - When you run `clean` in dev and leave the UI open, the auth token starts failing to be accepted and you can only recover by logging out and in again. Should this be more automated somehow?
-- Previews
-  - Getting this working with github login is a big pita - you have to setup a separate dedicated auth.<yourserver>.com app to be a central place to do oauth. Or we could switch to secret link auth, but that seems to violate the spirit of the project a bit.
-  - Seems to require custom mutators because getting permissions working with previews will be a big change in Zero
-- mooar data
-- can we integrate with ts even better?
-  - If we integrate at the router layer we'll get automatic preloads!
-  - If we interate at the query layer, it seems like we'd get suspense (and maybe with a little bit of changes to Zero ssr!!?)
-- Add remove buttons to cart page
-
-app bugs
-
-- add to cart button should be on mousedown
+- integrate with TS router layer - we should get automatic/elegant preloads
+- in github deploy update permissions
+- add to cart button should be on mousedown - when we add this the remove accidentally happens
 - factor mousedown into reusable <FastLink> element
-- use real drizzle migrations
-- nicer styles? (or do we care - maybe the non-styled nature is a feature)
 - pull inline styles out into whatever is standard for tanstack start - module css? something else?
 - auto-push drizzle schema on change in dev
-- clean up env vars more - it's super confusing right now which env vars are for which servers
+- clean up env vars more - it's super confusing right now which env vars are for which things. maybe each component (server, zero-cache, dev) should have its own section of .env with duplicate/interpolated vars
 - change all the relative paths to use ~ shortcut - tanstack start has docs on this
-- the name of this app should change to zero-records, it's no longer and itunes app. it's vercel domain should also change.
+- the name of this app (package, github repo) should change to zero-records, it's no longer and itunes app. it's vercel domain should also change.
 
-zero bugs
+zero todos
 
 - it would be nice to be able to ssr: true for startup reasons. not to cause zero to actually run server side or even be instanced, but just ZeroProvider to run so that modules can be sent to browser. But ZeroProvider does'nt render children if Zero is undefined.
-- text search
-  - we can implement a quick but effective version of this by adding a `search` operator to zql and implementing it with FTS5 in sqlite and `ILIKE` on the client.
-  - we dont have to do ranking, at least for this app, because we want to rank by popularity
 - the pattern of making the zero instance reactive in zero-provider.ts feels right but (a) had to hack around current code in zero/react, and (b) took a fair amount of code. Can we make this easier? Need to consider having multiple zero instances live.
 - setting up better-auth jwt is alot. better-auth guy says we should use tanstack query? does it help?
 - stupid to have to useZero() just to form queries
   - this would make sharing query fragments more elegant too (see artist.tsx)
-- debug panel would be super useful for just "why don't i have data??"
-  - maybe it should also show mutations - would have fixed a bug i struggled with for a bit
-- fix preload api to not block ui queries
 - exceeding 20k limit causes all data to get dropped - pretty surprising.
   - we should remove the limit
-  - we should limit ttl to max 10m
 - fix @rocicorp/zero-sqlite3 for up arrow to work and document better
 - warn about missing index on FK it makes zero crazy slow.
 - errors about missing env vars shouldn't tell you to create .env. .env shouldn't be required.
 - you should be able to start zero-cache w/o a schema.ts - it should at least replicate the data. schema not required for replication, only typing queries in client!
-- conditional query (for when session is null and using userID in query)
 - it would be nice if tx.insert() returned the value.
+  - consider also have ts.update() do this? kinda bummer to pay the cost to do this if not needed
+  - maybe there's a flag needed on insert()
 - zero-deploy-permissions should also pay attention to .env
+
+Not doing
+
+- Previews
+  - going to do this via custom mutators / queries
+- mooar data
+  - we'll just explain curren status
+- integrate with TS at the query layer. this would maybe get us partway to SSR and suspense - project for another time
+- use real drizzle migrations - not really a zero thing
+- nicer styles? - not doing the ugly styles are a feature - less goop to remove when using this as a starter
+- text search
+  - can be todo noted in docs/launch
+- we should limit ttl to max 10m
+  - erik doing
 - client-only queries would significantly reduce load while typing
+  - queries api is changing
 - 500 errors in push don't cause revert - easy to not notice they aern't working
+  - going to rework error handling
+- conditional query (for when session is null and using userID in query)
+  - queries api is changing
