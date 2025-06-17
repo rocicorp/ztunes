@@ -9,14 +9,13 @@ app todos
 - pull inline styles out into whatever is standard for tanstack start - module css? something else?
 - auto-push drizzle schema on change in dev
 - clean up env vars more - it's super confusing right now which env vars are for which things. maybe each component (server, zero-cache, dev) should have its own section of .env with duplicate/interpolated vars
-- change all the relative paths to use ~ shortcut - tanstack start has docs on this
-- the name of this app (package, github repo) should change to zero-records, it's no longer and itunes app. it's vercel domain should also change.
+- change all the relative paths to use ~ shortcut - https://tanstack.com/start/latest/docs/framework/react/path-aliases
+- the name of this app (package, github repo, vercel app) should change to zero-records, it's no longer and itunes app.
 
 zero todos
 
 - it would be nice to be able to ssr: true for startup reasons. not to cause zero to actually run server side or even be instanced, but just ZeroProvider to run so that modules can be sent to browser. But ZeroProvider does'nt render children if Zero is undefined.
 - the pattern of making the zero instance reactive in zero-provider.ts feels right but (a) had to hack around current code in zero/react, and (b) took a fair amount of code. Can we make this easier? Need to consider having multiple zero instances live.
-- setting up better-auth jwt is alot. better-auth guy says we should use tanstack query? does it help?
 - stupid to have to useZero() just to form queries
   - this would make sharing query fragments more elegant too (see artist.tsx)
 - exceeding 20k limit causes all data to get dropped - pretty surprising.
@@ -27,7 +26,7 @@ zero todos
 - you should be able to start zero-cache w/o a schema.ts - it should at least replicate the data. schema not required for replication, only typing queries in client!
 - it would be nice if tx.insert() returned the value.
   - consider also have ts.update() do this? kinda bummer to pay the cost to do this if not needed
-  - maybe there's a flag needed on insert()
+  - maybe there's a `return` flag needed on insert() and update()
 - zero-deploy-permissions should also pay attention to .env
 
 Not doing
