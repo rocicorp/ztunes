@@ -1,9 +1,9 @@
 import {Zero} from '@rocicorp/zero';
 import {schema, Schema} from '../../zero/schema';
-import {ZeroProvider as ZeroProviderImpl} from '@rocicorp/zero/react';
-import {useEffect, useState} from 'react';
-import {createMutators, Mutators} from '../../zero/mutators';
-import {useSession, SessionContextType} from './session-provider';
+import {ZeroProvider} from './zero-provider-neue';
+import {useMemo} from 'react';
+import {createMutators} from '../../zero/mutators';
+import {useSession} from './session-provider';
 import {must} from '../../shared/must';
 
 const serverURL = must(
@@ -11,78 +11,25 @@ const serverURL = must(
   'VITE_PUBLIC_SERVER is required',
 );
 
-export function ZeroProvider({children}: {children: React.ReactNode}) {
+export function ZeroInit({children}: {children: React.ReactNode}) {
   const session = useSession();
-  const zero = useZero(session);
-  if (zero) {
-    console.timeStamp('got zero');
-  }
-  useExposeZero(zero);
-  usePreload(zero);
 
-  if (!zero) {
-    return null;
-  }
-
-  return <ZeroProviderImpl zero={zero}>{children}</ZeroProviderImpl>;
-}
-
-function useZero(session: SessionContextType) {
-  const [zero, setZero] = useState<Zero<Schema, Mutators> | undefined>(
-    undefined,
-  );
-
-  useEffect(() => {
-    const z = new Zero({
+  const opts = useMemo(() => {
+    return {
+      schema,
       userID: session.userID ?? 'anon',
       auth: session.jwt,
       server: serverURL,
-      schema,
       mutators: createMutators(
         session.userID ? {sub: session.userID} : undefined,
       ),
-    });
-
-    setZero(z);
-
-    return () => {
-      zero?.close();
-      setZero(undefined);
+      init: zero => {
+        preload(zero);
+      },
     };
   }, [session.userID, session.jwt]);
 
-  return zero;
-}
-
-function useExposeZero(zero: Zero<Schema> | undefined) {
-  useEffect(() => {
-    let canceled = false;
-
-    if (!zero) {
-      return;
-    }
-
-    (window as any).__zero = zero;
-    zero.inspect().then(inspector => {
-      if (!canceled) {
-        (window as any).__inspector = inspector;
-      }
-    });
-
-    return () => {
-      (window as any).__zero = undefined;
-      (window as any).__inspector = undefined;
-      canceled = true;
-    };
-  }, [zero]);
-}
-
-function usePreload(zero: Zero<Schema> | undefined) {
-  useEffect(() => {
-    if (zero) {
-      preload(zero);
-    }
-  }, [zero]);
+  return <ZeroProvider {...opts}>{children}</ZeroProvider>;
 }
 
 function preload(z: Zero<Schema>) {

@@ -1,7 +1,7 @@
 import {createFileRoute, Outlet} from '@tanstack/react-router';
 import {SessionProvider} from '../../components/session-provider';
 import {auth} from '../../../auth/auth';
-import {ZeroProvider} from '../../components/zero-provider';
+import {ZeroInit} from '../../components/zero-init';
 import {getWebRequest} from '@tanstack/react-start/server';
 import {createServerFn} from '@tanstack/react-start';
 import {SiteLayout} from '../../components/site-layout';
@@ -51,11 +51,11 @@ function RouteComponent() {
   const {userID, token} = Route.useLoaderData();
   return (
     <SessionProvider initialUserID={userID} initialToken={token}>
-      <ZeroProvider>
+      <ZeroInit>
         <SiteLayout>
           <Outlet />
         </SiteLayout>
-      </ZeroProvider>
+      </ZeroInit>
     </SessionProvider>
   );
 }
