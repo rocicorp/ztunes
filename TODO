@@ -1,6 +1,6 @@
 app todos
 
-- It's still unfortunately slow because of: (a) surprisingly long initial page load (200ms in hawaii), (b) surprisinly slow asset loads (100ms in hawaii from cdn), (c) surprisingly slow db queries (30ms for top-20 vs near instant locally)
+- It's still unfortunately slow because of: (a) surprisingly long initial page load (200ms in hawaii - zbugs initial page load is 100ms), (b) three round trips at startup as opposed to two in zbugs (one getting route), (c) surprisingly slow db queries (30ms for top-20 vs near instant locally despite I think using NVMe disk in fly.io)
 - When you run `clean` in dev and leave the UI open, the auth token starts failing to be accepted and you can only recover by logging out and in again. Should this be more automated somehow?
 - integrate with TS router layer - we should get automatic/elegant preloads
 - in github deploy update permissions
