@@ -1,7 +1,6 @@
 import { CustomMutatorDefs } from '@rocicorp/zero';
 import { schema } from './schema';
 import { AuthData } from './schema';
-import { nanoid } from 'nanoid';
 
 export function createMutators(authData: AuthData | undefined) {
   return {
