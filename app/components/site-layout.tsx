@@ -14,7 +14,7 @@ export function SiteLayout({children}: {children: React.ReactNode}) {
         }}
       >
         <Link to="/">
-          <img src="/logo.png" alt="logo" style={{height: 100}} />
+          <img src="/logo-adc6d1a1.png" alt="logo" style={{height: 100}} />
         </Link>
         <div style={{flex: 1}} />
         <Cart />
