@@ -7,7 +7,6 @@ big:
 
 small:
 
-- can we switch back to oauth app? the github app shows a scary "can act on your behalf" warning which is not true. make sure oauth login works even if user email is non-public.
 - When you run `clean` in dev and leave the UI open, the auth token starts failing to be accepted and you can only recover by logging out and in again. Should this be more automated somehow?
 - in github deploy update permissions
 - add to cart button should be on mousedown - when we add this the remove accidentally happens
