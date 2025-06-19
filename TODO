@@ -15,7 +15,9 @@ zero todos
 
 - the pattern of making the zero instance reactive in zero-provider.ts feels right but (a) had to hack around current code in zero/react, and (b) took a fair amount of code. Can we make this easier? Need to consider having multiple zero instances live.
 - exceeding 20k limit causes all data to get dropped - pretty surprising.
-  - we should remove the limit
+  - we cannot remove the limit because it will cause queries to be cached forever
+  - erik is working on removing
+  - maybe add a warning?
 - fix @rocicorp/zero-sqlite3 for up arrow to work and document better
 - warn about missing index on FK it makes zero crazy slow.
 - errors about missing env vars shouldn't tell you to create .env. .env shouldn't be required.
