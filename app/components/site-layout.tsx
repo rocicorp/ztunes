@@ -1,6 +1,6 @@
 import {Cart} from './cart';
 import {LoginButton} from './login-button';
-import {Link} from '@tanstack/react-router';
+import {Link} from './link';
 
 export function SiteLayout({children}: {children: React.ReactNode}) {
   return (

@@ -1,9 +1,10 @@
 import {useQuery, useZero} from '@rocicorp/zero/react';
 import {type Schema} from '../../../zero/schema';
-import {createFileRoute, useRouter, Link} from '@tanstack/react-router';
+import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
 import {artistQuery} from './artist';
+import {Link} from '../../components/link';
 
 export const Route = createFileRoute('/_layout/')({
   component: Home,
@@ -63,11 +64,7 @@ function Home() {
       <ul style={{listStyle: 'none', padding: 0}}>
         {artists.map(artist => (
           <li key={artist.id} style={{marginBottom: '0.2em'}}>
-            <Link
-              to="/artist"
-              search={{id: artist.id}}
-              onMouseDown={e => e.currentTarget.click()}
-            >
+            <Link to="/artist" search={{id: artist.id}}>
               {artist.name}
             </Link>
           </li>

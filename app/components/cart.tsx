@@ -1,7 +1,7 @@
 import {useZero, useQuery} from '@rocicorp/zero/react';
 import {Schema} from '../../zero/schema';
 import {authClient} from '../../auth/client';
-import {Link} from '@tanstack/react-router';
+import {Link} from './link';
 
 export function Cart() {
   const session = authClient.useSession();
