@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PG_URL: ${{ secrets.PG_URL }}
+      ZERO_UPSTREAM_DB: ${{ secrets.ZERO_UPSTREAM_DB }}
 
     steps:
       - uses: actions/checkout@v4
@@ -40,3 +41,7 @@ jobs:
             echo "❌ drizzle-kit emitted errors to stderr"
             exit 1
           fi
+
+      - name: Update zero permissions
+        run: |
+          npx zero-deploy-permissions -p "zero/schema.ts"
