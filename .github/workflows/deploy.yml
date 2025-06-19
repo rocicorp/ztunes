@@ -32,13 +32,13 @@ jobs:
         run: |
           set -e
           # Generate current (local) config JSON from fly.toml
-          fly config show --local > local.json
+          flyctl config show --local > local.json
           # Fetch last deployed (remote) config JSON
-          fly config show > remote.json || true
+          flyctl config show > remote.json || true
           # Deploy only when the configs differ
           if ! diff -q remote.json local.json > /dev/null; then
             echo "🔥 fly.toml change detected – deploying…"
-            fly deploy
+            flyctl deploy
           else
             echo "✅ fly.toml unchanged – skipping deploy."
           fi
