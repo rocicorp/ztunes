@@ -23,7 +23,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run migrations
+      - name: Setup Flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@v1
+
+      - name: Deploy zero-cache to Fly if necessary
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: |
+          set -e
+          # Generate current (local) config JSON from fly.toml
+          fly config show --local > local.json
+          # Fetch last deployed (remote) config JSON
+          fly config show > remote.json || true
+          # Deploy only when the configs differ
+          if ! diff -q remote.json local.json > /dev/null; then
+            echo "🔥 fly.toml change detected – deploying…"
+            fly deploy
+          else
+            echo "✅ fly.toml unchanged – skipping deploy."
+          fi
+
+      - name: Update DB schema
         run: |
           set -o pipefail
 
