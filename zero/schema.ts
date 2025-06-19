@@ -14,7 +14,10 @@ export type AuthData = {
 const allowIfCartOwner = (
   authData: AuthData,
   { cmp }: ExpressionBuilder<Schema, 'cartItem'>,
-) => cmp('userId', authData.sub);
+) => {
+  // You can see a cart item if you are its owner.
+  return cmp('userId', authData.sub);
+}
 
 export const permissions = definePermissions<{}, Schema>(schema, () => {
   return {
