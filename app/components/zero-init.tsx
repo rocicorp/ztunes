@@ -1,10 +1,10 @@
 import {Zero} from '@rocicorp/zero';
-import {schema, Schema} from '../../zero/schema';
+import {schema, Schema} from 'zero/schema';
 import {ZeroProvider} from './zero-provider-neue';
 import {useMemo} from 'react';
-import {createMutators} from '../../zero/mutators';
+import {createMutators} from 'zero/mutators';
 import {useSession} from './session-provider';
-import {must} from '../../shared/must';
+import {must} from 'shared/must';
 
 const serverURL = must(
   import.meta.env.VITE_PUBLIC_SERVER,

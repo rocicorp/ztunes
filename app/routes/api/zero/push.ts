@@ -5,10 +5,10 @@ import {
   PostgresJSConnection,
 } from '@rocicorp/zero/pg';
 import postgres from 'postgres';
-import { schema } from '../../../../zero/schema';
-import { createMutators } from '../../../../zero/mutators';
+import { schema } from 'zero/schema';
+import { createMutators } from 'zero/mutators';
 import * as jose from 'jose';
-import { must } from '../../../../shared/must';
+import { must } from 'shared/must';
 import { createServerFileRoute } from '@tanstack/react-start/server';
 
 const pgURL = must(process.env.PG_URL, 'PG_URL is required');

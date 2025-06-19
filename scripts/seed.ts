@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import * as fs from 'fs';
-import { db } from '../db/index';
+import { db } from 'db/index';
 import { sql } from 'drizzle-orm';
 
 const __filename = fileURLToPath(import.meta.url);

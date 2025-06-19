@@ -1,10 +1,10 @@
 import {useQuery, useZero} from '@rocicorp/zero/react';
-import {type Schema} from '../../../zero/schema';
+import {type Schema} from 'zero/schema';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
 import {artistQuery} from './artist';
-import {Link} from '../../components/link';
+import {Link} from 'app/components/link';
 
 export const Route = createFileRoute('/_layout/')({
   component: Home,

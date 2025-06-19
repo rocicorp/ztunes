@@ -1,10 +1,10 @@
 import {createFileRoute, Outlet} from '@tanstack/react-router';
-import {SessionProvider} from '../../components/session-provider';
-import {auth} from '../../../auth/auth';
-import {ZeroInit} from '../../components/zero-init';
+import {SessionProvider} from 'app/components/session-provider';
+import {auth} from 'auth/auth';
+import {ZeroInit} from 'app/components/zero-init';
 import {getWebRequest} from '@tanstack/react-start/server';
 import {createServerFn} from '@tanstack/react-start';
-import {SiteLayout} from '../../components/site-layout';
+import {SiteLayout} from 'app/components/site-layout';
 
 export const getAuthFromHeaders = createServerFn().handler(async () => {
   const session = await auth.api.getSession({

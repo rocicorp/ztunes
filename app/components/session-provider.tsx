@@ -1,4 +1,4 @@
-import {authClient} from '../../auth/client';
+import {authClient} from 'auth/client';
 import {useEffect, useState, createContext, useContext} from 'react';
 
 export type SessionContextType = {

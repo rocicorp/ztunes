@@ -1,8 +1,8 @@
 import { index, integer, pgTable, varchar, timestamp, primaryKey } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import * as authSchema from "../auth/schema";
+import * as authSchema from "auth/schema";
 
-export * from "../auth/schema";
+export * from "auth/schema";
 
 export const artist = pgTable("artist", {
   id: varchar().primaryKey(),

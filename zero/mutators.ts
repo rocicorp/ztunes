@@ -1,6 +1,5 @@
 import { CustomMutatorDefs } from '@rocicorp/zero';
-import { schema } from './schema';
-import { AuthData } from './schema';
+import { schema, AuthData } from './schema';
 
 export function createMutators(authData: AuthData | undefined) {
   return {

@@ -1,4 +1,4 @@
-import { exec } from '../shared/exec';
+import { exec } from 'shared/exec';
 
 console.log('Cleaning up resources...');
 

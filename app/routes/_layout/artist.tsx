@@ -1,10 +1,10 @@
 import {useQuery, useZero} from '@rocicorp/zero/react';
 import {Query} from '@rocicorp/zero';
 import {createFileRoute} from '@tanstack/react-router';
-import {Schema} from '../../../zero/schema';
-import {Mutators} from '../../../zero/mutators';
-import {authClient} from '../../../auth/client';
-import {Button} from '../../components/button';
+import {Schema} from 'zero/schema';
+import {Mutators} from 'zero/mutators';
+import {authClient} from 'auth/client';
+import {Button} from 'app/components/button';
 
 export const Route = createFileRoute('/_layout/artist')({
   component: RouteComponent,

@@ -1,5 +1,5 @@
 import {useLocation} from '@tanstack/react-router';
-import {authClient} from '../../auth/client';
+import {authClient} from 'auth/client';
 import {Button} from './button';
 
 export function LoginButton() {

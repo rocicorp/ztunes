@@ -1,4 +1,4 @@
-import { exec } from '../shared/exec';
-import '../shared/env';
+import { exec } from 'shared/exec';
+import 'shared/env';
 
 exec('vite dev');

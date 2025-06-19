@@ -1,6 +1,6 @@
-import { must } from '../shared/must';
-import '../shared/env';
-import { exec } from '../shared/exec';
+import { must } from 'shared/must';
+import 'shared/env';
+import { exec } from 'shared/exec';
 
 const pgPassword = must(process.env.PG_PASSWORD, 'PG_PASSWORD is required');
 

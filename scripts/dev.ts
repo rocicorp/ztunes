@@ -1,6 +1,6 @@
 import { concurrently } from 'concurrently';
-import { must } from '../shared/must';
-import '../shared/env';
+import { must } from 'shared/must';
+import 'shared/env';
 
 const pgAddress = must(process.env.PG_ADDRESS, 'PG_ADDRESS is required');
 
