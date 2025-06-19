@@ -26,7 +26,7 @@ destination = "/data"
 initial_size = "100gb"
 
 [env]
-ZERO_REPLICA_FILE="/data/ztunes.db"
+ZERO_REPLICA_FILE="/data/zero-records.db"
 ZERO_SCHEMA_PATH="zero/schema.ts"
 ZERO_LOG_LEVEL="debug"
 # Set via fly secret
