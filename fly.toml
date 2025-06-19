@@ -29,6 +29,8 @@ initial_size = "100gb"
 ZERO_REPLICA_FILE="/data/zero-records.db"
 ZERO_SCHEMA_PATH="zero/schema.ts"
 ZERO_LOG_LEVEL="debug"
+ZERO_QUERY_HYDRATION_STATS="true"
+ZERO_LOG_SLOW_HYDRATE_THRESHOLD="1"
 # Set via fly secret
 # ZERO_UPSTREAM_DB=""
 # ZERO_AUTH_JWKS_URL=""
