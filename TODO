@@ -15,7 +15,6 @@ small:
 - auto-push drizzle schema on change in dev
 - clean up env vars more - it's super confusing right now which env vars are for which things. maybe each component (server, zero-cache, dev) should have its own section of .env with duplicate/interpolated vars
 - change all the relative paths to use ~ shortcut - https://tanstack.com/start/latest/docs/framework/react/path-aliases
-- the name of this app (package, github repo, vercel app) should change to zero-records, it's no longer and itunes app.
 
 zero todos
 
