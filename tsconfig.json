@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "jsx": "react-jsx",
-    "moduleResolution": "Bundler",
     "module": "ESNext",
-    "target": "ES2022",
+    "moduleResolution": "Bundler",
     "skipLibCheck": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "target": "ES2022"
   }
 }

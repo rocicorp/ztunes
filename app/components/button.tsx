@@ -1,11 +1,4 @@
-import {
-  DetailedHTMLProps,
-  HTMLAttributes,
-  MouseEvent,
-  PointerEvent,
-  ReactNode,
-  useRef,
-} from 'react';
+import {MouseEvent, PointerEvent, ReactNode, useRef} from 'react';
 
 export function Button({
   children,
