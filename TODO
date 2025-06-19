@@ -10,7 +10,6 @@ small:
 - When you run `clean` in dev and leave the UI open, the auth token starts failing to be accepted and you can only recover by logging out and in again. Should this be more automated somehow?
 - in github deploy update permissions
 - add to cart button should be on mousedown - when we add this the remove accidentally happens
-- pull inline styles out into whatever is standard for tanstack start - module css? something else?
 - auto-push drizzle schema on change in dev
 - clean up env vars more - it's super confusing right now which env vars are for which things. maybe each component (server, zero-cache, dev) should have its own section of .env with duplicate/interpolated vars
 - change all the relative paths to use ~ shortcut - https://tanstack.com/start/latest/docs/framework/react/path-aliases
