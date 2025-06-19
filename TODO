@@ -9,10 +9,8 @@ small:
 
 - README
 - When you run `clean` in dev and leave the UI open, the auth token starts failing to be accepted and you can only recover by logging out and in again. Should this be more automated somehow?
-- add to cart button should be on mousedown - when we add this the remove accidentally happens
 - clean up env vars more - it's super confusing right now which env vars are for which things. maybe each component (server, zero-cache, dev) should have its own section of .env with duplicate/interpolated vars
 - change all the relative paths to use ~ shortcut - https://tanstack.com/start/latest/docs/framework/react/path-aliases
-- make sure vercel deploy is sequenced after db migration
 
 zero todos
 

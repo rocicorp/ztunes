@@ -4,6 +4,7 @@ import {createFileRoute} from '@tanstack/react-router';
 import {Schema} from '../../../zero/schema';
 import {Mutators} from '../../../zero/mutators';
 import {authClient} from '../../../auth/client';
+import {Button} from '../../components/button';
 
 export const Route = createFileRoute('/_layout/artist')({
   component: RouteComponent,
@@ -50,14 +51,14 @@ function RouteComponent() {
     }
 
     if (!session.data?.user.id) {
-      return <button disabled>Login to shop</button>;
+      return <Button disabled>Login to shop</Button>;
     }
 
     const message = album.cartItems ? 'Remove from cart' : 'Add to cart';
     const action = album.cartItems
       ? () => z.mutate.cart.remove(album.id)
       : () => z.mutate.cart.add({albumID: album.id, addedAt: Date.now()});
-    return <button onClick={action}>{message}</button>;
+    return <Button onPress={action}>{message}</Button>;
   };
 
   return (

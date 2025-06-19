@@ -1,5 +1,6 @@
-import {useLocation, useRouter} from '@tanstack/react-router';
+import {useLocation} from '@tanstack/react-router';
 import {authClient} from '../../auth/client';
+import {Button} from './button';
 
 export function LoginButton() {
   const location = useLocation();
@@ -8,14 +9,14 @@ export function LoginButton() {
     return (
       <div>
         {session.data.user.email}{' '}
-        <button onClick={() => authClient.signOut()}>Sign out</button>
+        <Button onPress={() => authClient.signOut()}>Sign out</Button>
       </div>
     );
   }
   const callbackURL = location.href;
   return (
-    <button
-      onClick={() =>
+    <Button
+      onPress={() =>
         authClient.signIn.social({
           provider: 'github',
           callbackURL,
@@ -25,6 +26,6 @@ export function LoginButton() {
       }
     >
       Sign in
-    </button>
+    </Button>
   );
 }
