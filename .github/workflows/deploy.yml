@@ -11,6 +11,7 @@ jobs:
     env:
       PG_URL: ${{ secrets.PG_URL }}
       ZERO_UPSTREAM_DB: ${{ secrets.ZERO_UPSTREAM_DB }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +26,9 @@ jobs:
 
       - name: Setup Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@v1
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
 
       - name: Deploy zero-cache to Fly if necessary
         env:
@@ -65,3 +69,9 @@ jobs:
       - name: Update zero permissions
         run: |
           npx zero-deploy-permissions -p "zero/schema.ts"
+
+      - name: Deploy to Vercel
+        run: |
+          vercel deploy --prod --yes \
+            --token $VERCEL_TOKEN \
+            --meta githubCommitSha=${{ github.sha }}

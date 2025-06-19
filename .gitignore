@@ -4,3 +4,4 @@
 .vscode
 count.txt
 node_modules
+.vercel
