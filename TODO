@@ -13,20 +13,9 @@ small:
 
 zero todos
 
-- the pattern of making the zero instance reactive in zero-provider.ts feels right but (a) had to hack around current code in zero/react, and (b) took a fair amount of code. Can we make this easier? Need to consider having multiple zero instances live.
-- exceeding 20k limit causes all data to get dropped - pretty surprising.
-  - we cannot remove the limit because it will cause queries to be cached forever
-  - erik is working on removing
-  - maybe add a warning?
-- fix @rocicorp/zero-sqlite3 for up arrow to work and document better
-- warn about missing index on FK it makes zero crazy slow.
-- errors about missing env vars shouldn't tell you to create .env. .env shouldn't be required.
-- you should be able to start zero-cache w/o a schema.ts - it should at least replicate the data. schema not required for replication, only typing queries in client!
-- zero-deploy-permissions should also pay attention to .env
-  - wait when i wrote this i thought it was ignoring .env, but now i'm seeing an error about it complaining about a missing .env.
-
 Not doing
 
+- warn about missing index on FK it makes zero crazy slow.
 - it would be nice if tx.insert() returned the value.
   - consider also have ts.update() do this? kinda bummer to pay the cost to do this if not needed
   - maybe there's a `return` flag needed on insert() and update()

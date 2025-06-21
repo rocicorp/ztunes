@@ -1,6 +1,6 @@
 import {Zero} from '@rocicorp/zero';
+import {ZeroProvider} from '@rocicorp/zero/react';
 import {schema, Schema} from 'zero/schema';
-import {ZeroProvider} from './zero-provider-neue';
 import {useMemo} from 'react';
 import {createMutators} from 'zero/mutators';
 import {useSession} from './session-provider';
