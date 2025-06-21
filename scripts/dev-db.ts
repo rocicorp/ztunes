@@ -1,8 +1,11 @@
-import { must } from 'shared/must';
+import {must} from 'shared/must';
 import 'shared/env';
-import { exec } from 'shared/exec';
+import {exec} from 'shared/exec';
 
-const pgPassword = must(process.env.PG_PASSWORD, 'PG_PASSWORD is required');
+const devPgPassword = must(
+  process.env.DEV_PG_PASSWORD,
+  'DEV_PG_PASSWORD is required',
+);
 
 function main() {
   try {
@@ -16,7 +19,7 @@ function main() {
     );
     try {
       exec(
-        `docker run --rm --name zero-records -e POSTGRES_PASSWORD=${pgPassword} -p 5432:5432 postgres -c wal_level=logical`,
+        `docker run --rm --name zero-records -e POSTGRES_PASSWORD=${devPgPassword} -p 5432:5432 postgres -c wal_level=logical`,
       );
     } catch (runError) {
       console.error('Failed to create and run new container:', runError);
