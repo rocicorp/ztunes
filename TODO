@@ -9,6 +9,7 @@ small:
 
 - README
 - When you run `clean` in dev and leave the UI open, the auth token starts failing to be accepted and you can only recover by logging out and in again. Should this be more automated somehow?
+- put URL back to ztunes
 
 zero todos
 
