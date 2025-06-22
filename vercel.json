@@ -6,19 +6,15 @@
     {"src": "/artist?id=(.*)", "dest": "/_shell.html"},
     {
       "src": "/assets/(.*)\\.(js|css)",
-      "headers": [
-        {
-          "Cache-Control": "public, max-age=31536000, immutable"
-        }
-      ]
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
     },
     {
       "src": "/logo-(.*)\\.png",
-      "headers": [
-        {
-          "Cache-Control": "public, max-age=31536000, immutable"
-        }
-      ]
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
     }
   ]
 }
