@@ -36,6 +36,8 @@ function Home() {
 
   const [artists, {type}] = useQuery(q, {ttl: '1m'});
 
+  console.time('artists - ' + type);
+
   const setSearchParam = useDebouncedCallback((text: string) => {
     router.navigate({
       to: '/',
