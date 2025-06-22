@@ -22,6 +22,8 @@
   ],
   "rewrites": [
     {"source": "/api/:path*", "destination": "/api/:path*"},
-    {"source": "/:path*", "destination": "/_shell.html"}
+    {"source": "/", "destination": "/_shell.html"},
+    {"source": "/artist?id=:id", "destination": "/_shell.html"},
+    {"source": "/cart", "destination": "/_shell.html"}
   ]
 }
