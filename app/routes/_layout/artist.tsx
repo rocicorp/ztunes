@@ -3,8 +3,8 @@ import {Query} from '@rocicorp/zero';
 import {createFileRoute} from '@tanstack/react-router';
 import {Schema} from 'zero/schema';
 import {Mutators} from 'zero/mutators';
-import {authClient} from 'auth/client';
 import {Button} from 'app/components/button';
+import {useSession} from 'app/components/session-provider';
 
 export const Route = createFileRoute('/_layout/artist')({
   component: RouteComponent,
@@ -23,7 +23,7 @@ export function artistQuery(query: Query<Schema, 'artist'>) {
 }
 
 function RouteComponent() {
-  const session = authClient.useSession();
+  const session = useSession();
   const z = useZero<Schema, Mutators>();
   const search = Route.useSearch();
   const id = search.id;
@@ -46,11 +46,7 @@ function RouteComponent() {
   }
 
   const cartButton = (album: (typeof artist.albums)[number]) => {
-    if (session.isPending) {
-      return null;
-    }
-
-    if (!session.data?.user.id) {
+    if (!session.data) {
       return <Button disabled>Login to shop</Button>;
     }
 

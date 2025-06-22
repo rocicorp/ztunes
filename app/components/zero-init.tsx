@@ -17,17 +17,17 @@ export function ZeroInit({children}: {children: React.ReactNode}) {
   const opts = useMemo(() => {
     return {
       schema,
-      userID: session.userID ?? 'anon',
-      auth: session.jwt,
+      userID: session.data?.userID ?? 'anon',
+      auth: session.data?.jwt,
       server: serverURL,
       mutators: createMutators(
-        session.userID ? {sub: session.userID} : undefined,
+        session.data?.userID ? {sub: session.data.userID} : undefined,
       ),
       init: zero => {
         preload(zero);
       },
     };
-  }, [session.userID, session.jwt]);
+  }, [session.data?.userID, session.data?.jwt]);
 
   return <ZeroProvider {...opts}>{children}</ZeroProvider>;
 }

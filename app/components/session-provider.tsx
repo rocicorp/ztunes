@@ -1,10 +1,17 @@
+import {createContext, useContext, useMemo, useState} from 'react';
+import Cookies from 'js-cookie';
 import {authClient} from 'auth/client';
-import {useEffect, useState, createContext, useContext} from 'react';
 
 export type SessionContextType = {
-  userID: string | undefined;
-  jwt: string | undefined;
-  pending: boolean;
+  data:
+    | {
+        userID: string;
+        email: string;
+        jwt: string;
+      }
+    | undefined;
+  login: () => void;
+  logout: () => void;
 };
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
@@ -17,67 +24,54 @@ export function useSession() {
   return context;
 }
 
-export function SessionProvider({
-  initialUserID,
-  initialToken,
-  children,
-}: {
-  initialUserID: string | undefined;
-  initialToken: string | undefined;
-  children: React.ReactNode;
-}) {
-  const session = authClient.useSession();
+export function SessionProvider({children}: {children: React.ReactNode}) {
+  const [, setForceUpdate] = useState({});
 
-  const [jwt, setJwt] = useState<string | undefined>(undefined);
-  const [pending, setPending] = useState(true);
+  const userID = Cookies.get('userid') as string | undefined;
+  const email = Cookies.get('email') as string | undefined;
+  const jwt = Cookies.get('jwt') as string | undefined;
 
-  useEffect(() => {
-    let isCancelled = false;
-    setPending(true);
-
-    const fetchToken = async () => {
-      const res = await fetch('/api/auth/token', {
-        credentials: 'include',
+  const logout = useMemo(
+    () => () => {
+      authClient.signOut().then(() => {
+        setForceUpdate({});
       });
-      if (res.ok) {
-        if (isCancelled) {
-          return;
-        }
+    },
+    [],
+  );
 
-        const data = await res.json();
-        if (isCancelled) {
-          return;
-        }
-
-        if (!data.token) {
-          console.error('No token found in /api/auth/token response');
-          return;
-        }
-
-        setJwt(data.token);
-      }
-      setPending(false);
+  const data = useMemo(() => {
+    if (!userID || !jwt || !email) {
+      return undefined;
+    }
+    return {
+      userID,
+      email,
+      jwt,
     };
+  }, [userID, jwt, email]);
 
-    // We fetch even if session is pending because better-auth can return JWT
-    // in parallel. No need to wait for userID. When userID comes back, we
-    // will do another token request which is kinda lame but it will be same
-    // JWT so won't cause any impact on app. And better than waiting for a
-    // whole round trip for userID.
-    fetchToken();
-
-    return () => {
-      isCancelled = true;
+  const context = useMemo(() => {
+    return {
+      data,
+      login,
+      logout,
     };
-  }, [session.data?.session.token]);
-
-  const value = {
-    userID: initialUserID ?? session.data?.user.id,
-    jwt: initialToken ?? jwt,
-    pending: session.isPending || pending,
-  };
+  }, [data, login, logout]);
 
   return (
-    <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
+    <SessionContext.Provider value={context}>
+      {children}
+    </SessionContext.Provider>
   );
+}
+
+function login() {
+  const callbackURL = location.href;
+  authClient.signIn.social({
+    provider: 'github',
+    callbackURL,
+    errorCallbackURL: callbackURL,
+    newUserCallbackURL: callbackURL,
+  });
 }

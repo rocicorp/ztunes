@@ -13,7 +13,7 @@ concurrently([
     name: 'pg',
     prefixColor: '#32648c',
   },
-  {command: 'npm run dev:ui', name: 'ts', prefixColor: '#7ce645'},
+  //{command: 'npm run dev:ui', name: 'ts', prefixColor: '#7ce645'},
   {
     command: `wait-on tcp:${devPgAddress} && sleep 1 && npx drizzle-kit push --force && npm run seed`,
     name: 'sd',
