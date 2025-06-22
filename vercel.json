@@ -3,7 +3,7 @@
   "routes": [
     {"src": "/", "dest": "/_shell.html"},
     {"src": "/cart", "dest": "/_shell.html"},
-    {"src": "/artist?id=(.*)", "destination": "/_shell.html"},
+    {"src": "/artist?id=(.*)", "dest": "/_shell.html"},
     {
       "src": "/assets/(.*)\\.(js|css)",
       "headers": [
