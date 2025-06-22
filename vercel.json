@@ -20,5 +20,9 @@
       ]
     }
   ],
-  "rewrites": [{"source": "/", "destination": "/_shell.html"}]
+  "rewrites": [
+    {"source": "/", "destination": "/_shell.html"},
+    {"source": "/cart", "destination": "/_shell.html"},
+    {"source": "/artist?id=:id", "destination": "/_shell.html"}
+  ]
 }
