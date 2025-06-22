@@ -21,7 +21,7 @@
     }
   ],
   "rewrites": [
-    {"source": "/api/(.*)", "destination": "/api/$1"},
-    {"source": "/(.*)", "destination": "/_shell.html"}
+    {"source": "/(.*)", "destination": "/_shell.html"},
+    {"source": "/api/(.*)", "destination": "/api/$1"}
   ]
 }
