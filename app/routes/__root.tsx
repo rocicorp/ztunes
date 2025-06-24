@@ -6,6 +6,7 @@ import {
   HeadContent,
   Scripts,
 } from '@tanstack/react-router';
+import {must} from 'shared/must';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -33,11 +34,16 @@ function RootComponent() {
   );
 }
 
+const serverURL = must(
+  import.meta.env.VITE_PUBLIC_SERVER,
+  'VITE_PUBLIC_SERVER is required',
+);
+
 function RootDocument({children}: Readonly<{children: ReactNode}>) {
   return (
     <html>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href={serverURL} />
         <style
           dangerouslySetInnerHTML={{
             __html: `
