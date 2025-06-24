@@ -5,3 +5,5 @@
 count.txt
 node_modules
 .vercel
+.nitro
+.output
