@@ -20,6 +20,11 @@ export const auth = betterAuth({
     provider: 'pg',
     schema,
   }),
+  session: {
+    cookieCache: {
+      enabled: true,
+    }
+  },
   plugins: [jwt()],
   socialProviders: {
     github: {
