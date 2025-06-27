@@ -1,9 +1,9 @@
-import { betterAuth, serializeCookie } from 'better-auth';
-import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { db } from 'db';
-import { must } from 'shared/must';
+import {betterAuth, serializeCookie} from 'better-auth';
+import {drizzleAdapter} from 'better-auth/adapters/drizzle';
+import {db} from 'db';
+import {must} from 'shared/must';
 import * as schema from './schema';
-import { createAuthMiddleware, getJwtToken, jwt } from 'better-auth/plugins';
+import {createAuthMiddleware, getJwtToken, jwt} from 'better-auth/plugins';
 import cookie from 'cookie';
 
 const clientID = must(
@@ -23,8 +23,8 @@ export const auth = betterAuth({
   session: {
     cookieCache: {
       enabled: true,
-      maxAge: 5 * 60
-    }
+      maxAge: 5 * 60,
+    },
   },
   plugins: [jwt()],
   socialProviders: {
@@ -75,7 +75,9 @@ export const auth = betterAuth({
       if (ctx.path.indexOf('/callback/') !== -1) {
         const headers = must(ctx.context.responseHeaders);
         const session = ctx.context.newSession;
-        const token = ctx.context.responseHeaders?.get('set-auth-jwt') || await getJwtToken(ctx);
+        const token =
+          ctx.context.responseHeaders?.get('set-auth-jwt') ||
+          (await getJwtToken(ctx));
 
         if (session && token) {
           setCookies(headers, {

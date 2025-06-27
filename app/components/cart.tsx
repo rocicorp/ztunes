@@ -1,7 +1,7 @@
-import { useZero, useQuery } from '@rocicorp/zero/react';
-import { Schema } from 'zero/schema';
-import { Link } from './link';
-import { useSession } from './session-provider';
+import {useZero, useQuery} from '@rocicorp/zero/react';
+import {Schema} from 'zero/schema';
+import {Link} from './link';
+import {useSession} from './session-provider';
 
 export function Cart() {
   const session = useSession();
