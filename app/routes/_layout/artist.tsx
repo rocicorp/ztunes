@@ -1,10 +1,11 @@
 import {useQuery, useZero} from '@rocicorp/zero/react';
-import {Query} from '@rocicorp/zero';
+import {Zero} from '@rocicorp/zero';
 import {createFileRoute} from '@tanstack/react-router';
 import {Schema} from 'zero/schema';
 import {Mutators} from 'zero/mutators';
 import {Button} from 'app/components/button';
 import {useSession} from 'app/components/session-provider';
+import {must} from 'shared/must';
 
 export const Route = createFileRoute('/_layout/artist')({
   component: RouteComponent,
@@ -14,16 +15,28 @@ export const Route = createFileRoute('/_layout/artist')({
       id: typeof params.id === 'string' ? params.id : undefined,
     };
   },
+  staticData: {
+    query,
+  },
 });
 
-export function artistQuery(query: Query<Schema, 'artist'>) {
-  return query.related('albums', album =>
-    album.related('cartItems', ci => ci.one()).orderBy('year', 'desc'),
-  );
+// TODO: Can get type of params and search from route somehow?
+// Tried Route['types']['params'] and Route['types']['searchSchema'] but
+// (a) params not strongly typed and (b) referencing either causes
+// circular definition.
+function query(z: Zero<Schema>, _params: {}, search: {id: string | undefined}) {
+  const id = must(search.id);
+  return z.query.artist
+    .where('id', id)
+    .one()
+    .related('albums', album =>
+      album.related('cartItems', ci => ci.one()).orderBy('year', 'desc'),
+    );
 }
 
 function RouteComponent() {
   const session = useSession();
+
   const z = useZero<Schema, Mutators>();
   const search = Route.useSearch();
   const id = search.id;
@@ -32,9 +45,7 @@ function RouteComponent() {
     return <div>Missing required search parameter id</div>;
   }
 
-  const [artist, {type}] = useQuery(
-    artistQuery(z.query.artist.where('id', id)).one(),
-  );
+  const [artist, {type}] = useQuery(query(z, {}, {id}));
 
   if (!artist && type === 'complete') {
     return <div>Artist not found</div>;
