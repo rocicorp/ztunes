@@ -1,16 +1,10 @@
-app todos
-
 big:
 
 - (aaron) integrate with TS router layer - we should get automatic/elegant preloads
 
 small:
 
-- README
-
-zero todos
-
-Not doing
+Not doing:
 
 - warn about missing index on FK it makes zero crazy slow.
 - it would be nice if tx.insert() returned the value.
