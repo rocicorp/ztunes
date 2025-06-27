@@ -1,15 +1,15 @@
-import {createContext, useContext, useMemo, useState} from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 import Cookies from 'js-cookie';
-import {authClient} from 'auth/client';
+import { authClient } from 'auth/client';
 
 export type SessionContextType = {
   data:
-    | {
-        userID: string;
-        email: string;
-        jwt: string;
-      }
-    | undefined;
+  | {
+    userID: string;
+    email: string;
+    jwt: string;
+  }
+  | undefined;
   login: () => void;
   logout: () => void;
 };
@@ -24,7 +24,7 @@ export function useSession() {
   return context;
 }
 
-export function SessionProvider({children}: {children: React.ReactNode}) {
+export function SessionProvider({ children }: { children: React.ReactNode }) {
   const [, setForceUpdate] = useState({});
 
   const userID = Cookies.get('userid') as string | undefined;
