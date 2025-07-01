@@ -3,7 +3,7 @@ import {drizzleAdapter} from 'better-auth/adapters/drizzle';
 import {db} from 'db';
 import {must} from 'shared/must';
 import * as schema from './schema';
-import {createAuthMiddleware, jwt} from 'better-auth/plugins';
+import {createAuthMiddleware, getJwtToken, jwt} from 'better-auth/plugins';
 import cookie from 'cookie';
 
 const clientID = must(
@@ -20,6 +20,12 @@ export const auth = betterAuth({
     provider: 'pg',
     schema,
   }),
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60,
+    },
+  },
   plugins: [jwt()],
   socialProviders: {
     github: {
@@ -68,25 +74,16 @@ export const auth = betterAuth({
     after: createAuthMiddleware(async ctx => {
       if (ctx.path.indexOf('/callback/') !== -1) {
         const headers = must(ctx.context.responseHeaders);
-        const setCookieHeader = ctx.context.responseHeaders?.get('set-cookie');
-        const cookieVal = setCookieHeader?.split(';')[0];
-
-        const session = await auth.api.getSession({
-          headers: new Headers({
-            cookie: cookieVal ?? '',
-          }),
-        });
-        const token = await auth.api.getToken({
-          headers: new Headers({
-            cookie: cookieVal ?? '',
-          }),
-        });
+        const session = ctx.context.newSession;
+        const token =
+          ctx.context.responseHeaders?.get('set-auth-jwt') ||
+          (await getJwtToken(ctx));
 
         if (session && token) {
           setCookies(headers, {
             userid: session.user.id,
             email: session.user.email,
-            jwt: token.token,
+            jwt: token,
           });
         }
         return;
