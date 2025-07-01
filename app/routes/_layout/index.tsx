@@ -36,8 +36,6 @@ function Home() {
 
   const [artists, {type}] = useQuery(q, {ttl: '1m'});
 
-  console.time('artists - ' + type);
-
   const setSearchParam = useDebouncedCallback((text: string) => {
     router.navigate({
       to: '/',
@@ -55,7 +53,9 @@ function Home() {
   return (
     <>
       <div style={{display: 'flex', flexDirection: 'column'}}>
-        <h3 style={{margin: '1em 0 0.2em 0'}}>Search 85,000 Artists...</h3>
+        <h3 style={{margin: '1em 0 0.2em 0'}}>
+          Search 85,000 artists from the 1990s...
+        </h3>
         <input
           type="text"
           value={search}
