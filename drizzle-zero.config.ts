@@ -1,0 +1,75 @@
+import {drizzleZeroConfig} from 'drizzle-zero';
+import * as drizzleSchema from './db/schema';
+
+export const schema = drizzleZeroConfig(drizzleSchema, {
+  tables: {
+    user: {
+      id: true,
+      name: true,
+      email: true,
+      emailVerified: true,
+      image: false,
+      createdAt: true,
+      updatedAt: true,
+    },
+    session: {
+      id: true,
+      expiresAt: true,
+      token: true,
+      createdAt: true,
+      updatedAt: true,
+      ipAddress: true,
+      userAgent: true,
+      userId: true,
+    },
+    account: {
+      id: true,
+      accountId: true,
+      providerId: true,
+      userId: true,
+      accessToken: true,
+      refreshToken: true,
+      idToken: true,
+      accessTokenExpiresAt: true,
+      refreshTokenExpiresAt: true,
+      scope: true,
+      password: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    verification: {
+      id: true,
+      identifier: true,
+      value: true,
+      expiresAt: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    jwks: {
+      id: true,
+      publicKey: true,
+      privateKey: true,
+      createdAt: true,
+    },
+    artist: {
+      id: true,
+      name: true,
+      sortName: true,
+      type: true,
+      beginDate: true,
+      endDate: true,
+      popularity: true,
+    },
+    album: {
+      id: true,
+      artistId: true,
+      title: true,
+      year: true,
+    },
+    cartItem: {
+      userId: true,
+      albumId: true,
+      addedAt: true,
+    },
+  },
+});
