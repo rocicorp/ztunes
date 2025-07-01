@@ -3,24 +3,35 @@ import {createFileRoute} from '@tanstack/react-router';
 import {Mutators} from 'zero/mutators';
 import {Schema} from 'zero/schema';
 import {Button} from 'app/components/button';
-import {useSession} from 'app/components/session-provider';
+import {SessionContextType, useSession} from 'app/components/session-provider';
+import {Zero} from '@rocicorp/zero';
+
+function query(
+  z: Zero<Schema>,
+  _params: undefined,
+  _search: undefined,
+  session: SessionContextType,
+) {
+  return z.query.cartItem
+    .related('album', album =>
+      album.one().related('artist', artist => artist.one()),
+    )
+    .where('userId', session.data?.userID ?? '')
+    .orderBy('addedAt', 'asc');
+}
 
 export const Route = createFileRoute('/_layout/cart')({
   component: RouteComponent,
   ssr: false,
+  staticData: {
+    query,
+  },
 });
 
 function RouteComponent() {
   const session = useSession();
   const z = useZero<Schema, Mutators>();
-  const [cartItems] = useQuery(
-    z.query.cartItem
-      .related('album', album =>
-        album.one().related('artist', artist => artist.one()),
-      )
-      .where('userId', session.data?.userID ?? ''),
-  );
-
+  const [cartItems] = useQuery(query(z, undefined, undefined, session));
   if (!session.data) {
     return <div>Login to view cart</div>;
   }
