@@ -13,7 +13,7 @@ export const Route = createFileRoute('/_layout/cart')({
 function RouteComponent() {
   const session = useSession();
   const z = useZero<Schema, Mutators>();
-  const [cartItems] = useQuery(
+  const [cartItems, {type: resultType}] = useQuery(
     z.query.cartItem
       .related('album', album =>
         album.one().related('artist', artist => artist.one()),
@@ -34,18 +34,22 @@ function RouteComponent() {
       <h1>Cart</h1>
       <table cellPadding={0} cellSpacing={0} border={0} style={{width: 500}}>
         <tbody>
-          {cartItems.map(item =>
-            item.album ? (
-              <tr key={item.albumId}>
-                <td>
-                  {item.album?.title} ({item.album?.artist?.name})
-                </td>
-                <td style={{paddingLeft: '1em'}}>
-                  <Button onPress={() => onRemove(item.albumId)}>Remove</Button>
-                </td>
-              </tr>
-            ) : null,
-          )}
+          {cartItems.length === 0 && resultType === 'complete'
+            ? 'No items in cart 😢'
+            : cartItems.map(item =>
+                item.album ? (
+                  <tr key={item.albumId}>
+                    <td>
+                      {item.album?.title} ({item.album?.artist?.name})
+                    </td>
+                    <td style={{paddingLeft: '1em'}}>
+                      <Button onPress={() => onRemove(item.albumId)}>
+                        Remove
+                      </Button>
+                    </td>
+                  </tr>
+                ) : null,
+              )}
         </tbody>
       </table>
     </>
