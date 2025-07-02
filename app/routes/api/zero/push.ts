@@ -10,6 +10,7 @@ import {createMutators} from 'zero/mutators';
 import * as jose from 'jose';
 import {must} from 'shared/must';
 import {createServerFileRoute} from '@tanstack/react-start/server';
+import {auth} from 'auth/auth';
 
 const pgURL = must(process.env.PG_URL, 'PG_URL is required');
 
@@ -51,7 +52,8 @@ async function getUserID(request: Request) {
   }
 
   const token = authHeader.slice(prefix.length);
-  const jwks = jose.createRemoteJWKSet(new URL('/api/auth/jwks', request.url));
+  const set = await auth.api.getJwks();
+  const jwks = jose.createLocalJWKSet(set);
 
   const {payload} = await jose.jwtVerify(token, jwks);
   return must(payload.sub, 'Empty sub in token');
