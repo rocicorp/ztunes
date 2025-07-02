@@ -15,8 +15,8 @@
  * ------------------------------------------------------------
  */
 
-import type { DrizzleToZeroSchema, ZeroCustomType } from "drizzle-zero";
-import type * as drizzleSchema from "../db/schema";
+import type {DrizzleToZeroSchema, ZeroCustomType} from 'drizzle-zero';
+import type * as drizzleSchema from '../db/schema';
 
 type ZeroSchema = DrizzleToZeroSchema<typeof drizzleSchema>;
 
@@ -27,609 +27,609 @@ type ZeroSchema = DrizzleToZeroSchema<typeof drizzleSchema>;
 export const schema = {
   tables: {
     account: {
-      name: "account",
+      name: 'account',
       columns: {
         id: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "id"
+            'account',
+            'id'
           >,
         },
         accountId: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "accountId"
+            'account',
+            'accountId'
           >,
-          serverName: "account_id",
+          serverName: 'account_id',
         },
         providerId: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "providerId"
+            'account',
+            'providerId'
           >,
-          serverName: "provider_id",
+          serverName: 'provider_id',
         },
         userId: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "userId"
+            'account',
+            'userId'
           >,
-          serverName: "user_id",
+          serverName: 'user_id',
         },
         accessToken: {
-          type: "string",
+          type: 'string',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "accessToken"
+            'account',
+            'accessToken'
           >,
-          serverName: "access_token",
+          serverName: 'access_token',
         },
         refreshToken: {
-          type: "string",
+          type: 'string',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "refreshToken"
+            'account',
+            'refreshToken'
           >,
-          serverName: "refresh_token",
+          serverName: 'refresh_token',
         },
         idToken: {
-          type: "string",
+          type: 'string',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "idToken"
+            'account',
+            'idToken'
           >,
-          serverName: "id_token",
+          serverName: 'id_token',
         },
         accessTokenExpiresAt: {
-          type: "number",
+          type: 'number',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "accessTokenExpiresAt"
+            'account',
+            'accessTokenExpiresAt'
           >,
-          serverName: "access_token_expires_at",
+          serverName: 'access_token_expires_at',
         },
         refreshTokenExpiresAt: {
-          type: "number",
+          type: 'number',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "refreshTokenExpiresAt"
+            'account',
+            'refreshTokenExpiresAt'
           >,
-          serverName: "refresh_token_expires_at",
+          serverName: 'refresh_token_expires_at',
         },
         scope: {
-          type: "string",
+          type: 'string',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "scope"
+            'account',
+            'scope'
           >,
         },
         password: {
-          type: "string",
+          type: 'string',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "password"
+            'account',
+            'password'
           >,
         },
         createdAt: {
-          type: "number",
+          type: 'number',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "createdAt"
+            'account',
+            'createdAt'
           >,
-          serverName: "created_at",
+          serverName: 'created_at',
         },
         updatedAt: {
-          type: "number",
+          type: 'number',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "account",
-            "updatedAt"
+            'account',
+            'updatedAt'
           >,
-          serverName: "updated_at",
+          serverName: 'updated_at',
         },
       },
-      primaryKey: ["id"],
+      primaryKey: ['id'],
     },
     album: {
-      name: "album",
+      name: 'album',
       columns: {
         id: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "album",
-            "id"
+            'album',
+            'id'
           >,
         },
         artistId: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "album",
-            "artistId"
+            'album',
+            'artistId'
           >,
-          serverName: "artist_id",
+          serverName: 'artist_id',
         },
         title: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "album",
-            "title"
+            'album',
+            'title'
           >,
         },
         year: {
-          type: "number",
+          type: 'number',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "album",
-            "year"
+            'album',
+            'year'
           >,
         },
       },
-      primaryKey: ["id"],
+      primaryKey: ['id'],
     },
     artist: {
-      name: "artist",
+      name: 'artist',
       columns: {
         id: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "artist",
-            "id"
+            'artist',
+            'id'
           >,
         },
         name: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "artist",
-            "name"
+            'artist',
+            'name'
           >,
         },
         sortName: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "artist",
-            "sortName"
+            'artist',
+            'sortName'
           >,
-          serverName: "sort_name",
+          serverName: 'sort_name',
         },
         type: {
-          type: "string",
+          type: 'string',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "artist",
-            "type"
+            'artist',
+            'type'
           >,
         },
         beginDate: {
-          type: "string",
+          type: 'string',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "artist",
-            "beginDate"
+            'artist',
+            'beginDate'
           >,
-          serverName: "begin_date",
+          serverName: 'begin_date',
         },
         endDate: {
-          type: "string",
+          type: 'string',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "artist",
-            "endDate"
+            'artist',
+            'endDate'
           >,
-          serverName: "end_date",
+          serverName: 'end_date',
         },
         popularity: {
-          type: "number",
+          type: 'number',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "artist",
-            "popularity"
+            'artist',
+            'popularity'
           >,
         },
       },
-      primaryKey: ["id"],
+      primaryKey: ['id'],
     },
     cartItem: {
-      name: "cartItem",
+      name: 'cartItem',
       columns: {
         userId: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "cartItem",
-            "userId"
+            'cartItem',
+            'userId'
           >,
-          serverName: "user_id",
+          serverName: 'user_id',
         },
         albumId: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "cartItem",
-            "albumId"
+            'cartItem',
+            'albumId'
           >,
-          serverName: "album_id",
+          serverName: 'album_id',
         },
         addedAt: {
-          type: "number",
+          type: 'number',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "cartItem",
-            "addedAt"
+            'cartItem',
+            'addedAt'
           >,
-          serverName: "added_at",
+          serverName: 'added_at',
         },
       },
-      primaryKey: ["userId", "albumId"],
-      serverName: "cart_item",
+      primaryKey: ['userId', 'albumId'],
+      serverName: 'cart_item',
     },
     jwks: {
-      name: "jwks",
+      name: 'jwks',
       columns: {
         id: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "jwks",
-            "id"
+            'jwks',
+            'id'
           >,
         },
         publicKey: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "jwks",
-            "publicKey"
+            'jwks',
+            'publicKey'
           >,
-          serverName: "public_key",
+          serverName: 'public_key',
         },
         privateKey: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "jwks",
-            "privateKey"
+            'jwks',
+            'privateKey'
           >,
-          serverName: "private_key",
+          serverName: 'private_key',
         },
         createdAt: {
-          type: "number",
+          type: 'number',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "jwks",
-            "createdAt"
+            'jwks',
+            'createdAt'
           >,
-          serverName: "created_at",
+          serverName: 'created_at',
         },
       },
-      primaryKey: ["id"],
+      primaryKey: ['id'],
     },
     session: {
-      name: "session",
+      name: 'session',
       columns: {
         id: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "session",
-            "id"
+            'session',
+            'id'
           >,
         },
         expiresAt: {
-          type: "number",
+          type: 'number',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "session",
-            "expiresAt"
+            'session',
+            'expiresAt'
           >,
-          serverName: "expires_at",
+          serverName: 'expires_at',
         },
         token: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "session",
-            "token"
+            'session',
+            'token'
           >,
         },
         createdAt: {
-          type: "number",
+          type: 'number',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "session",
-            "createdAt"
+            'session',
+            'createdAt'
           >,
-          serverName: "created_at",
+          serverName: 'created_at',
         },
         updatedAt: {
-          type: "number",
+          type: 'number',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "session",
-            "updatedAt"
+            'session',
+            'updatedAt'
           >,
-          serverName: "updated_at",
+          serverName: 'updated_at',
         },
         ipAddress: {
-          type: "string",
+          type: 'string',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "session",
-            "ipAddress"
+            'session',
+            'ipAddress'
           >,
-          serverName: "ip_address",
+          serverName: 'ip_address',
         },
         userAgent: {
-          type: "string",
+          type: 'string',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "session",
-            "userAgent"
+            'session',
+            'userAgent'
           >,
-          serverName: "user_agent",
+          serverName: 'user_agent',
         },
         userId: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "session",
-            "userId"
+            'session',
+            'userId'
           >,
-          serverName: "user_id",
+          serverName: 'user_id',
         },
       },
-      primaryKey: ["id"],
+      primaryKey: ['id'],
     },
     user: {
-      name: "user",
+      name: 'user',
       columns: {
         id: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "user",
-            "id"
+            'user',
+            'id'
           >,
         },
         name: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "user",
-            "name"
+            'user',
+            'name'
           >,
         },
         email: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "user",
-            "email"
+            'user',
+            'email'
           >,
         },
         emailVerified: {
-          type: "boolean",
+          type: 'boolean',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "user",
-            "emailVerified"
+            'user',
+            'emailVerified'
           >,
-          serverName: "email_verified",
+          serverName: 'email_verified',
         },
         image: {
-          type: "string",
+          type: 'string',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "user",
-            "image"
+            'user',
+            'image'
           >,
         },
         createdAt: {
-          type: "number",
+          type: 'number',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "user",
-            "createdAt"
+            'user',
+            'createdAt'
           >,
-          serverName: "created_at",
+          serverName: 'created_at',
         },
         updatedAt: {
-          type: "number",
+          type: 'number',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "user",
-            "updatedAt"
+            'user',
+            'updatedAt'
           >,
-          serverName: "updated_at",
+          serverName: 'updated_at',
         },
       },
-      primaryKey: ["id"],
+      primaryKey: ['id'],
     },
     verification: {
-      name: "verification",
+      name: 'verification',
       columns: {
         id: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "verification",
-            "id"
+            'verification',
+            'id'
           >,
         },
         identifier: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "verification",
-            "identifier"
+            'verification',
+            'identifier'
           >,
         },
         value: {
-          type: "string",
+          type: 'string',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "verification",
-            "value"
+            'verification',
+            'value'
           >,
         },
         expiresAt: {
-          type: "number",
+          type: 'number',
           optional: false,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "verification",
-            "expiresAt"
+            'verification',
+            'expiresAt'
           >,
-          serverName: "expires_at",
+          serverName: 'expires_at',
         },
         createdAt: {
-          type: "number",
+          type: 'number',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "verification",
-            "createdAt"
+            'verification',
+            'createdAt'
           >,
-          serverName: "created_at",
+          serverName: 'created_at',
         },
         updatedAt: {
-          type: "number",
+          type: 'number',
           optional: true,
           customType: null as unknown as ZeroCustomType<
             ZeroSchema,
-            "verification",
-            "updatedAt"
+            'verification',
+            'updatedAt'
           >,
-          serverName: "updated_at",
+          serverName: 'updated_at',
         },
       },
-      primaryKey: ["id"],
+      primaryKey: ['id'],
     },
   },
   relationships: {
     album: {
       artist: [
         {
-          sourceField: ["artistId"],
-          destField: ["id"],
-          destSchema: "artist",
-          cardinality: "one",
+          sourceField: ['artistId'],
+          destField: ['id'],
+          destSchema: 'artist',
+          cardinality: 'one',
         },
       ],
       cartItems: [
         {
-          sourceField: ["id"],
-          destField: ["albumId"],
-          destSchema: "cartItem",
-          cardinality: "many",
+          sourceField: ['id'],
+          destField: ['albumId'],
+          destSchema: 'cartItem',
+          cardinality: 'many',
         },
       ],
     },
     artist: {
       albums: [
         {
-          sourceField: ["id"],
-          destField: ["artistId"],
-          destSchema: "album",
-          cardinality: "many",
+          sourceField: ['id'],
+          destField: ['artistId'],
+          destSchema: 'album',
+          cardinality: 'many',
         },
       ],
     },
     cartItem: {
       album: [
         {
-          sourceField: ["albumId"],
-          destField: ["id"],
-          destSchema: "album",
-          cardinality: "one",
+          sourceField: ['albumId'],
+          destField: ['id'],
+          destSchema: 'album',
+          cardinality: 'one',
         },
       ],
       user: [
         {
-          sourceField: ["userId"],
-          destField: ["id"],
-          destSchema: "user",
-          cardinality: "one",
+          sourceField: ['userId'],
+          destField: ['id'],
+          destSchema: 'user',
+          cardinality: 'one',
         },
       ],
     },
     user: {
       cartItems: [
         {
-          sourceField: ["id"],
-          destField: ["userId"],
-          destSchema: "cartItem",
-          cardinality: "many",
+          sourceField: ['id'],
+          destField: ['userId'],
+          destSchema: 'cartItem',
+          cardinality: 'many',
         },
       ],
     },

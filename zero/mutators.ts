@@ -1,10 +1,13 @@
-import { CustomMutatorDefs } from '@rocicorp/zero';
-import { schema, AuthData } from './schema';
+import {CustomMutatorDefs} from '@rocicorp/zero';
+import {schema, AuthData} from './schema';
 
 export function createMutators(authData: AuthData | undefined) {
   return {
     cart: {
-      add: async (tx, { albumID, addedAt }: { albumID: string, addedAt: number }) => {
+      add: async (
+        tx,
+        {albumID, addedAt}: {albumID: string; addedAt: number},
+      ) => {
         if (!authData) {
           throw new Error('Not authenticated');
         }
@@ -24,11 +27,17 @@ export function createMutators(authData: AuthData | undefined) {
         if (!authData) {
           throw new Error('Not authenticated');
         }
-        const cartItem = await tx.query.cartItem.where('userId', authData.sub).where('albumId', albumId).one();
+        const cartItem = await tx.query.cartItem
+          .where('userId', authData.sub)
+          .where('albumId', albumId)
+          .one();
         if (!cartItem) {
           return;
         }
-        await tx.mutate.cartItem.delete({ userId: cartItem.userId, albumId: cartItem.albumId });
+        await tx.mutate.cartItem.delete({
+          userId: cartItem.userId,
+          albumId: cartItem.albumId,
+        });
       },
     },
   } as const satisfies CustomMutatorDefs<typeof schema>;
