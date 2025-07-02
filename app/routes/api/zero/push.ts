@@ -55,6 +55,11 @@ async function getUserID(request: Request) {
   const set = await auth.api.getJwks();
   const jwks = jose.createLocalJWKSet(set);
 
-  const {payload} = await jose.jwtVerify(token, jwks);
-  return must(payload.sub, 'Empty sub in token');
+  try {
+    const {payload} = await jose.jwtVerify(token, jwks);
+    return must(payload.sub, 'Empty sub in token');
+  } catch (err) {
+    console.info('Could not verify token: ' + (err.message ?? String(err)));
+    return json({error: 'Invalid token'}, {status: 401});
+  }
 }
