@@ -28,6 +28,7 @@
     "nanoid": "^5.1.5",
     "pg": "^8.16.0",
     "react": "^19.1.0",
+    "react-cookie": "^8.0.1",
     "react-dom": "^19.1.0",
     "use-debounce": "^10.0.4",
     "vinxi": "^0.5.6",

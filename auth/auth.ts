@@ -1,4 +1,4 @@
-import {betterAuth, serializeCookie} from 'better-auth';
+import {betterAuth} from 'better-auth';
 import {drizzleAdapter} from 'better-auth/adapters/drizzle';
 import {db} from 'db';
 import {must} from 'shared/must';
@@ -20,7 +20,20 @@ export const auth = betterAuth({
     provider: 'pg',
     schema,
   }),
-  plugins: [jwt()],
+  plugins: [
+    jwt({
+      jwt: {
+        // This is now long your websockets will be able to stay up. When the
+        // websocket is closed, all the queries are dematerialized on the
+        // server. So making the socket lifetime too short is bad for
+        // performance.
+        //
+        // The Zero team is working on some improvements to auth that will
+        // enable shorter-lived tokens.
+        expirationTime: '1h',
+      },
+    }),
+  ],
   socialProviders: {
     github: {
       clientId: clientID,
@@ -28,43 +41,8 @@ export const auth = betterAuth({
     },
   },
   hooks: {
-    // TODO: Is there a better way to implement the below with better-auth?
-    //
-    // ========================================================================
-    //
-    // We want to boot the app as fast as is possible within the constraint of
-    // it being an SPA.
-    //
-    // This means we want to minimize network requests before the app comes up,
-    // and those we must do we want to do to the edge not origin server.
-    //
-    // Without authentication, we can do pretty well: we can serve the root page
-    // and all assets from the edge. The root page will have maxage=0, and the
-    // rest of the resources will be permacached. So we will end up with:
-    //
-    // Cold cache: edge (root) -> edge (assets) -> origin (data)
-    // Warm cache: edge (root) -> origin (data)
-    //
-    // With authentication, using the default patterns from better-auth, we end
-    // up with another round trip to origin to get session and JWT on startup:
-    //
-    // Cold cache: edge (root) -> edge (assets) -> origin (auth) -> origin (data)
-    // Warm cache: edge (root) -> origin (auth) -> origin (data)
-    //
-    // We can do the session initialization on the server (in a TanStack
-    // loader), but then our root page has to go to origin server:
-    //
-    // Cold cache: origin (root) -> edge (assets) -> origin (data)
-    // Warm cache: origin (root) -> origin (data)
-    //
-    // By utilizing cookies, we preserve the performance of the non-auth'd
-    // setup. The auth round trip is pushed to when you actually login/out.
-    //
-    // The downside is that it is less secure because the JWT is exposed to the
-    // client. But that is only necessary because Zero requires the JWT on the
-    // client currently. In the future, Zero will be able to directly utilize
-    // cookie login and then the same setup can work w/o exposing the token to
-    // the client.
+    // We set the JWT, email, and userid in cookies to avoid needing an extra
+    // round-trip to get them on startup.
     after: createAuthMiddleware(async ctx => {
       if (ctx.path.indexOf('/callback/') !== -1) {
         const headers = must(ctx.context.responseHeaders);
@@ -105,9 +83,16 @@ export const auth = betterAuth({
   },
 });
 
-function setCookies(headers: Headers, cookies: Record<string, string>) {
+export function setCookies(
+  headers: Headers,
+  cookies: {userid: string; email: string; jwt: string},
+) {
   const opts = {
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    // 1 year. Note that it doesn't really matter what this is as the JWT has
+    // its own, much shorter expiry above. It makes sense for it to be long
+    // since by default better auth will extend its own session indefinitely
+    // as long as you keep calling getSession().
+    maxAge: 60 * 60 * 24 * 365,
     path: '/',
   };
   for (const [key, value] of Object.entries(cookies)) {
