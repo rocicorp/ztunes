@@ -1,11 +1,6 @@
-big:
+Things to improve in Zero:
 
-- (aaron) integrate with TS router layer - we should get automatic/elegant preloads
-
-small:
-
-Not doing:
-
+- Make the auth token refresh work by invalidation, not returning a new value
 - warn about missing index on FK it makes zero crazy slow.
 - it would be nice if tx.insert() returned the value.
   - consider also have ts.update() do this? kinda bummer to pay the cost to do this if not needed

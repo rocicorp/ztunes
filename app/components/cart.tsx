@@ -1,14 +1,12 @@
-import {useZero, useQuery} from '@rocicorp/zero/react';
-import {Schema} from 'zero/schema';
+import {useQuery} from '@rocicorp/zero/react';
 import {Link} from './link';
-import {useSession} from './session-provider';
+import {useRouter} from '@tanstack/react-router';
 
 export function Cart() {
-  const session = useSession();
-  const z = useZero<Schema>();
+  const {zero, session} = useRouter().options.context;
 
   const [items] = useQuery(
-    z.query.cartItem
+    zero.query.cartItem
       .where('userId', session.data?.userID ?? '')
       .orderBy('addedAt', 'asc'),
     {
