@@ -1,47 +1,46 @@
-import {useQuery} from '@rocicorp/zero/react';
-import {Zero} from '@rocicorp/zero';
-import {createFileRoute, useRouter} from '@tanstack/react-router';
+import {useQuery, useZero} from '@rocicorp/zero/react';
+import {Query} from '@rocicorp/zero';
+import {createFileRoute} from '@tanstack/react-router';
 import {Schema} from 'zero/schema';
 import {Mutators} from 'zero/mutators';
 import {Button} from 'app/components/button';
-
-function query(zero: Zero<Schema, Mutators>, artistID: string | undefined) {
-  return zero.query.artist
-    .where('id', artistID ?? '')
-    .related('albums', album => album.related('cartItems'))
-    .one();
-}
+import {useSession} from 'app/components/session-provider';
 
 export const Route = createFileRoute('/_layout/artist')({
   component: RouteComponent,
   ssr: false,
-  loaderDeps: ({search}) => ({artistId: search.id}),
-  loader: async ({context, deps: {artistId}}) => {
-    const {zero} = context;
-    console.log('preloading artist', artistId);
-    query(zero, artistId).preload({ttl: '5m'}).cleanup();
-  },
-  validateSearch: (search: Record<string, unknown>) => {
+  validateSearch: (params: Record<string, unknown>) => {
     return {
-      id: typeof search.id === 'string' ? search.id : undefined,
-    } as {id: string | undefined};
+      id: typeof params.id === 'string' ? params.id : undefined,
+    };
   },
 });
 
+export function artistQuery(query: Query<Schema, 'artist'>) {
+  return query.related('albums', album =>
+    album.related('cartItems', ci => ci.one()).orderBy('year', 'desc'),
+  );
+}
+
 function RouteComponent() {
-  const {zero, session} = useRouter().options.context;
-  const {id} = Route.useSearch();
+  const session = useSession();
+  const z = useZero<Schema, Mutators>();
+  const search = Route.useSearch();
+  const id = search.id;
 
   if (!id) {
     return <div>Missing required search parameter id</div>;
   }
 
-  const [artist, {type}] = useQuery(query(zero, id), {ttl: '5m'});
+  const [artist, {type}] = useQuery(
+    artistQuery(z.query.artist.where('id', id)).one(),
+  );
 
   if (!artist && type === 'complete') {
     return <div>Artist not found</div>;
   }
 
+  // TODO: Figure out suspense?
   if (!artist) {
     return null;
   }
@@ -51,12 +50,10 @@ function RouteComponent() {
       return <Button disabled>Login to shop</Button>;
     }
 
-    const message =
-      album.cartItems.length > 0 ? 'Remove from cart' : 'Add to cart';
-    const action =
-      album.cartItems.length > 0
-        ? () => zero.mutate.cart.remove(album.id)
-        : () => zero.mutate.cart.add({albumID: album.id, addedAt: Date.now()});
+    const message = album.cartItems ? 'Remove from cart' : 'Add to cart';
+    const action = album.cartItems
+      ? () => z.mutate.cart.remove(album.id)
+      : () => z.mutate.cart.add({albumID: album.id, addedAt: Date.now()});
     return <Button onPress={action}>{message}</Button>;
   };
 

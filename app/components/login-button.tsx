@@ -1,8 +1,10 @@
-import {useRouter} from '@tanstack/react-router';
+import {useLocation} from '@tanstack/react-router';
 import {Button} from './button';
+import {useSession} from './session-provider';
 
 export function LoginButton() {
-  const {session} = useRouter().options.context;
+  const location = useLocation();
+  const session = useSession();
   if (session.data) {
     return (
       <div>
@@ -11,5 +13,6 @@ export function LoginButton() {
       </div>
     );
   }
+  const callbackURL = location.href;
   return <Button onPress={() => session.login()}>Sign in</Button>;
 }

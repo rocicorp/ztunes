@@ -1,5 +1,5 @@
 import {createFileRoute, Outlet} from '@tanstack/react-router';
-import {SessionInit} from 'app/components/session-init';
+import {SessionProvider} from 'app/components/session-provider';
 import {ZeroInit} from 'app/components/zero-init';
 import {createServerFn} from '@tanstack/react-start';
 import {SiteLayout} from 'app/components/site-layout';
@@ -15,13 +15,13 @@ export const Route = createFileRoute('/_layout')({
 function RouteComponent() {
   return (
     <CookiesProvider>
-      <SessionInit>
+      <SessionProvider>
         <ZeroInit>
           <SiteLayout>
             <Outlet />
           </SiteLayout>
         </ZeroInit>
-      </SessionInit>
+      </SessionProvider>
     </CookiesProvider>
   );
 }
