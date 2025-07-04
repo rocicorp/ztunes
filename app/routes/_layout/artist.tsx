@@ -1,25 +1,18 @@
 import {useQuery} from '@rocicorp/zero/react';
-import {Zero} from '@rocicorp/zero';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
-import {Schema} from 'zero/schema';
-import {Mutators} from 'zero/mutators';
 import {Button} from 'app/components/button';
-
-function query(zero: Zero<Schema, Mutators>, artistID: string | undefined) {
-  return zero.query.artist
-    .where('id', artistID ?? '')
-    .related('albums', album => album.related('cartItems'))
-    .one();
-}
+import {getArtist} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/artist')({
   component: RouteComponent,
   ssr: false,
   loaderDeps: ({search}) => ({artistId: search.id}),
-  loader: async ({context, deps: {artistId}}) => {
-    const {zero} = context;
+  loader: async ({context: {zero}, deps: {artistId}}) => {
     console.log('preloading artist', artistId);
-    query(zero, artistId).preload({ttl: '5m'}).cleanup();
+    getArtist(artistId ?? '')
+      .delegate(zero.queryDelegate)
+      .preload({ttl: '5m'})
+      .cleanup();
   },
   validateSearch: (search: Record<string, unknown>) => {
     return {
@@ -36,7 +29,7 @@ function RouteComponent() {
     return <div>Missing required search parameter id</div>;
   }
 
-  const [artist, {type}] = useQuery(query(zero, id), {ttl: '5m'});
+  const [artist, {type}] = useQuery(getArtist(id), {ttl: '5m'});
 
   if (!artist && type === 'complete') {
     return <div>Artist not found</div>;
