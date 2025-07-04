@@ -4,6 +4,7 @@ import {
   PermissionsConfig,
   type Row,
   definePermissions,
+  querify,
 } from '@rocicorp/zero';
 import {schema, type Schema} from './schema.gen';
 
@@ -44,3 +45,5 @@ export const permissions = definePermissions<{}, Schema>(schema, () => {
     },
   } satisfies PermissionsConfig<AuthData, Schema>;
 });
+
+export const builder = querify(schema);

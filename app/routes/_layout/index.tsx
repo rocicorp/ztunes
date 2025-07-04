@@ -1,10 +1,9 @@
-import {useQuery, useZero} from '@rocicorp/zero/react';
-import {type Schema} from 'zero/schema';
+import {useQuery} from '@rocicorp/zero/react';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
-import {artistQuery} from './artist';
 import {Link} from 'app/components/link';
+import {searchArtists} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/')({
   component: Home,
@@ -14,28 +13,40 @@ export const Route = createFileRoute('/_layout/')({
       q: typeof search.q === 'string' ? search.q : undefined,
     } as {q?: string | undefined};
   },
+  loaderDeps: ({search}) => ({q: search.q}),
+  loader: async ({context, deps: {q}}) => {
+    const {zero} = context;
+    console.log('preloading artists', q);
+    searchArtists(q ?? '')
+      .delegate(zero.queryDelegate)
+      .preload({ttl: '5m'})
+      .cleanup();
+  },
 });
 
 function Home() {
-  const z = useZero<Schema>();
   const router = useRouter();
   const limit = 20;
 
   const [search, setSearch] = useState('');
-  const searchParam = Route.useSearch().q;
+  const qs = Route.useSearch();
+  const searchParam = qs.q;
   useEffect(() => {
     setSearch(searchParam ?? '');
   }, [searchParam]);
 
-  let q = artistQuery(z.query.artist)
-    .orderBy('popularity', 'desc')
-    .limit(limit);
-  if (search) {
-    q = q.where('name', 'ILIKE', `%${search}%`);
-  }
+  // No need to cache the queries for each individual keystroke. Just
+  // cache them when the user has paused, which we know by when the
+  // QS matches because we already debounce the QS.
+  const ttl = search === searchParam ? '5m' : 'none';
+  const [artists, {type}] = useQuery(searchArtists(search ?? ''), {
+    ttl,
+  });
 
-  const [artists, {type}] = useQuery(q, {ttl: '1m'});
-
+  // Safari has a limit on how fast you can change QS. Anyway it makes no sense
+  // to have a history entry for each keystroke anyway so even without this we'd
+  // have to have some URL entries be replace and some not. Easier to just skip
+  // history entries until user pauses.
   const setSearchParam = useDebouncedCallback((text: string) => {
     router.navigate({
       to: '/',

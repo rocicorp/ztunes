@@ -1,11 +1,6 @@
-big:
+Things to improve in Zero:
 
-- (aaron) integrate with TS router layer - we should get automatic/elegant preloads
-
-small:
-
-Not doing:
-
+- Make the auth token refresh work by invalidation, not returning a new value
 - warn about missing index on FK it makes zero crazy slow.
 - it would be nice if tx.insert() returned the value.
   - consider also have ts.update() do this? kinda bummer to pay the cost to do this if not needed
@@ -30,3 +25,31 @@ Not doing:
   - going to rework error handling
 - conditional query (for when session is null and using userID in query)
   - queries api is changing
+
+
+CQ TODO
+
+- There's a new API to mutators right? Apply that.
+
+Custom Query Notes
+
+- overall I like this
+- there is something very satisfying about how the queries are bare functions that snap together
+- the way auth works is weird.
+  - some functions want to receive userID and other auth info, some don't
+  - i continue to feel this should be injected
+  - withAuth<AuthData>(...) ?
+  - withValidator can work same way
+- don't like querify(). why can't it be off schema?
+- *really* don't like passing in separate name - can use object trick?
+- don't like pattern of exposing shared queries by default - too easy to leak things
+- import * as queries is handy but worried about accidentally exposing something
+- we have to figure out if we're going with "pull" or "query" or what because of env vars
+- preview support!
+- shouldn't have to assign delegate manually
+  - or maybe alternately one() should take ttl
+  - or ever better preload() should just lose cleanup() completely
+- processQueries -> getQueries?
+- I *really* like how a 'named' query is just a query with same interface - very composable
+- validation?
+- how do local-only queries interact?

@@ -2,13 +2,14 @@
 import type {ReactNode} from 'react';
 import {
   Outlet,
-  createRootRoute,
+  createRootRouteWithContext,
   HeadContent,
   Scripts,
 } from '@tanstack/react-router';
 import {must} from 'shared/must';
+import type {RouterContext} from 'app/router';
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       {
