@@ -1,13 +1,5 @@
-import {namedQuery} from '@rocicorp/zero';
+import {namedQuery, Schema, Zero} from '@rocicorp/zero';
 import {builder} from './schema';
-
-export type Auth = {
-  userID: string;
-};
-
-function withAuth<T extends (...args: any[]) => any>(fn: T, auth: Auth) {
-  return fn(auth.userID);
-}
 
 export const getArtist = namedQuery('getArtist', (artistID: string) =>
   builder.artist
@@ -15,6 +7,14 @@ export const getArtist = namedQuery('getArtist', (artistID: string) =>
     .related('albums', album => album.related('cartItems'))
     .one(),
 );
+
+export const searchArtists = namedQuery('searchArtists', (q: string) => {
+  let query = builder.artist.orderBy('popularity', 'desc').limit(20);
+  if (q) {
+    query = query.where('name', 'ILIKE', `%${q}%`);
+  }
+  return query;
+});
 
 export const getCartItems = namedQuery('getCartItems', (userID: string) =>
   builder.cartItem
