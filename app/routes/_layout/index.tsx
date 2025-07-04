@@ -7,8 +7,10 @@ import {Link} from 'app/components/link';
 import {Mutators} from 'zero/mutators';
 import {Zero} from 'node_modules/@rocicorp/zero/out/zero-client/src/client/zero';
 
+const limit = 20;
+
 function query(z: Zero<Schema, Mutators>, q: string | undefined) {
-  let query = z.query.artist.orderBy('popularity', 'desc').limit(20);
+  let query = z.query.artist.orderBy('popularity', 'desc').limit(limit);
   if (q) {
     query = query.where('name', 'ILIKE', `%${q}%`);
   }
@@ -34,7 +36,6 @@ export const Route = createFileRoute('/_layout/')({
 function Home() {
   const router = useRouter();
   const {zero} = router.options.context;
-  const limit = 20;
 
   const [search, setSearch] = useState('');
   const qs = Route.useSearch();
@@ -69,6 +70,10 @@ function Home() {
     setSearchParam(e.target.value);
   };
 
+  // If the typing has settled, use the default preload behavior.
+  // Otherwise, don't preload.
+  const preload = search === searchParam ? undefined : false;
+
   return (
     <>
       <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -85,7 +90,7 @@ function Home() {
       <ul style={{listStyle: 'none', padding: 0}}>
         {artists.map(artist => (
           <li key={artist.id} style={{marginBottom: '0.2em'}}>
-            <Link to="/artist" search={{id: artist.id}}>
+            <Link to="/artist" search={{id: artist.id}} preload={preload}>
               {artist.name}
             </Link>
           </li>
