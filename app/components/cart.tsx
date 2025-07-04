@@ -2,16 +2,13 @@ import {useZero, useQuery} from '@rocicorp/zero/react';
 import {Schema} from 'zero/schema';
 import {Link} from './link';
 import {useSession} from './session-provider';
+import {cartItemListQuery} from 'zero/queries';
 
 export function Cart() {
   const session = useSession();
   const z = useZero<Schema>();
 
-  const [items] = useQuery(
-    z.query.cartItem
-      .where('userId', session.data?.userID ?? '')
-      .orderBy('addedAt', 'asc'),
-  );
+  const [items] = useQuery(cartItemListQuery());
 
   if (!session.data) {
     return null;

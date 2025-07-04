@@ -3,8 +3,8 @@ import {type Schema} from 'zero/schema';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
-import {artistQuery} from './artist';
 import {Link} from 'app/components/link';
+import {artistListQuery} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/')({
   component: Home,
@@ -27,14 +27,12 @@ function Home() {
     setSearch(searchParam ?? '');
   }, [searchParam]);
 
-  let q = artistQuery(z.query.artist)
-    .orderBy('popularity', 'desc')
-    .limit(limit);
-  if (search) {
-    q = q.where('name', 'ILIKE', `%${search}%`);
-  }
-
-  const [artists, {type}] = useQuery(q, {ttl: '1m'});
+  const [artists, {type}] = useQuery(
+    artistListQuery(limit, search === '' ? null : search),
+    {
+      ttl: '1m',
+    },
+  );
 
   console.time('artists - ' + type);
 

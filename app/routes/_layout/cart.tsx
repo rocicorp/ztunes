@@ -3,7 +3,8 @@ import {createFileRoute} from '@tanstack/react-router';
 import {Mutators} from 'zero/mutators';
 import {Schema} from 'zero/schema';
 import {Button} from 'app/components/button';
-import {useSession} from 'app/components/session-provider';
+import {SessionContextType, useSession} from 'app/components/session-provider';
+import {cartItemListQuery} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/cart')({
   component: RouteComponent,
@@ -12,19 +13,17 @@ export const Route = createFileRoute('/_layout/cart')({
 
 function RouteComponent() {
   const session = useSession();
-  const z = useZero<Schema, Mutators>();
-  const [cartItems] = useQuery(
-    z.query.cartItem
-      .related('album', album =>
-        album.one().related('artist', artist => artist.one()),
-      )
-      .where('userId', session.data?.userID ?? ''),
-  );
 
   if (!session.data) {
     return <div>Login to view cart</div>;
   }
 
+  return <Cart session={session}></Cart>;
+}
+
+function Cart({session}: {session: SessionContextType}) {
+  const z = useZero<Schema, Mutators>();
+  const [cartItems] = useQuery(cartItemListQuery());
   const onRemove = (albumID: string) => {
     z.mutate.cart.remove(albumID);
   };

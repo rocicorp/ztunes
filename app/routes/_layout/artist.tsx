@@ -5,6 +5,7 @@ import {Schema} from 'zero/schema';
 import {Mutators} from 'zero/mutators';
 import {Button} from 'app/components/button';
 import {useSession} from 'app/components/session-provider';
+import {artistQuery} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/artist')({
   component: RouteComponent,
@@ -16,25 +17,20 @@ export const Route = createFileRoute('/_layout/artist')({
   },
 });
 
-export function artistQuery(query: Query<Schema, 'artist'>) {
-  return query.related('albums', album =>
-    album.related('cartItems', ci => ci.one()).orderBy('year', 'desc'),
-  );
-}
-
 function RouteComponent() {
-  const session = useSession();
-  const z = useZero<Schema, Mutators>();
   const search = Route.useSearch();
   const id = search.id;
 
   if (!id) {
     return <div>Missing required search parameter id</div>;
   }
+  return <Artist id={id}></Artist>;
+}
 
-  const [artist, {type}] = useQuery(
-    artistQuery(z.query.artist.where('id', id)).one(),
-  );
+function Artist({id}: {id: string}) {
+  const session = useSession();
+  const z = useZero<Schema, Mutators>();
+  const [artist, {type}] = useQuery(artistQuery(id));
 
   if (!artist && type === 'complete') {
     return <div>Artist not found</div>;

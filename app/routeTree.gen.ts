@@ -16,6 +16,7 @@ import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as LayoutCartRouteImport } from './routes/_layout/cart'
 import { Route as LayoutArtistRouteImport } from './routes/_layout/artist'
 import { ServerRoute as ApiZeroPushServerRouteImport } from './routes/api/zero/push'
+import { ServerRoute as ApiZeroPullServerRouteImport } from './routes/api/zero/pull'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -42,6 +43,11 @@ const LayoutArtistRoute = LayoutArtistRouteImport.update({
 const ApiZeroPushServerRoute = ApiZeroPushServerRouteImport.update({
   id: '/api/zero/push',
   path: '/api/zero/push',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiZeroPullServerRoute = ApiZeroPullServerRouteImport.update({
+  id: '/api/zero/pull',
+  path: '/api/zero/pull',
   getParentRoute: () => rootServerRouteImport,
 } as any)
 const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
@@ -85,27 +91,31 @@ export interface RootRouteChildren {
 }
 export interface FileServerRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/zero/pull': typeof ApiZeroPullServerRoute
   '/api/zero/push': typeof ApiZeroPushServerRoute
 }
 export interface FileServerRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/zero/pull': typeof ApiZeroPullServerRoute
   '/api/zero/push': typeof ApiZeroPushServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
   '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/zero/pull': typeof ApiZeroPullServerRoute
   '/api/zero/push': typeof ApiZeroPushServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/auth/$' | '/api/zero/push'
+  fullPaths: '/api/auth/$' | '/api/zero/pull' | '/api/zero/push'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/auth/$' | '/api/zero/push'
-  id: '__root__' | '/api/auth/$' | '/api/zero/push'
+  to: '/api/auth/$' | '/api/zero/pull' | '/api/zero/push'
+  id: '__root__' | '/api/auth/$' | '/api/zero/pull' | '/api/zero/push'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
   ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
+  ApiZeroPullServerRoute: typeof ApiZeroPullServerRoute
   ApiZeroPushServerRoute: typeof ApiZeroPushServerRoute
 }
 
@@ -150,6 +160,13 @@ declare module '@tanstack/react-start/server' {
       preLoaderRoute: typeof ApiZeroPushServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
+    '/api/zero/pull': {
+      id: '/api/zero/pull'
+      path: '/api/zero/pull'
+      fullPath: '/api/zero/pull'
+      preLoaderRoute: typeof ApiZeroPullServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -184,6 +201,7 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
   ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
+  ApiZeroPullServerRoute: ApiZeroPullServerRoute,
   ApiZeroPushServerRoute: ApiZeroPushServerRoute,
 }
 export const serverRouteTree = rootServerRouteImport
