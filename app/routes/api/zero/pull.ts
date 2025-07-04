@@ -14,7 +14,9 @@ export const ServerRoute = createServerFileRoute('/api/zero/pull').methods({
 
     const result = await processQueries(
       async (name, args) => {
-        const q = queries[name](...args);
+        // OMG total hack 😂
+        console.log('pulling', name, args, userID);
+        const q = queries[name](...args, userID);
         return {query: q};
       },
       schema,

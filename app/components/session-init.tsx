@@ -64,7 +64,6 @@ async function zeroAuth(error?: 'invalid-token') {
     await fetch('/api/auth/refresh', {
       credentials: 'include',
     });
-
-    return new Cookies().get('jwt') as string | undefined;
   }
+  return new Cookies().get('jwt') as string | undefined;
 }

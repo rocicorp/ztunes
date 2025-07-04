@@ -6,10 +6,10 @@ import {getArtist} from 'zero/queries';
 export const Route = createFileRoute('/_layout/artist')({
   component: RouteComponent,
   ssr: false,
-  loaderDeps: ({search}) => ({artistId: search.id}),
-  loader: async ({context: {zero}, deps: {artistId}}) => {
-    console.log('preloading artist', artistId);
-    getArtist(artistId ?? '')
+  loaderDeps: ({search}) => ({artistID: search.id}),
+  loader: async ({context: {zero}, deps: {artistID}}) => {
+    console.log('preloading artist', artistID);
+    getArtist(artistID ?? '')
       .delegate(zero.queryDelegate)
       .preload({ttl: '5m'})
       .cleanup();

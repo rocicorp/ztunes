@@ -43,3 +43,5 @@ Custom Query Notes
   - or maybe alternately one() should take ttl
   - or ever better preload() should just lose cleanup() completely
 - processQueries -> getQueries?
+- I *really* like how a 'named' query is just a query with same interface - very composable
+- validation?
