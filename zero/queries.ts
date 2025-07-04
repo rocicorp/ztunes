@@ -1,6 +1,10 @@
 import {namedQuery, Schema, Zero} from '@rocicorp/zero';
 import {builder} from './schema';
 
+export const topArtists = namedQuery('topArtists', () =>
+  builder.artist.orderBy('popularity', 'desc').limit(1_000),
+);
+
 export const getArtist = namedQuery('getArtist', (artistID: string) =>
   builder.artist
     .where('id', artistID)

@@ -5,6 +5,7 @@ import {useMemo} from 'react';
 import {createMutators, Mutators} from 'zero/mutators';
 import {useRouter} from '@tanstack/react-router';
 import {must} from 'shared/must';
+import {topArtists} from 'zero/queries';
 
 const serverURL = must(
   import.meta.env.VITE_PUBLIC_SERVER,
@@ -69,8 +70,6 @@ function preload(z: Zero<Schema>) {
     // avoid having the UI jostle. So we want to preload in the same order we
     // tend to display in the UI. That way local results are always also the
     // top ranked results.
-    z.query.artist.orderBy('popularity', 'desc').limit(1_000).preload({
-      ttl: '1m',
-    });
+    topArtists().preload({ttl: '1m'});
   }, 1_000);
 }
