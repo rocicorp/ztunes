@@ -4,6 +4,7 @@ import {schema} from 'zero/schema';
 import {createServerFileRoute} from '@tanstack/react-start/server';
 import {getUserID} from './-auth';
 import * as queries from 'zero/queries';
+import {needsAuth} from 'zero/queries';
 
 export const ServerRoute = createServerFileRoute('/api/zero/pull').methods({
   POST: async ({request}) => {
@@ -14,10 +15,14 @@ export const ServerRoute = createServerFileRoute('/api/zero/pull').methods({
 
     const result = await processQueries(
       async (name, args) => {
-        // OMG total hack 😂
         console.log('pulling', name, args, userID);
-        const q = queries[name](...args, userID);
-        return {query: q};
+        const q = queries[name];
+
+        if (needsAuth(q)) {
+          args = [{userID}, ...args];
+        }
+
+        return {query: q(...args)};
       },
       schema,
       request,

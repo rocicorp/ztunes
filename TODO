@@ -33,8 +33,15 @@ CQ TODO
 
 Custom Query Notes
 
+- overall I like this
+- there is something very satisfying about how the queries are bare functions that snap together
+- the way auth works is weird.
+  - some functions want to receive userID and other auth info, some don't
+  - i continue to feel this should be injected
+  - withAuth<AuthData>(...) ?
+  - withValidator can work same way
 - don't like querify(). why can't it be off schema?
-- don't like passing in separate name - can use object trick?
+- *really* don't like passing in separate name - can use object trick?
 - don't like pattern of exposing shared queries by default - too easy to leak things
 - import * as queries is handy but worried about accidentally exposing something
 - we have to figure out if we're going with "pull" or "query" or what because of env vars
@@ -45,3 +52,4 @@ Custom Query Notes
 - processQueries -> getQueries?
 - I *really* like how a 'named' query is just a query with same interface - very composable
 - validation?
+- how do local-only queries interact?

@@ -11,7 +11,7 @@ export const Route = createFileRoute('/_layout/cart')({
     const {zero, session} = context;
     const userID = session.data?.userID;
     if (userID) {
-      getCartItems(userID)
+      getCartItems({userID})
         .delegate(zero.queryDelegate)
         .preload({ttl: '5m'})
         .cleanup();
@@ -22,7 +22,7 @@ export const Route = createFileRoute('/_layout/cart')({
 function RouteComponent() {
   const {zero, session} = useRouter().options.context;
   const [cartItems, {type: resultType}] = useQuery(
-    getCartItems(session.data?.userID ?? ''),
+    getCartItems({userID: session.data?.userID ?? ''}),
   );
 
   if (!session.data) {

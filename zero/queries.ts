@@ -1,5 +1,23 @@
-import {namedQuery, Schema, Zero} from '@rocicorp/zero';
+import {AnyQuery, namedQuery, ReadonlyJSONValue} from '@rocicorp/zero';
 import {builder} from './schema';
+
+type AuthData = {
+  userID: string;
+};
+
+function withAuth<
+  Fn extends (authData: AuthData, ...args: ReadonlyJSONValue[]) => AnyQuery,
+>(fn: Fn) {
+  const wrapped = (authData: AuthData, ...args: ReadonlyJSONValue[]) => {
+    return fn(authData, ...args);
+  };
+  wrapped.needsAuth = true;
+  return wrapped;
+}
+
+export function needsAuth(fn: () => void): fn is () => void {
+  return 'needsAuth' in fn;
+}
 
 export const topArtists = namedQuery('topArtists', () =>
   builder.artist.orderBy('popularity', 'desc').limit(1_000),
@@ -20,8 +38,14 @@ export const searchArtists = namedQuery('searchArtists', (q: string) => {
   return query;
 });
 
-export const getCartItems = namedQuery('getCartItems', (userID: string) =>
-  builder.cartItem
-    .where('userId', userID)
-    .related('album', album => album.related('artist', artist => artist.one())),
+export const getCartItems = namedQuery(
+  'getCartItems',
+  withAuth(({userID}: AuthData) =>
+    builder.cartItem
+      .where('userId', userID)
+      .related('album', album =>
+        album.related('artist', artist => artist.one()),
+      )
+      .orderBy('addedAt', 'asc'),
+  ),
 );
