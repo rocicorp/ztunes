@@ -70,13 +70,54 @@ This app uses custom mutators (see `zero/mutators.ts`) to enforce that a user ca
 
 Zero read permissions are used for the corresponding cart read permissions (see `zero/schema.ts`).
 
-## Preloading
+## Link Preloading
 
-And important consideration in any Zero app is what to preload.
+And important consideration in any Zero app is what to preload. Our general advice is "anything data the app needs within one click".
 
-The general advice is "anything data the app needs within one click". But this general rules is not always achievable. A search UI can of course access _all_ data in one click.
+In TanStack we can mostly achieve this really elegantly by just using TanStack's built-in
+[preload feature](https://tanstack.com/router/v1/docs/framework/react/guide/preloading).
 
-We must decide some subset of the searchable data to preload.
+Each `Route` defines a free `query` function which it uses in TanStack's `loader` method:
+
+```ts
+function query(zero: Zero<Schema, Mutators>, artistID: string | undefined) {
+  return zero.query.artist
+    .where('id', artistID ?? '')
+    .related('albums', album => album.related('cartItems'))
+    .one();
+}
+
+export const Route = createFileRoute('/_layout/artist')({
+  // ...
+  loader: async ({context, deps: {artistId}}) => {
+    const {zero} = context;
+    query(zero, artistId).preload({ttl: '5m'}).cleanup();
+  },
+});
+```
+
+Then this same `query` function is used during render like normal:
+
+```ts
+const [artist] = useQuery(query(zero, id));
+```
+
+The result is that any link visible on screen will navigate instantly. Additionally:
+
+- Preloaded data is automatically kept up-to-date by Zero – no stale or inconsistent caches
+- All mutations are instantaneous by default
+- Realtime collaboration for free
+
+## Search Preloading
+
+TanStack's built-in preloading only helps with links. We want instant search too.
+
+To support this, ztunes preloads a subset of artist data at app startup, so that it can be
+searched over locally.
+
+This is something most apps will want to to do, but the question is _what_ data to preload.
+We want enough data to cover the most common things users will search for, but not so much that app
+startup begins to suffer.
 
 ztunes' choice is to preload the first 1k (out of 88k) most popular artists (by a `popularity` field in the `artist` table). This 1k records is the dataset that is searched locally.
 
@@ -84,9 +125,13 @@ This works out nicely because it is very likely that anything the user searches 
 
 Asynchronously, just like all Zero queries, the search also goes to the server. So if the user picks something obscure, they will still get the result, just more slowly.
 
-To prevent jostle of the UI when async results come in, ztunes sorts query results by popularity descending. This way any local results are by definition the most popular and are at the top of the list. Other results pop in below.
+## Jostle-Free Search UX
 
-Additionally, when displaying search results in `index.tsx`, ztunes searches for related albums and cart data. This is done so that when the user navigates into an album, the data needed by that UI is already synced.
+We want to provide instant results over local data, but we don't want to "jostle" (reorder) those results when server result come in asynchronously. This would make the UX very hard to read and negate any benefit from instant results.
+
+To prevent this jostle, ztunes sorts all query results by popularity descending. This way any local results are by definition the most popular and are at the top of the list. Other results pop in below.
+
+In general you will want to preload data in the same order you will be displaying in search results.
 
 ## Search Notes
 
@@ -100,7 +145,7 @@ In the future Zero will have first-class search that will improve this. For now,
 
 If you apply this pattern to your own apps keep in mind this performance quirk. If you need better text search let us know, as we have some ideas for quick fixes.
 
-# Deployment
+## Deployment
 
 We run a live deployment of ztunes, continuously updated, on Fly.io, Supabase, and Vercel.
 
@@ -108,7 +153,7 @@ We run `zero-cache` in [single-node mode](https://zero.rocicorp.dev/docs/deploym
 
 See `fly.toml` to deploy to your own account.
 
-# Continuous Integration
+## Continuous Integration
 
 We continuously deploy ztunes using Github CI. See `deploy.yml` for how this is done.
 
