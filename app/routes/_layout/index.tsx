@@ -39,9 +39,9 @@ function Home() {
 
   const [search, setSearch] = useState('');
   const qs = Route.useSearch();
-  const searchParam = qs.q;
+  const searchParam = qs.q ?? '';
   useEffect(() => {
-    setSearch(searchParam ?? '');
+    setSearch(searchParam);
   }, [searchParam]);
 
   // No need to cache the queries for each individual keystroke. Just
