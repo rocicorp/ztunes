@@ -39,7 +39,15 @@ export function SessionInit({children}: {children: React.ReactNode}) {
 
   const router = useRouter();
   return (
-    <RouterContextProvider router={router} context={{session}}>
+    <RouterContextProvider
+      /**
+       * key is a hack - it shouldn't be needed, but for some reason on logout,
+       * when the session is changed to undefined, the router doesn't re-render.
+       */
+      key={data?.userID}
+      router={router}
+      context={{session}}
+    >
       {children}
     </RouterContextProvider>
   );
