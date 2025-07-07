@@ -72,9 +72,9 @@ Zero read permissions are used for the corresponding cart read permissions (see 
 
 ## Link Preloading
 
-And important consideration in any Zero app is what to preload. Our general advice is "anything data the app needs within one click".
+An important consideration in any Zero app is what to preload. Our general advice is "any data the app needs within one click".
 
-In TanStack we can mostly achieve this really elegantly by just using TanStack's built-in
+In TanStack we can mostly achieve this elegantly via TanStack's built-in
 [preload feature](https://tanstack.com/router/v1/docs/framework/react/guide/preloading).
 
 Each `Route` defines a free `query` function which it uses in TanStack's `loader` method:
@@ -127,7 +127,7 @@ Asynchronously, just like all Zero queries, the search also goes to the server. 
 
 ## Jostle-Free Search UX
 
-We want to provide instant results over local data, but we don't want to "jostle" (reorder) those results when server result come in asynchronously. This would make the UX very hard to read and negate any benefit from instant results.
+We want to provide instant results over local data, but we don't want to "jostle" (reorder) those results when server result comes in asynchronously. This would make the UX very hard to read and negate any benefit from instant results.
 
 To prevent this jostle, ztunes sorts all query results by popularity descending. This way any local results are by definition the most popular and are at the top of the list. Other results pop in below.
 
@@ -135,9 +135,9 @@ In general you will want to preload data in the same order you will be displayin
 
 ## Search Notes
 
-Zero currently lacks first-class text indexing. This means that searches are going to be worst-case `O(n)`. This worst case occurs when there are fewer matching records in the database than the app requests with `limit`. It also occurs if the sort of the query doesn't match the sort order of an index.
+Zero currently lacks first-class text indexing. This means searches are going to be worst-case `O(n)`. This worst case occurs when there are fewer matching records in the database than the app requests with `limit`. It also occurs if the sort of the query doesn't match the sort order of an index.
 
-So for example, if the user searches `f` that's going to get fast results because the UI requests 20 results and there are many more than 20 matches for this string.
+So for example, if the user searches `f`, that's going to get fast results because the UI requests 20 results and there are many more than 20 matches for this string.
 
 But if the user searches `foo fighters`, it will be `O(n)` because Zero will scan all aritsts trying to come up with 20 matches.
 
