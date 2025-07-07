@@ -53,6 +53,11 @@ function RootDocument({children}: Readonly<{children: ReactNode}>) {
             font-optical-sizing: auto;
             font-weight: 400;
             font-style: normal;
+            touch-action: manipulation;
+          }
+
+          body {
+            touch-action: pan-x pan-y;
           }
         `,
           }}
