@@ -35,11 +35,19 @@ Custom Query Notes
 
 - overall I like this
 - there is something very satisfying about how the queries are bare functions that snap together
+
 - the way auth works is weird.
   - some functions want to receive userID and other auth info, some don't
   - i continue to feel this should be injected
   - withAuth<AuthData>(...) ?
   - withValidator can work same way
+  
+
+  - idea: can we just use something like today's custom mutators
+    - createQueries that closes over session/authdata
+
+
+
 - don't like querify(). why can't it be off schema?
 - *really* don't like passing in separate name - can use object trick?
 - don't like pattern of exposing shared queries by default - too easy to leak things
