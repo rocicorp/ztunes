@@ -18,8 +18,7 @@ export const Route = createFileRoute('/_layout/artist')({
   loaderDeps: ({search}) => ({artistId: search.id}),
   loader: async ({context, deps: {artistId}}) => {
     const {zero} = context;
-    console.log('preloading artist', artistId);
-    query(zero, artistId).preload({ttl: '5m'}).cleanup();
+    query(zero, artistId).run();
   },
   validateSearch: (search: Record<string, unknown>) => {
     return {
@@ -36,7 +35,7 @@ function RouteComponent() {
     return <div>Missing required search parameter id</div>;
   }
 
-  const [artist, {type}] = useQuery(query(zero, id), {ttl: '5m'});
+  const [artist, {type}] = useQuery(query(zero, id));
 
   if (!artist && type === 'complete') {
     return <div>Artist not found</div>;

@@ -91,7 +91,7 @@ export const Route = createFileRoute('/_layout/artist')({
   // ...
   loader: async ({context, deps: {artistId}}) => {
     const {zero} = context;
-    query(zero, artistId).preload({ttl: '5m'}).cleanup();
+    query(zero, artistId).run();
   },
 });
 ```

@@ -9,9 +9,6 @@ export function Cart() {
     zero.query.cartItem
       .where('userId', session.data?.userID ?? '')
       .orderBy('addedAt', 'asc'),
-    {
-      ttl: '1m',
-    },
   );
 
   if (!session.data) {

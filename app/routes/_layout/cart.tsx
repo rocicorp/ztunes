@@ -21,7 +21,7 @@ export const Route = createFileRoute('/_layout/cart')({
     const {zero, session} = context;
     const userID = session.data?.userID;
     if (userID) {
-      query(zero, userID).preload({ttl: '5m'}).cleanup();
+      query(zero, userID).run();
     }
   },
 });
