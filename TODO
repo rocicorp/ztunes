@@ -11,17 +11,13 @@ Things to improve in Zero:
 - Previews
   - going to do this via custom mutators / queries
 - mooar data
-  - we'll just explain curren status
+  - it would be cool to scale this up to entire history of music
+  - text search may fall apart (see below note) or it may work - fun to try!
 - integrate with TS at the query layer. this would maybe get us partway to SSR and suspense - project for another time
 - use real drizzle migrations - not really a zero thing
-- nicer styles? - not doing the ugly styles are a feature - less goop to remove when using this as a starter
 - text search
   - can be todo noted in docs/launch
-- we should limit ttl to max 10m
-  - erik doing
 - client-only queries would significantly reduce load while typing
   - queries api is changing
-- 500 errors in push don't cause revert - easy to not notice they aern't working
-  - going to rework error handling
 - conditional query (for when session is null and using userID in query)
   - queries api is changing

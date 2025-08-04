@@ -1,3 +1,4 @@
+import {Zero} from '@rocicorp/zero';
 import {useQuery} from '@rocicorp/zero/react';
 import {type Schema} from 'zero/schema';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
@@ -5,7 +6,6 @@ import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
 import {Link} from 'app/components/link';
 import {Mutators} from 'zero/mutators';
-import {Zero} from 'node_modules/@rocicorp/zero/out/zero-client/src/client/zero';
 
 const limit = 20;
 
@@ -28,8 +28,7 @@ export const Route = createFileRoute('/_layout/')({
   loaderDeps: ({search}) => ({q: search.q}),
   loader: async ({context, deps: {q}}) => {
     const {zero} = context;
-    console.log('preloading artists', q);
-    query(zero, q).preload({ttl: '5m'}).cleanup();
+    query(zero, q).run();
   },
 });
 
@@ -47,10 +46,8 @@ function Home() {
   // No need to cache the queries for each individual keystroke. Just
   // cache them when the user has paused, which we know by when the
   // QS matches because we already debounce the QS.
-  const ttl = search === searchParam ? '5m' : 'none';
-  const [artists, {type}] = useQuery(query(zero, search), {
-    ttl,
-  });
+  const opts = search !== searchParam ? undefined : ({ttl: 'none'} as const);
+  const [artists, {type}] = useQuery(query(zero, search), opts);
 
   // Safari has a limit on how fast you can change QS. Anyway it makes no sense
   // to have a history entry for each keystroke anyway so even without this we'd
