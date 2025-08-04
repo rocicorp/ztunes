@@ -102,11 +102,15 @@ Then this same `query` function is used during render like normal:
 const [artist] = useQuery(query(zero, id));
 ```
 
-The result is that any link visible on screen will navigate instantly. Additionally:
+The default TTL for Zero queries is 5m, so if user visits link within 5m, data will already be synced to client and nav will be instant.
+
+Additionally:
 
 - Preloaded data is automatically kept up-to-date by Zero – no stale or inconsistent caches
 - All mutations are instantaneous by default
 - Realtime collaboration for free
+
+See https://zero.rocicorp.dev/docs/reading-data#ttls for more information on ttls.
 
 ## Search Preloading
 
