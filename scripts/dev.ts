@@ -1,6 +1,14 @@
 import {concurrently} from 'concurrently';
 import {must} from 'shared/must';
 import 'shared/env';
+import {execSync} from 'child_process';
+
+// Check env sync before starting dev servers
+try {
+  execSync('tsx scripts/check-env.ts', {stdio: 'inherit'});
+} catch (error) {
+  process.exit(1);
+}
 
 const devPgAddress = must(
   process.env.DEV_PG_ADDRESS,
