@@ -1,9 +1,9 @@
 import * as fs from 'fs';
-import { parse } from 'dotenv';
+import {parse} from 'dotenv';
 
 function checkEnvSync() {
   // Only check if .env.sample exists
-  if (!fs.existsSync('.env.sample')) {
+  if (!fs.existsSync('.env.sample') || !fs.existsSync('.env')) {
     return;
   }
 
@@ -23,7 +23,10 @@ function checkEnvSync() {
         console.error('  Missing from .env:', [...missing].join(', '));
       }
       if (extra.size > 0) {
-        console.error('  Extra in .env (not in .env.sample):', [...extra].join(', '));
+        console.error(
+          '  Extra in .env (not in .env.sample):',
+          [...extra].join(', '),
+        );
       }
       process.exit(1);
     }
