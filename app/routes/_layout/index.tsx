@@ -1,20 +1,18 @@
-import {queries} from '@rocicorp/zero';
 import {useQuery} from '@rocicorp/zero/react';
 import {builder} from 'zero/schema';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
 import {Link} from 'app/components/link';
+import {named} from 'zero/named';
 
 const limit = 20;
 
-export const {indexPage} = queries({
-  indexPage: (filter: string) => {
-    return builder.artist
-      .where('name', 'ILIKE', `%${filter}%`)
-      .orderBy('popularity', 'desc')
-      .limit(limit);
-  },
+export const indexPage = named('indexPage', (filter: string) => {
+  return builder.artist
+    .where('name', 'ILIKE', `%${filter}%`)
+    .orderBy('popularity', 'desc')
+    .limit(limit);
 });
 
 export const Route = createFileRoute('/_layout/')({
@@ -35,7 +33,6 @@ export const Route = createFileRoute('/_layout/')({
 
 function Home() {
   const router = useRouter();
-  const {zero} = router.options.context;
 
   const [search, setSearch] = useState('');
   const qs = Route.useSearch();

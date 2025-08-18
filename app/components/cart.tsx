@@ -1,14 +1,15 @@
 import {useQuery} from '@rocicorp/zero/react';
 import {Link} from './link';
 import {useRouter} from '@tanstack/react-router';
-import {queriesWithContext} from '@rocicorp/zero';
 import {builder} from 'zero/schema';
+import {namedWithContext} from 'zero/named';
 
-export const {cartComponent} = queriesWithContext({
-  cartComponent: (userID: string) => {
+export const cartComponent = namedWithContext(
+  'cartComponent',
+  (userID: string) => {
     return builder.cartItem.where('userId', userID).orderBy('addedAt', 'asc');
   },
-});
+);
 
 export function Cart() {
   const {session} = useRouter().options.context;

@@ -31,11 +31,25 @@ CQ related:
 - it is a bit weird that you access mutators differently than queries - not biggest problem though
 - I guess z.preload() is fine, but what about z.run() and z.materialize()?
 - delegate(z.queryDelegate) is so weird. please let's get rid of it and also z.delegate.
-- why not keep existing api?
-  - makes sense to be able to build queries independent of zero for many reasons
-  - need at least builder for CQ
-  - odd to need to pass z.query.foo to useQuery() but not z itself
-  - once you have leads to directly to z.{preload()|run()|materialize()}
 - getQueries callback should not have to be async - accept MaybePromise
 - update README
+- export named and maybe make the name property on the function part of the type
 - upgrade to latest zero and adjust the way mutators work
+- do we really want the args to be part of the unique ID? Different than mutators, and different than JS.
+- conceptual/doc question: what is the function that accepts a name and args and returns a ZQL query called?
+  - i want it to be a "named query". because existing queries are functions, can be built/extended
+  - and because i'd ike to avoid having "query factories"
+  - but otoh ... if MakeQueryFn is the best name, so be it
+  - if the function is a "named query" then what is the resulting value? It's not a ZQL query, it literally has a name.
+  - i guess that technically the query type that has a name is a "named query" since that is the thing you can pass to z.query() that
+    actually kicks off a hybrid query / sync.
+  - that must mean the functions are GetNamedQueryFn. Kind awk, but so be it.
+
+Note to self: why not keep existing api?
+
+- makes sense to be able to build queries independent of zero for many reasons
+- need at least builder for CQ
+- odd to need to pass z.query.foo to useQuery() but not z itself
+  - we could fix this and get zero from query instead
+- once you have leads to directly to z.{preload()|run()|materialize()}
+- trying to avoid making massive types in one place

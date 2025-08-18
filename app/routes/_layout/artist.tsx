@@ -1,16 +1,14 @@
 import {useQuery} from '@rocicorp/zero/react';
-import {queries} from '@rocicorp/zero';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {builder} from 'zero/schema';
 import {Button} from 'app/components/button';
+import {named} from 'zero/named';
 
-export const {artistPage} = queries({
-  artistPage: (artistID: string) => {
-    return builder.artist
-      .where('id', artistID)
-      .related('albums', album => album.related('cartItems'))
-      .one();
-  },
+export const artistPage = named('artistPage', (artistID: string) => {
+  return builder.artist
+    .where('id', artistID)
+    .related('albums', album => album.related('cartItems'))
+    .one();
 });
 
 export const Route = createFileRoute('/_layout/artist')({

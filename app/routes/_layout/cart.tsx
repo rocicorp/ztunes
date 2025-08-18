@@ -1,17 +1,15 @@
 import {useQuery} from '@rocicorp/zero/react';
-import {queriesWithContext} from '@rocicorp/zero';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {builder} from 'zero/schema';
 import {Button} from 'app/components/button';
+import {namedWithContext} from 'zero/named';
 
-export const {cartPage} = queriesWithContext({
-  cartPage: (userID: string) => {
-    return builder.cartItem
-      .related('album', album =>
-        album.one().related('artist', artist => artist.one()),
-      )
-      .where('userId', userID);
-  },
+export const cartPage = namedWithContext('cartPage', (userID: string) => {
+  return builder.cartItem
+    .related('album', album =>
+      album.one().related('artist', artist => artist.one()),
+    )
+    .where('userId', userID);
 });
 
 export const Route = createFileRoute('/_layout/cart')({
