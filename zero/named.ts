@@ -21,7 +21,8 @@ export function named<T extends (...args: ReadonlyJSONValue[]) => AnyQuery>(
 }
 
 export function namedWithContext<
-  T extends (...args: ReadonlyJSONValue[]) => AnyQuery,
+  Context,
+  T extends (ctx: Context, ...args: ReadonlyJSONValue[]) => AnyQuery,
 >(name: string, fn: T) {
   const q = (queriesWithContext as any)({
     [name]: fn,

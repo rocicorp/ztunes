@@ -4,16 +4,21 @@ import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
 import {Link} from 'app/components/link';
-import {named} from 'zero/named';
+import z from 'zod';
+import {synced} from 'zero/synced';
 
 const limit = 20;
 
-export const indexPage = named('indexPage', (filter: string) => {
-  return builder.artist
-    .where('name', 'ILIKE', `%${filter}%`)
-    .orderBy('popularity', 'desc')
-    .limit(limit);
-});
+export const indexPage = synced(
+  'indexPage',
+  z.array(z.string()).parse,
+  (filter: string) => {
+    return builder.artist
+      .where('name', 'ILIKE', `%${filter}%`)
+      .orderBy('popularity', 'desc')
+      .limit(limit);
+  },
+);
 
 export const Route = createFileRoute('/_layout/')({
   component: Home,

@@ -3,13 +3,19 @@ import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {builder} from 'zero/schema';
 import {Button} from 'app/components/button';
 import {named} from 'zero/named';
+import {synced} from 'zero/synced';
+import z from 'zod';
 
-export const artistPage = named('artistPage', (artistID: string) => {
-  return builder.artist
-    .where('id', artistID)
-    .related('albums', album => album.related('cartItems'))
-    .one();
-});
+export const artistPage = synced(
+  'artistPage',
+  z.array(z.string()).parse,
+  (artistID: string) => {
+    return builder.artist
+      .where('id', artistID)
+      .related('albums', album => album.related('cartItems'))
+      .one();
+  },
+);
 
 export const Route = createFileRoute('/_layout/artist')({
   component: RouteComponent,
