@@ -21,3 +21,20 @@ Things to improve in Zero:
   - queries api is changing
 - conditional query (for when session is null and using userID in query)
   - queries api is changing
+
+
+CQ related:
+
+- Let's standardize on the endpoint being called get-queries
+  - rename config var to match
+- validation!!
+- it is a bit weird that you access mutators differently than queries - not biggest problem though
+- I guess z.preload() is fine, but what about z.run() and z.materialize()?
+- delegate(z.queryDelegate) is so weird. please let's get rid of it and also z.delegate.
+- why not keep existing api?
+  - makes sense to be able to build queries independent of zero for many reasons
+  - need at least builder for CQ
+  - odd to need to pass z.query.foo to useQuery() but not z itself
+  - once you have leads to directly to z.{preload()|run()|materialize()}
+- getQueries callback should not have to be async - accept MaybePromise
+- 
