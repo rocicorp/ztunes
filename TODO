@@ -37,4 +37,5 @@ CQ related:
   - odd to need to pass z.query.foo to useQuery() but not z itself
   - once you have leads to directly to z.{preload()|run()|materialize()}
 - getQueries callback should not have to be async - accept MaybePromise
-- 
+- update README
+- upgrade to latest zero and adjust the way mutators work
