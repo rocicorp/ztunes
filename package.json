@@ -14,7 +14,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@rocicorp/zero": "0.22.2025080100",
+    "@rocicorp/zero": "^0.23.2025082500",
     "@tanstack/react-router": "^1.120.20",
     "@tanstack/react-start": "^1.120.20",
     "@tanstack/react-virtual": "^3.13.9",
@@ -31,7 +31,8 @@
     "react-cookie": "^8.0.1",
     "react-dom": "^19.1.0",
     "use-debounce": "^10.0.4",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "zod": "^4.0.17"
   },
   "devDependencies": {
     "@types/pg": "^8.15.4",

@@ -1,5 +1,10 @@
 import {createServerFileRoute} from '@tanstack/react-start/server';
-import {auth, setCookies} from 'auth/auth';
+import {auth, setCookies} from 'auth/init';
+import {z} from 'zod';
+
+const tokenSchema = z.object({
+  token: z.string(),
+});
 
 export const ServerRoute = createServerFileRoute('/api/auth/refresh').methods({
   GET: async ({request}) => {
@@ -27,11 +32,22 @@ async function getJwtToken(headers: Headers) {
     headers,
   });
   if (!result.ok) {
-    console.error('Could not refresh JWT token', await result.text());
+    console.error(
+      'could not refresh JWT token - api returned non-200',
+      await result.text(),
+    );
     return null;
   }
   const body = await result.json();
-  return body.token;
+  const res = tokenSchema.safeParse(body);
+  if (!res.success) {
+    console.error(
+      'could not refresh JWT token - response invalid: ' + res.error.message,
+      body,
+    );
+    return null;
+  }
+  return res.data.token;
 }
 
 function unauthorized() {

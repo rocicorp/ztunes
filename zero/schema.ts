@@ -3,11 +3,14 @@ import {
   ExpressionBuilder,
   PermissionsConfig,
   type Row,
+  createBuilder,
   definePermissions,
 } from '@rocicorp/zero';
 import {schema, type Schema} from './schema.gen';
 
 export {schema, type Schema};
+
+export const builder = createBuilder(schema);
 
 export type Artist = Row<typeof schema.tables.artist>;
 export type Album = Row<typeof schema.tables.album>;

@@ -21,3 +21,9 @@ Things to improve in Zero:
   - queries api is changing
 - conditional query (for when session is null and using userID in query)
   - queries api is changing
+
+
+CQ related:
+
+- update README
+- upgrade to latest zero and adjust the way mutators work
