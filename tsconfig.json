@@ -7,6 +7,6 @@
     "skipLibCheck": true,
     "strictNullChecks": true,
     "target": "ESNext",
-    "lib": ["ESNext"]
+    "lib": ["ESNext", "DOM"]
   }
 }

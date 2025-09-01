@@ -18,7 +18,7 @@ const processor = new PushProcessor(
   new ZQLDatabase(new PostgresJSConnection(postgres(pgURL)), schema),
 );
 
-export const ServerRoute = createServerFileRoute('/api/zero/push').methods({
+export const ServerRoute = createServerFileRoute('/api/zero/mutate').methods({
   POST: async ({request}) => {
     const userID = await getUserID(request);
     if (typeof userID === 'object') {
