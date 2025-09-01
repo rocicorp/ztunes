@@ -1,11 +1,12 @@
+import {Transaction} from '@rocicorp/zero';
+import {AuthData, Schema} from './schema';
 import {CustomMutatorDefs} from '@rocicorp/zero';
-import {schema, AuthData} from './schema';
 
 export function createMutators(authData: AuthData | undefined) {
   return {
     cart: {
       add: async (
-        tx,
+        tx: Transaction<Schema>,
         {albumID, addedAt}: {albumID: string; addedAt: number},
       ) => {
         if (!authData) {
@@ -23,7 +24,7 @@ export function createMutators(authData: AuthData | undefined) {
         }
       },
 
-      remove: async (tx, albumId: string) => {
+      remove: async (tx: Transaction<Schema>, albumId: string) => {
         if (!authData) {
           throw new Error('Not authenticated');
         }
@@ -40,7 +41,7 @@ export function createMutators(authData: AuthData | undefined) {
         });
       },
     },
-  } as const satisfies CustomMutatorDefs<typeof schema>;
+  } as const satisfies CustomMutatorDefs;
 }
 
 export type Mutators = ReturnType<typeof createMutators>;

@@ -4,11 +4,16 @@ import {
   PermissionsConfig,
   type Row,
   definePermissions,
+  Schema as ZeroSchema,
 } from '@rocicorp/zero';
-import {schema, type Schema} from './schema.gen';
+import {schema as genSchema} from './schema.gen';
 
-export {schema, type Schema};
+export const schema = {
+  ...genSchema,
+  enableLegacyMutators: false,
+} as const satisfies ZeroSchema;
 
+export type Schema = typeof schema;
 export type Artist = Row<typeof schema.tables.artist>;
 export type Album = Row<typeof schema.tables.album>;
 
