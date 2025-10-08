@@ -1,9 +1,6 @@
 import {json} from '@tanstack/react-start';
-import {
-  PushProcessor,
-  ZQLDatabase,
-  PostgresJSConnection,
-} from '@rocicorp/zero/pg';
+import {PushProcessor} from '@rocicorp/zero/pg';
+import {zeroPostgresJS} from '@rocicorp/zero/server/adapters/postgresjs';
 import postgres from 'postgres';
 import {schema} from 'zero/schema';
 import {createMutators} from 'zero/mutators';
@@ -14,9 +11,7 @@ import {auth} from 'auth/auth';
 
 const pgURL = must(process.env.PG_URL, 'PG_URL is required');
 
-const processor = new PushProcessor(
-  new ZQLDatabase(new PostgresJSConnection(postgres(pgURL)), schema),
-);
+const processor = new PushProcessor(zeroPostgresJS(schema, postgres(pgURL)));
 
 export const ServerRoute = createServerFileRoute('/api/zero/mutate').methods({
   POST: async ({request}) => {
@@ -26,10 +21,7 @@ export const ServerRoute = createServerFileRoute('/api/zero/mutate').methods({
     }
 
     try {
-      const result = await processor.process(
-        createMutators(userID ? {sub: userID} : undefined),
-        request,
-      );
+      const result = await processor.process(createMutators(userID), request);
       return json(result);
     } catch (err) {
       return json({error: 'Invalid token'}, {status: 401});

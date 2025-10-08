@@ -1,20 +1,20 @@
 import {Transaction} from '@rocicorp/zero';
-import {AuthData, Schema} from './schema';
+import {Schema} from './schema';
 import {CustomMutatorDefs} from '@rocicorp/zero';
 
-export function createMutators(authData: AuthData | undefined) {
+export function createMutators(userId: string | undefined) {
   return {
     cart: {
       add: async (
         tx: Transaction<Schema>,
         {albumID, addedAt}: {albumID: string; addedAt: number},
       ) => {
-        if (!authData) {
+        if (!userId) {
           throw new Error('Not authenticated');
         }
         try {
           await tx.mutate.cartItem.insert({
-            userId: authData.sub,
+            userId,
             albumId: albumID,
             addedAt: tx.location === 'client' ? addedAt : Date.now(),
           });
@@ -25,13 +25,14 @@ export function createMutators(authData: AuthData | undefined) {
       },
 
       remove: async (tx: Transaction<Schema>, albumId: string) => {
-        if (!authData) {
+        if (!userId) {
           throw new Error('Not authenticated');
         }
         const cartItem = await tx.query.cartItem
-          .where('userId', authData.sub)
+          .where('userId', userId)
           .where('albumId', albumId)
-          .one();
+          .one()
+          .run();
         if (!cartItem) {
           return;
         }

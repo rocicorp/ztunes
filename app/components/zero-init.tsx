@@ -21,9 +21,7 @@ export function ZeroInit({children}: {children: React.ReactNode}) {
       userID: session.data?.userID ?? 'anon',
       auth: session.zeroAuth,
       server: serverURL,
-      mutators: createMutators(
-        session.data?.userID ? {sub: session.data.userID} : undefined,
-      ),
+      mutators: createMutators(session.data?.userID),
       init: (zero: Zero<Schema, Mutators>) => {
         router.update({
           context: {
