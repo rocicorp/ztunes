@@ -21,6 +21,7 @@ export const ServerRoute = createServerFileRoute(
   '/api/zero/get-queries',
 ).methods({
   POST: async ({request}) => {
+    return json({}, {status: 401});
     const userID = await getUserID(request);
     if (typeof userID === 'object') {
       return userID;
