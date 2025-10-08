@@ -45,6 +45,9 @@ function getQuery(
   if (!q) {
     throw new Error('Unknown query: ' + name);
   }
+  if (name === 'getHomepageArtists') {
+    throw new Error('bonk');
+  }
   return {query: q(userID, ...args)};
 }
 
