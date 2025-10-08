@@ -1,27 +1,29 @@
 import {useQuery} from '@rocicorp/zero/react';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
-import {Mutators} from 'zero/mutators';
-import {Schema} from 'zero/schema';
+import {builder} from 'zero/schema';
 import {Button} from 'app/components/button';
-import {Zero} from '@rocicorp/zero';
+import {syncedQueryWithContext} from '@rocicorp/zero';
+import z from 'zod';
 
-function query(z: Zero<Schema, Mutators>, userID: string | undefined) {
-  return z.query.cartItem
-    .related('album', album =>
-      album.one().related('artist', artist => artist.one()),
-    )
-    .where('userId', userID ?? '');
-}
+export const getCartItemsQuery = syncedQueryWithContext(
+  'getCartItems',
+  z.tuple([]),
+  (userID: string | undefined) =>
+    builder.cartItem
+      .related('album', album =>
+        album.one().related('artist', artist => artist.one()),
+      )
+      .where('userId', userID ?? ''),
+);
 
 export const Route = createFileRoute('/_layout/cart')({
   component: RouteComponent,
   ssr: false,
   loader: async ({context}) => {
-    console.log('preloading cart', context.session);
     const {zero, session} = context;
     const userID = session.data?.userID;
     if (userID) {
-      query(zero, userID).run();
+      zero.run(getCartItemsQuery(userID));
     }
   },
 });
@@ -29,7 +31,7 @@ export const Route = createFileRoute('/_layout/cart')({
 function RouteComponent() {
   const {zero, session} = useRouter().options.context;
   const [cartItems, {type: resultType}] = useQuery(
-    query(zero, session.data?.userID),
+    getCartItemsQuery(session.data?.userID),
   );
 
   if (!session.data) {

@@ -1,15 +1,12 @@
 import {useQuery} from '@rocicorp/zero/react';
 import {Link} from './link';
 import {useRouter} from '@tanstack/react-router';
+import {getCartItemsQuery} from 'app/routes/_layout/cart';
 
 export function Cart() {
-  const {zero, session} = useRouter().options.context;
+  const {session} = useRouter().options.context;
 
-  const [items] = useQuery(
-    zero.query.cartItem
-      .where('userId', session.data?.userID ?? '')
-      .orderBy('addedAt', 'asc'),
-  );
+  const [items] = useQuery(getCartItemsQuery(session.data?.userID ?? ''));
 
   if (!session.data) {
     return null;
