@@ -24,4 +24,9 @@ export const auth = betterAuth({
       clientSecret: clientSecret,
     },
   },
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: true,
+    },
+  },
 });
