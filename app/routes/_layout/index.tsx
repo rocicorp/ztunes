@@ -1,23 +1,11 @@
 import {useQuery} from '@rocicorp/zero/react';
-import {builder} from 'zero/schema';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import {useDebouncedCallback} from 'use-debounce';
 import {Link} from 'app/components/link';
-import {syncedQuery} from '@rocicorp/zero';
-import z from 'zod';
+import {queries} from 'zero/queries';
 
 const limit = 20;
-
-export const getHomepageArtists = syncedQuery(
-  'getHomepageArtists',
-  z.tuple([z.string()]),
-  (q: string) =>
-    builder.artist
-      .where('name', 'ILIKE', `%${q}%`)
-      .orderBy('popularity', 'desc')
-      .limit(limit),
-);
 
 export const Route = createFileRoute('/_layout/')({
   component: Home,
@@ -29,7 +17,7 @@ export const Route = createFileRoute('/_layout/')({
   },
   loaderDeps: ({search}) => ({q: search.q}),
   loader: async ({context, deps: {q}}) => {
-    context.zero.run(getHomepageArtists(q ?? ''));
+    context.zero.run(queries.getHomepageArtists(q ?? ''));
   },
 });
 
@@ -48,7 +36,7 @@ function Home() {
   // cache them when the user has paused, which we know by when the
   // QS matches because we already debounce the QS.
   const opts = search !== searchParam ? undefined : ({ttl: 'none'} as const);
-  const [artists, {type}] = useQuery(getHomepageArtists(search), opts);
+  const [artists, {type}] = useQuery(queries.getHomepageArtists(search), opts);
 
   // Safari has a limit on how fast you can change QS. Anyway it makes no sense
   // to have a history entry for each keystroke anyway so even without this we'd

@@ -4,17 +4,12 @@ import * as jose from 'jose';
 import {must} from 'shared/must';
 import {createServerFileRoute} from '@tanstack/react-start/server';
 import {auth} from 'auth/auth';
-import {getHomepageArtists} from 'app/routes/_layout';
 import {handleGetQueriesRequest} from '@rocicorp/zero/server';
 import {ReadonlyJSONValue, withValidation} from '@rocicorp/zero';
-import {getCartItemsQuery} from 'app/routes/_layout/cart';
-import {getArtistQuery} from 'app/routes/_layout/artist';
+import {queries} from 'zero/queries';
 
-const queries = Object.fromEntries(
-  [getHomepageArtists, getCartItemsQuery, getArtistQuery].map(q => [
-    q.queryName,
-    withValidation(q),
-  ]),
+const validated = Object.fromEntries(
+  Object.values(queries).map(q => [q.queryName, withValidation(q)]),
 );
 
 export const ServerRoute = createServerFileRoute(
@@ -41,7 +36,7 @@ function getQuery(
   name: string,
   args: readonly ReadonlyJSONValue[],
 ) {
-  const q = queries[name];
+  const q = validated[name];
   if (!q) {
     throw new Error('Unknown query: ' + name);
   }

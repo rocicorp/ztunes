@@ -5,6 +5,7 @@ import {useMemo} from 'react';
 import {createMutators, Mutators} from 'zero/mutators';
 import {useRouter} from '@tanstack/react-router';
 import {must} from 'shared/must';
+import {queries} from 'zero/queries';
 
 const serverURL = must(
   import.meta.env.VITE_PUBLIC_SERVER,
@@ -91,7 +92,7 @@ function preload(z: Zero<Schema>) {
     // There is a slight downside here than when/if the preload query changes,
     // Users will momentarily do *both* preload queries at startup -- the old
     // and new ones, until the old one ages out.
-    z.query.artist.orderBy('popularity', 'desc').limit(1_000).preload({
+    z.preload(queries.artistPreload(), {
       ttl: '1m',
     });
   }, 1_000);

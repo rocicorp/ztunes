@@ -1,20 +1,7 @@
 import {useQuery} from '@rocicorp/zero/react';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
-import {builder} from 'zero/schema';
 import {Button} from 'app/components/button';
-import {syncedQueryWithContext} from '@rocicorp/zero';
-import z from 'zod';
-
-export const getCartItemsQuery = syncedQueryWithContext(
-  'getCartItems',
-  z.tuple([]),
-  (userID: string | undefined) =>
-    builder.cartItem
-      .related('album', album =>
-        album.one().related('artist', artist => artist.one()),
-      )
-      .where('userId', userID ?? ''),
-);
+import {queries} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/cart')({
   component: RouteComponent,
@@ -23,7 +10,7 @@ export const Route = createFileRoute('/_layout/cart')({
     const {zero, session} = context;
     const userID = session.data?.userID;
     if (userID) {
-      zero.run(getCartItemsQuery(userID));
+      zero.run(queries.getCartItems(userID));
     }
   },
 });
@@ -31,7 +18,7 @@ export const Route = createFileRoute('/_layout/cart')({
 function RouteComponent() {
   const {zero, session} = useRouter().options.context;
   const [cartItems, {type: resultType}] = useQuery(
-    getCartItemsQuery(session.data?.userID),
+    queries.getCartItems(session.data?.userID),
   );
 
   if (!session.data) {

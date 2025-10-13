@@ -1,26 +1,14 @@
 import {useQuery} from '@rocicorp/zero/react';
-import {syncedQuery} from '@rocicorp/zero';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
-import {builder} from 'zero/schema';
 import {Button} from 'app/components/button';
-import {z} from 'zod';
-
-export const getArtistQuery = syncedQuery(
-  'getArtist',
-  z.tuple([z.string()]),
-  (artistID: string) =>
-    builder.artist
-      .where('id', artistID)
-      .related('albums', album => album.related('cartItems'))
-      .one(),
-);
+import {queries} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/artist')({
   component: RouteComponent,
   ssr: false,
   loaderDeps: ({search}) => ({artistId: search.id}),
   loader: async ({context, deps: {artistId}}) => {
-    context.zero.run(getArtistQuery(artistId ?? ''));
+    context.zero.run(queries.getArtist(artistId ?? ''));
   },
   validateSearch: (search: Record<string, unknown>) => {
     return {
@@ -37,7 +25,7 @@ function RouteComponent() {
     return <div>Missing required search parameter id</div>;
   }
 
-  const [artist, {type}] = useQuery(getArtistQuery(id));
+  const [artist, {type}] = useQuery(queries.getArtist(id));
 
   if (!artist && type === 'complete') {
     return <div>Artist not found</div>;

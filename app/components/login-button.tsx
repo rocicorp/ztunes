@@ -1,13 +1,15 @@
 import {useRouter} from '@tanstack/react-router';
 import {Button} from './button';
+import {queries} from 'zero/queries';
+import {useQuery} from '@rocicorp/zero/react';
 
 export function LoginButton() {
   const {session} = useRouter().options.context;
-  if (session.data) {
+  const [user] = useQuery(queries.user(session.data?.userID));
+  if (user) {
     return (
       <div>
-        {session.data.email}{' '}
-        <Button onPress={() => session.logout()}>Sign out</Button>
+        {user.email} <Button onPress={() => session.logout()}>Sign out</Button>
       </div>
     );
   }
