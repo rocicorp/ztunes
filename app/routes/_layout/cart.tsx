@@ -1,14 +1,16 @@
 import {useQuery} from '@rocicorp/zero/react';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {Button} from 'app/components/button';
+import {authClient} from 'auth/client';
 import {queries} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/cart')({
   component: RouteComponent,
   ssr: false,
   loader: async ({context}) => {
-    const {zero, session} = context;
-    const userID = session.data?.userID;
+    const session = await authClient.getSession();
+    const {zero} = context;
+    const userID = session.data?.user.id;
     if (userID) {
       zero.run(queries.getCartItems(userID));
     }
@@ -16,12 +18,13 @@ export const Route = createFileRoute('/_layout/cart')({
 });
 
 function RouteComponent() {
-  const {zero, session} = useRouter().options.context;
+  const session = authClient.useSession();
+  const {zero} = useRouter().options.context;
   const [cartItems, {type: resultType}] = useQuery(
-    queries.getCartItems(session.data?.userID),
+    queries.getCartItems(session.data?.user.id),
   );
 
-  if (!session.data) {
+  if (!session.data?.user) {
     return <div>Login to view cart</div>;
   }
 

@@ -4,11 +4,9 @@ import {routeTree} from './routeTree.gen';
 import {Zero} from '@rocicorp/zero';
 import {Schema} from 'zero/schema';
 import {Mutators} from 'zero/mutators';
-import {SessionContextType} from './components/session-init';
 
 export interface RouterContext {
   zero: Zero<Schema, Mutators>;
-  session: SessionContextType;
 }
 
 export function createRouter() {
@@ -25,7 +23,6 @@ export function createRouter() {
     defaultPreloadGcTime: 0,
     context: {
       zero: undefined as unknown as Zero<Schema, Mutators>, // populated in ZeroInit,
-      session: undefined as unknown as SessionContextType, // populated in SessionProvider
     } satisfies RouterContext,
   });
 

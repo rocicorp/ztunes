@@ -1,14 +1,12 @@
 import {useQuery} from '@rocicorp/zero/react';
 import {Link} from './link';
-import {useRouter} from '@tanstack/react-router';
 import {queries} from 'zero/queries';
+import {authClient} from 'auth/client';
 
 export function Cart() {
-  const {session} = useRouter().options.context;
-
-  const [items] = useQuery(queries.getCartItems(session.data?.userID ?? ''));
-
-  if (!session.data) {
+  const session = authClient.useSession();
+  const [items] = useQuery(queries.getCartItems(session.data?.user.id ?? ''));
+  if (!session.data?.user) {
     return null;
   }
 

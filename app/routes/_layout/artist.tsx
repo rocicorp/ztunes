@@ -1,6 +1,7 @@
 import {useQuery} from '@rocicorp/zero/react';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {Button} from 'app/components/button';
+import {authClient} from 'auth/client';
 import {queries} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/artist')({
@@ -18,7 +19,8 @@ export const Route = createFileRoute('/_layout/artist')({
 });
 
 function RouteComponent() {
-  const {zero, session} = useRouter().options.context;
+  const session = authClient.useSession();
+  const {zero} = useRouter().options.context;
   const {id} = Route.useSearch();
 
   if (!id) {
@@ -36,7 +38,7 @@ function RouteComponent() {
   }
 
   const cartButton = (album: (typeof artist.albums)[number]) => {
-    if (!session.data) {
+    if (!session.data?.user) {
       return <Button disabled>Login to shop</Button>;
     }
 

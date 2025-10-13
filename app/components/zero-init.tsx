@@ -6,6 +6,7 @@ import {createMutators, Mutators} from 'zero/mutators';
 import {useRouter} from '@tanstack/react-router';
 import {must} from 'shared/must';
 import {queries} from 'zero/queries';
+import {authClient} from 'auth/client';
 
 const serverURL = must(
   import.meta.env.VITE_PUBLIC_SERVER,
@@ -14,15 +15,14 @@ const serverURL = must(
 
 export function ZeroInit({children}: {children: React.ReactNode}) {
   const router = useRouter();
-  const {session} = router.options.context;
+  const session = authClient.useSession();
 
   const opts = useMemo(() => {
     return {
       schema,
-      userID: session.data?.userID ?? 'anon',
-      auth: session.zeroAuth,
+      userID: session.data?.user.id ?? 'anon',
       server: serverURL,
-      mutators: createMutators(session.data?.userID),
+      mutators: createMutators(session.data?.user.id),
       init: (zero: Zero<Schema, Mutators>) => {
         router.update({
           context: {
@@ -36,7 +36,7 @@ export function ZeroInit({children}: {children: React.ReactNode}) {
         preload(zero);
       },
     };
-  }, [session.data?.userID, router]);
+  }, [session.data?.user.id, router]);
 
   return <ZeroProvider {...opts}>{children}</ZeroProvider>;
 }
