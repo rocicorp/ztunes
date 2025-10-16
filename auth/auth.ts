@@ -24,11 +24,11 @@ export const auth = betterAuth({
       clientSecret: clientSecret,
     },
   },
-  advanced: process.env.GITHUB_CLIENT_SECRET
+  advanced: process.env.COOKIE_DOMAIN
     ? {
         crossSubDomainCookies: {
           enabled: true,
-          domain: process.env.GITHUB_CLIENT_SECRET,
+          domain: process.env.COOKIE_DOMAIN,
         },
       }
     : undefined,
