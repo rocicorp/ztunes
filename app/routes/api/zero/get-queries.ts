@@ -1,31 +1,22 @@
 import {json} from '@tanstack/react-start';
 import {schema} from 'zero/schema';
-import * as jose from 'jose';
-import {must} from 'shared/must';
 import {createServerFileRoute} from '@tanstack/react-start/server';
 import {auth} from 'auth/auth';
-import {getHomepageArtists} from 'app/routes/_layout';
 import {handleGetQueriesRequest} from '@rocicorp/zero/server';
 import {ReadonlyJSONValue, withValidation} from '@rocicorp/zero';
-import {getCartItemsQuery} from 'app/routes/_layout/cart';
-import {getArtistQuery} from 'app/routes/_layout/artist';
+import {queries} from 'zero/queries';
 
-const queries = Object.fromEntries(
-  [getHomepageArtists, getCartItemsQuery, getArtistQuery].map(q => [
-    q.queryName,
-    withValidation(q),
-  ]),
+const validated = Object.fromEntries(
+  Object.values(queries).map(q => [q.queryName, withValidation(q)]),
 );
 
 export const ServerRoute = createServerFileRoute(
   '/api/zero/get-queries',
 ).methods({
   POST: async ({request}) => {
-    const userID = await getUserID(request);
-    if (typeof userID === 'object') {
-      return userID;
-    }
-
+    const session = await auth.api.getSession(request);
+    const userID = session?.user.id;
+    console.log('!!!userID', userID);
     return json(
       await handleGetQueriesRequest(
         (name, args) => getQuery(userID, name, args),
@@ -41,36 +32,9 @@ function getQuery(
   name: string,
   args: readonly ReadonlyJSONValue[],
 ) {
-  const q = queries[name];
+  const q = validated[name];
   if (!q) {
     throw new Error('Unknown query: ' + name);
   }
   return {query: q(userID, ...args)};
-}
-
-async function getUserID(request: Request) {
-  const authHeader = request.headers.get('authorization');
-  if (!authHeader) {
-    return undefined;
-  }
-
-  const prefix = 'Bearer ';
-  if (!authHeader.startsWith(prefix)) {
-    return json(
-      {error: 'Missing or invalid authorization header'},
-      {status: 401},
-    );
-  }
-
-  const token = authHeader.slice(prefix.length);
-  const set = await auth.api.getJwks();
-  const jwks = jose.createLocalJWKSet(set);
-
-  try {
-    const {payload} = await jose.jwtVerify(token, jwks);
-    return must(payload.sub, 'Empty sub in token');
-  } catch (err) {
-    console.info('Could not verify token: ' + (err.message ?? String(err)));
-    return json({error: 'Invalid token'}, {status: 401});
-  }
 }

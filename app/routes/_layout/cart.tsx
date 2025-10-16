@@ -1,40 +1,30 @@
 import {useQuery} from '@rocicorp/zero/react';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
-import {builder} from 'zero/schema';
 import {Button} from 'app/components/button';
-import {syncedQueryWithContext} from '@rocicorp/zero';
-import z from 'zod';
-
-export const getCartItemsQuery = syncedQueryWithContext(
-  'getCartItems',
-  z.tuple([]),
-  (userID: string | undefined) =>
-    builder.cartItem
-      .related('album', album =>
-        album.one().related('artist', artist => artist.one()),
-      )
-      .where('userId', userID ?? ''),
-);
+import {authClient} from 'auth/client';
+import {queries} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/cart')({
   component: RouteComponent,
   ssr: false,
   loader: async ({context}) => {
-    const {zero, session} = context;
-    const userID = session.data?.userID;
+    const session = await authClient.getSession();
+    const {zero} = context;
+    const userID = session.data?.user.id;
     if (userID) {
-      zero.run(getCartItemsQuery(userID));
+      zero.run(queries.getCartItems(userID));
     }
   },
 });
 
 function RouteComponent() {
-  const {zero, session} = useRouter().options.context;
+  const session = authClient.useSession();
+  const {zero} = useRouter().options.context;
   const [cartItems, {type: resultType}] = useQuery(
-    getCartItemsQuery(session.data?.userID),
+    queries.getCartItems(session.data?.user.id),
   );
 
-  if (!session.data) {
+  if (!session.data?.user) {
     return <div>Login to view cart</div>;
   }
 

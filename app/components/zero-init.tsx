@@ -5,6 +5,8 @@ import {useMemo} from 'react';
 import {createMutators, Mutators} from 'zero/mutators';
 import {useRouter} from '@tanstack/react-router';
 import {must} from 'shared/must';
+import {queries} from 'zero/queries';
+import {authClient} from 'auth/client';
 
 const serverURL = must(
   import.meta.env.VITE_PUBLIC_SERVER,
@@ -13,17 +15,14 @@ const serverURL = must(
 
 export function ZeroInit({children}: {children: React.ReactNode}) {
   const router = useRouter();
-  const {session} = router.options.context;
+  const session = authClient.useSession();
 
   const opts = useMemo(() => {
     return {
       schema,
-      userID: session.data?.userID ?? 'anon',
-      auth: session.zeroAuth,
+      userID: session.data?.user.id ?? 'anon',
       server: serverURL,
-      mutators: createMutators(
-        session.data?.userID ? {sub: session.data.userID} : undefined,
-      ),
+      mutators: createMutators(session.data?.user.id),
       init: (zero: Zero<Schema, Mutators>) => {
         router.update({
           context: {
@@ -37,7 +36,7 @@ export function ZeroInit({children}: {children: React.ReactNode}) {
         preload(zero);
       },
     };
-  }, [session.data?.userID, router]);
+  }, [session.data?.user.id, router]);
 
   return <ZeroProvider {...opts}>{children}</ZeroProvider>;
 }
@@ -93,7 +92,7 @@ function preload(z: Zero<Schema>) {
     // There is a slight downside here than when/if the preload query changes,
     // Users will momentarily do *both* preload queries at startup -- the old
     // and new ones, until the old one ages out.
-    z.query.artist.orderBy('popularity', 'desc').limit(1_000).preload({
+    z.preload(queries.artistPreload(), {
       ttl: '1m',
     });
   }, 1_000);
