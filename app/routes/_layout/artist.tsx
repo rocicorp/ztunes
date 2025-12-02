@@ -10,7 +10,7 @@ export const Route = createFileRoute('/_layout/artist')({
   ssr: false,
   loaderDeps: ({search}) => ({artistId: search.id}),
   loader: async ({context, deps: {artistId}}) => {
-    context.zero.run(queries.getArtist(artistId ?? ''));
+    context.zero.run(queries.getArtist({artistId}));
   },
   validateSearch: (search: Record<string, unknown>) => {
     return {
@@ -22,13 +22,13 @@ export const Route = createFileRoute('/_layout/artist')({
 function RouteComponent() {
   const session = authClient.useSession();
   const {zero} = useRouter().options.context;
-  const {id} = Route.useSearch();
+  const {id: artistId} = Route.useSearch();
 
-  if (!id) {
+  if (!artistId) {
     return <div>Missing required search parameter id</div>;
   }
 
-  const [artist, {type}] = useQuery(queries.getArtist(id));
+  const [artist, {type}] = useQuery(queries.getArtist({artistId}));
 
   if (!artist && type === 'complete') {
     return <div>Artist not found</div>;
