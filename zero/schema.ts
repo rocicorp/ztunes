@@ -15,8 +15,6 @@ export const builder = createBuilder(schema);
 
 export type Schema = typeof schema;
 
-export const permissions = definePermissions<{}, Schema>(schema, () => ({}));
-
 declare module '@rocicorp/zero' {
   interface DefaultTypes {
     schema: typeof schema;

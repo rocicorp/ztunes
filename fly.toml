@@ -26,7 +26,6 @@ destination = "/data"
 initial_size = "100gb"
 
 [env]
-ZERO_SCHEMA_PATH="zero/schema.ts"
 ZERO_LOG_LEVEL="debug"
 ZERO_QUERY_HYDRATION_STATS="true"
 ZERO_LOG_SLOW_HYDRATE_THRESHOLD="1"
