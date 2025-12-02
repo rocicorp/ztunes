@@ -2,6 +2,7 @@ import {useQuery} from '@rocicorp/zero/react';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {Button} from 'app/components/button';
 import {authClient} from 'auth/client';
+import {mutators} from 'zero/mutators';
 import {queries} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/cart')({
@@ -29,7 +30,7 @@ function RouteComponent() {
   }
 
   const onRemove = (albumID: string) => {
-    zero.mutate.cart.remove(albumID);
+    zero.mutate(mutators.cart.remove({albumId: albumID}));
   };
 
   return (
