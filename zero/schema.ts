@@ -1,8 +1,4 @@
-import {
-  definePermissions,
-  Schema as ZeroSchema,
-  createBuilder,
-} from '@rocicorp/zero';
+import {Schema as ZeroSchema, createBuilder} from '@rocicorp/zero';
 import {schema as genSchema} from './schema.gen';
 
 export const schema = {
