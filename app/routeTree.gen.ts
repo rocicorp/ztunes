@@ -15,8 +15,8 @@ import { Route as LayoutRouteRouteImport } from './routes/_layout/route'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as LayoutCartRouteImport } from './routes/_layout/cart'
 import { Route as LayoutArtistRouteImport } from './routes/_layout/artist'
+import { ServerRoute as ApiZeroQueryServerRouteImport } from './routes/api/zero/query'
 import { ServerRoute as ApiZeroMutateServerRouteImport } from './routes/api/zero/mutate'
-import { ServerRoute as ApiZeroGetQueriesServerRouteImport } from './routes/api/zero/get-queries'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -40,14 +40,14 @@ const LayoutArtistRoute = LayoutArtistRouteImport.update({
   path: '/artist',
   getParentRoute: () => LayoutRouteRoute,
 } as any)
+const ApiZeroQueryServerRoute = ApiZeroQueryServerRouteImport.update({
+  id: '/api/zero/query',
+  path: '/api/zero/query',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
 const ApiZeroMutateServerRoute = ApiZeroMutateServerRouteImport.update({
   id: '/api/zero/mutate',
   path: '/api/zero/mutate',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
-const ApiZeroGetQueriesServerRoute = ApiZeroGetQueriesServerRouteImport.update({
-  id: '/api/zero/get-queries',
-  path: '/api/zero/get-queries',
   getParentRoute: () => rootServerRouteImport,
 } as any)
 const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
@@ -91,32 +91,32 @@ export interface RootRouteChildren {
 }
 export interface FileServerRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatServerRoute
-  '/api/zero/get-queries': typeof ApiZeroGetQueriesServerRoute
   '/api/zero/mutate': typeof ApiZeroMutateServerRoute
+  '/api/zero/query': typeof ApiZeroQueryServerRoute
 }
 export interface FileServerRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatServerRoute
-  '/api/zero/get-queries': typeof ApiZeroGetQueriesServerRoute
   '/api/zero/mutate': typeof ApiZeroMutateServerRoute
+  '/api/zero/query': typeof ApiZeroQueryServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
   '/api/auth/$': typeof ApiAuthSplatServerRoute
-  '/api/zero/get-queries': typeof ApiZeroGetQueriesServerRoute
   '/api/zero/mutate': typeof ApiZeroMutateServerRoute
+  '/api/zero/query': typeof ApiZeroQueryServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/auth/$' | '/api/zero/get-queries' | '/api/zero/mutate'
+  fullPaths: '/api/auth/$' | '/api/zero/mutate' | '/api/zero/query'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/auth/$' | '/api/zero/get-queries' | '/api/zero/mutate'
-  id: '__root__' | '/api/auth/$' | '/api/zero/get-queries' | '/api/zero/mutate'
+  to: '/api/auth/$' | '/api/zero/mutate' | '/api/zero/query'
+  id: '__root__' | '/api/auth/$' | '/api/zero/mutate' | '/api/zero/query'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
   ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
-  ApiZeroGetQueriesServerRoute: typeof ApiZeroGetQueriesServerRoute
   ApiZeroMutateServerRoute: typeof ApiZeroMutateServerRoute
+  ApiZeroQueryServerRoute: typeof ApiZeroQueryServerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -153,18 +153,18 @@ declare module '@tanstack/react-router' {
 }
 declare module '@tanstack/react-start/server' {
   interface ServerFileRoutesByPath {
+    '/api/zero/query': {
+      id: '/api/zero/query'
+      path: '/api/zero/query'
+      fullPath: '/api/zero/query'
+      preLoaderRoute: typeof ApiZeroQueryServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
     '/api/zero/mutate': {
       id: '/api/zero/mutate'
       path: '/api/zero/mutate'
       fullPath: '/api/zero/mutate'
       preLoaderRoute: typeof ApiZeroMutateServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
-    '/api/zero/get-queries': {
-      id: '/api/zero/get-queries'
-      path: '/api/zero/get-queries'
-      fullPath: '/api/zero/get-queries'
-      preLoaderRoute: typeof ApiZeroGetQueriesServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
     '/api/auth/$': {
@@ -201,8 +201,8 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
   ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
-  ApiZeroGetQueriesServerRoute: ApiZeroGetQueriesServerRoute,
   ApiZeroMutateServerRoute: ApiZeroMutateServerRoute,
+  ApiZeroQueryServerRoute: ApiZeroQueryServerRoute,
 }
 export const serverRouteTree = rootServerRouteImport
   ._addFileChildren(rootServerRouteChildren)
