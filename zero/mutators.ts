@@ -1,4 +1,4 @@
-import {builder} from './schema';
+import {zql} from './schema';
 import z from 'zod';
 import {defineMutator, defineMutators} from '@rocicorp/zero';
 
@@ -27,10 +27,7 @@ export const mutators = defineMutators({
         }
         const {userId} = ctx;
         const cartItem = await tx.run(
-          builder.cartItem
-            .where('userId', userId)
-            .where('albumId', albumId)
-            .one(),
+          zql.cartItem.where('userId', userId).where('albumId', albumId).one(),
         );
         if (!cartItem) {
           return;
