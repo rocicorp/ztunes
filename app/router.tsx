@@ -5,7 +5,7 @@ import {Zero} from '@rocicorp/zero';
 import {Schema} from 'zero/schema';
 
 export interface RouterContext {
-  zero: Zero<Schema>;
+  zero: Zero;
 }
 
 export function createRouter() {
@@ -21,7 +21,7 @@ export function createRouter() {
     // deduping and caching.
     defaultPreloadGcTime: 0,
     context: {
-      zero: undefined as unknown as Zero<Schema>, // populated in ZeroInit,
+      zero: undefined as unknown as Zero, // populated in ZeroInit,
     } satisfies RouterContext,
   });
 

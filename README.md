@@ -80,7 +80,7 @@ In TanStack we can mostly achieve this elegantly via TanStack's built-in
 Each `Route` defines a free `query` function which it uses in TanStack's `loader` method:
 
 ```ts
-function query(zero: Zero<Schema, Mutators>, artistID: string | undefined) {
+function query(zero: Zero, artistID: string | undefined) {
   return zero.query.artist
     .where('id', artistID ?? '')
     .related('albums', album => album.related('cartItems'))

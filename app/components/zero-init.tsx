@@ -25,7 +25,7 @@ export function ZeroInit({children}: {children: React.ReactNode}) {
       context,
       cacheURL,
       mutators,
-      init: (zero: Zero<Schema>) => {
+      init: (zero: Zero) => {
         router.update({
           context: {
             ...router.options.context,
@@ -43,7 +43,7 @@ export function ZeroInit({children}: {children: React.ReactNode}) {
   return <ZeroProvider {...opts}>{children}</ZeroProvider>;
 }
 
-function preload(z: Zero<Schema>) {
+function preload(z: Zero) {
   // Delay preload() slightly to avoid blocking UI on first run. We don't need
   // this data to display the UI, it's used by search.
   setTimeout(() => {
