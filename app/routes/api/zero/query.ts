@@ -14,7 +14,7 @@ export const ServerRoute = createServerFileRoute('/api/zero/query').methods({
       await handleQueryRequest(
         (name, args) => {
           const query = mustGetQuery(queries, name);
-          return query(args).toQuery(ctx);
+          return query.fn({args, ctx});
         },
         schema,
         request,
