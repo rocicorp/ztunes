@@ -1,6 +1,8 @@
-import {zql} from './schema';
+import {schema, zql} from './schema';
 import z from 'zod';
-import {defineMutator, defineMutators} from '@rocicorp/zero';
+import {createCRUDBuilder, defineMutator, defineMutators} from '@rocicorp/zero';
+
+const crud = createCRUDBuilder(schema);
 
 export const mutators = defineMutators({
   cart: {
@@ -11,11 +13,13 @@ export const mutators = defineMutators({
           throw new Error('Not authenticated');
         }
         const {userId} = ctx;
-        await tx.mutate.cartItem.insert({
-          userId,
-          albumId,
-          addedAt: tx.location === 'client' ? addedAt : Date.now(),
-        });
+        await tx.mutate(
+          crud.cartItem.insert({
+            userId,
+            albumId,
+            addedAt: tx.location === 'client' ? addedAt : Date.now(),
+          }),
+        );
       },
     ),
 
@@ -32,10 +36,12 @@ export const mutators = defineMutators({
         if (!cartItem) {
           return;
         }
-        await tx.mutate.cartItem.delete({
-          userId: cartItem.userId,
-          albumId: cartItem.albumId,
-        });
+        await tx.mutate(
+          crud.cartItem.delete({
+            userId: cartItem.userId,
+            albumId: cartItem.albumId,
+          }),
+        );
       },
     ),
   },
