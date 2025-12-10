@@ -1,8 +1,6 @@
-import {schema, zql} from './schema';
+import {crud, zql} from './schema';
 import z from 'zod';
-import {createCRUDBuilder, defineMutator, defineMutators} from '@rocicorp/zero';
-
-const crud = createCRUDBuilder(schema);
+import {defineMutator, defineMutators} from '@rocicorp/zero';
 
 export const mutators = defineMutators({
   cart: {
