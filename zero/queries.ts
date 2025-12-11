@@ -19,11 +19,14 @@ export const queries = defineQueries({
         .limit(20),
   ),
 
-  getCartItems: defineQuery(({ctx}) =>
-    authedCartItems(zql.cartItem, ctx).related('album', album =>
+  getCartItems: defineQuery(({ctx}) => {
+    if (!ctx) {
+      throw new Error('Not authenticated');
+    }
+    return authedCartItems(zql.cartItem, ctx).related('album', album =>
       album.one().related('artist', artist => artist.one()),
-    ),
-  ),
+    );
+  }),
 
   getArtist: defineQuery(
     z.object({artistId: z.string().optional()}),
