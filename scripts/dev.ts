@@ -15,7 +15,7 @@ const devPgAddress = must(
   'DEV_PG_ADDRESS is required',
 );
 
-concurrently([
+await concurrently([
   {
     command: 'npm run dev:clean && npm run dev:db',
     name: 'pg',
@@ -23,12 +23,7 @@ concurrently([
   },
   {command: 'npm run dev:ui', name: 'ts', prefixColor: '#7ce645'},
   {
-    command: `wait-on tcp:${devPgAddress} && sleep 1 && npx drizzle-kit push --force && npm run seed`,
-    name: 'sd',
-    prefixColor: '#ff5515',
-  },
-  {
-    command: `wait-on tcp:${devPgAddress} && sleep 1 && npm run dev:zero`,
+    command: `wait-on tcp:${devPgAddress} && sleep 1 && npx drizzle-kit push --force && npm run seed && sleep 1 && npm run dev:zero`,
     name: 'z0',
     prefixColor: '#ff11cc',
   },
@@ -38,4 +33,4 @@ concurrently([
     name: 'gz',
     prefixColor: '#11ffcc',
   },
-]);
+]).result;
