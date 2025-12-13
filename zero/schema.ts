@@ -7,7 +7,7 @@ export const schema = {
   enableLegacyQueries: false,
 } as const satisfies ZeroSchema;
 
-export const builder = createBuilder(schema);
+export const zql = createBuilder(schema);
 
 export type Schema = typeof schema;
 
