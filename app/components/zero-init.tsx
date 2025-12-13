@@ -13,6 +13,8 @@ const cacheURL = must(
   'VITE_PUBLIC_ZERO_CACHE_URL is required',
 );
 
+const logLevel = import.meta.env.VITE_PUBLIC_ZERO_LOG_LEVEL;
+
 export function ZeroInit({children}: {children: React.ReactNode}) {
   const router = useRouter();
   const session = authClient.useSession();
@@ -35,7 +37,9 @@ export function ZeroInit({children}: {children: React.ReactNode}) {
   );
 
   return (
-    <ZeroProvider {...{schema, userID, context, cacheURL, mutators, init}}>
+    <ZeroProvider
+      {...{schema, userID, context, cacheURL, mutators, init, logLevel}}
+    >
       {children}
     </ZeroProvider>
   );
