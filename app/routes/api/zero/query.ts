@@ -6,9 +6,7 @@ import {handleQueryRequest} from '@rocicorp/zero/server';
 import {mustGetQuery} from '@rocicorp/zero';
 import {queries} from 'zero/queries';
 
-export const ServerRoute = createServerFileRoute(
-  '/api/zero/get-queries',
-).methods({
+export const ServerRoute = createServerFileRoute('/api/zero/query').methods({
   POST: async ({request}) => {
     const session = await auth.api.getSession(request);
     const ctx = session ? {userId: session.user.id} : undefined;
