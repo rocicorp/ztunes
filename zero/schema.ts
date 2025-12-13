@@ -8,7 +8,7 @@ import {schema as genSchema} from './schema.gen';
 export const schema = {
   ...genSchema,
   enableLegacyMutators: false,
-  enableLegacyQueries: false,
+  enableLegacyQueries: true,
 } as const satisfies ZeroSchema;
 
 export const builder = createBuilder(schema);
