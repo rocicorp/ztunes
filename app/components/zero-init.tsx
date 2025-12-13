@@ -8,9 +8,9 @@ import {must} from 'shared/must';
 import {queries} from 'zero/queries';
 import {authClient} from 'auth/client';
 
-const serverURL = must(
-  import.meta.env.VITE_PUBLIC_SERVER,
-  'VITE_PUBLIC_SERVER is required',
+const cacheURL = must(
+  import.meta.env.VITE_PUBLIC_ZERO_CACHE_URL,
+  'VITE_PUBLIC_ZERO_CACHE_URL is required',
 );
 
 export function ZeroInit({children}: {children: React.ReactNode}) {
@@ -23,7 +23,7 @@ export function ZeroInit({children}: {children: React.ReactNode}) {
       schema,
       userID: session.data?.user.id ?? 'anon',
       context,
-      server: serverURL,
+      cacheURL,
       mutators,
       init: (zero: Zero<Schema>) => {
         router.update({
