@@ -13,7 +13,7 @@ export const Route = createFileRoute('/_layout/cart')({
     const {zero} = context;
     const userID = session.data?.user.id;
     if (userID) {
-      zero.run(queries.getCartItems(userID));
+      zero.run(queries.getCartItems());
     }
   },
 });
@@ -21,9 +21,7 @@ export const Route = createFileRoute('/_layout/cart')({
 function RouteComponent() {
   const session = authClient.useSession();
   const {zero} = useRouter().options.context;
-  const [cartItems, {type: resultType}] = useQuery(
-    queries.getCartItems(session.data?.user.id),
-  );
+  const [cartItems, {type: resultType}] = useQuery(queries.getCartItems());
 
   if (!session.data?.user) {
     return <div>Login to view cart</div>;
