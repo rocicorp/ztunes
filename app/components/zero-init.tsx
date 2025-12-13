@@ -1,47 +1,47 @@
 import {Zero} from '@rocicorp/zero';
 import {ZeroProvider} from '@rocicorp/zero/react';
-import {schema, Schema} from 'zero/schema';
-import {useMemo} from 'react';
-import {createMutators, Mutators} from 'zero/mutators';
+import {schema} from 'zero/schema';
+import {useCallback} from 'react';
 import {useRouter} from '@tanstack/react-router';
+import {mutators} from 'zero/mutators';
 import {must} from 'shared/must';
 import {queries} from 'zero/queries';
 import {authClient} from 'auth/client';
 
-const serverURL = must(
-  import.meta.env.VITE_PUBLIC_SERVER,
-  'VITE_PUBLIC_SERVER is required',
+const cacheURL = must(
+  import.meta.env.VITE_PUBLIC_ZERO_CACHE_URL,
+  'VITE_PUBLIC_ZERO_CACHE_URL is required',
 );
 
 export function ZeroInit({children}: {children: React.ReactNode}) {
   const router = useRouter();
   const session = authClient.useSession();
+  const context = session.data ? {userId: session.data.user.id} : undefined;
+  const userID = session.data?.user.id ?? 'anon';
 
-  const opts = useMemo(() => {
-    return {
-      schema,
-      userID: session.data?.user.id ?? 'anon',
-      server: serverURL,
-      mutators: createMutators(session.data?.user.id),
-      init: (zero: Zero<Schema, Mutators>) => {
-        router.update({
-          context: {
-            ...router.options.context,
-            zero,
-          },
-        });
+  const init = useCallback(
+    (zero: Zero) => {
+      router.update({
+        context: {
+          ...router.options.context,
+          zero,
+        },
+      });
+      router.invalidate();
 
-        router.invalidate();
+      preload(zero);
+    },
+    [router],
+  );
 
-        preload(zero);
-      },
-    };
-  }, [session.data?.user.id, router]);
-
-  return <ZeroProvider {...opts}>{children}</ZeroProvider>;
+  return (
+    <ZeroProvider {...{schema, userID, context, cacheURL, mutators, init}}>
+      {children}
+    </ZeroProvider>
+  );
 }
 
-function preload(z: Zero<Schema>) {
+function preload(z: Zero) {
   // Delay preload() slightly to avoid blocking UI on first run. We don't need
   // this data to display the UI, it's used by search.
   setTimeout(() => {

@@ -1,38 +1,34 @@
-import {Transaction} from '@rocicorp/zero';
-import {Schema} from './schema';
-import {CustomMutatorDefs} from '@rocicorp/zero';
+import {zql} from './schema';
+import z from 'zod';
+import {defineMutator, defineMutators} from '@rocicorp/zero';
 
-export function createMutators(userId: string | undefined) {
-  return {
-    cart: {
-      add: async (
-        tx: Transaction<Schema>,
-        {albumID, addedAt}: {albumID: string; addedAt: number},
-      ) => {
-        if (!userId) {
+export const mutators = defineMutators({
+  cart: {
+    add: defineMutator(
+      z.object({albumId: z.string(), addedAt: z.number()}),
+      async ({tx, ctx, args: {albumId, addedAt}}) => {
+        if (!ctx) {
           throw new Error('Not authenticated');
         }
-        try {
-          await tx.mutate.cartItem.insert({
-            userId,
-            albumId: albumID,
-            addedAt: tx.location === 'client' ? addedAt : Date.now(),
-          });
-        } catch (err) {
-          console.error('error adding cart item', err);
-          throw err;
-        }
+        const {userId} = ctx;
+        await tx.mutate.cartItem.insert({
+          userId,
+          albumId,
+          addedAt: tx.location === 'client' ? addedAt : Date.now(),
+        });
       },
+    ),
 
-      remove: async (tx: Transaction<Schema>, albumId: string) => {
-        if (!userId) {
+    remove: defineMutator(
+      z.object({albumId: z.string()}),
+      async ({tx, ctx, args: {albumId}}) => {
+        if (!ctx) {
           throw new Error('Not authenticated');
         }
-        const cartItem = await tx.query.cartItem
-          .where('userId', userId)
-          .where('albumId', albumId)
-          .one()
-          .run();
+        const {userId} = ctx;
+        const cartItem = await tx.run(
+          zql.cartItem.where('userId', userId).where('albumId', albumId).one(),
+        );
         if (!cartItem) {
           return;
         }
@@ -41,8 +37,6 @@ export function createMutators(userId: string | undefined) {
           albumId: cartItem.albumId,
         });
       },
-    },
-  } as const satisfies CustomMutatorDefs;
-}
-
-export type Mutators = ReturnType<typeof createMutators>;
+    ),
+  },
+});

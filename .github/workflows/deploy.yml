@@ -66,10 +66,6 @@ jobs:
             exit 1
           fi
 
-      - name: Update zero permissions
-        run: |
-          npx zero-deploy-permissions -p "zero/schema.ts"
-
       - name: Deploy to Vercel
         run: |
           vercel deploy --prod --yes \

@@ -2,11 +2,9 @@
 import {createRouter as createTanStackRouter} from '@tanstack/react-router';
 import {routeTree} from './routeTree.gen';
 import {Zero} from '@rocicorp/zero';
-import {Schema} from 'zero/schema';
-import {Mutators} from 'zero/mutators';
 
 export interface RouterContext {
-  zero: Zero<Schema, Mutators>;
+  zero: Zero;
 }
 
 export function createRouter() {
@@ -22,7 +20,7 @@ export function createRouter() {
     // deduping and caching.
     defaultPreloadGcTime: 0,
     context: {
-      zero: undefined as unknown as Zero<Schema, Mutators>, // populated in ZeroInit,
+      zero: undefined as unknown as Zero, // populated in ZeroInit,
     } satisfies RouterContext,
   });
 

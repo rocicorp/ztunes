@@ -1,6 +1,7 @@
 import {Cart} from './cart';
 import {LoginButton} from './login-button';
 import {Link} from './link';
+import {Status} from './status';
 
 export function SiteLayout({children}: {children: React.ReactNode}) {
   return (
@@ -19,6 +20,7 @@ export function SiteLayout({children}: {children: React.ReactNode}) {
         <div style={{flex: 1}} />
         <Cart />
         <LoginButton />
+        <Status />
       </div>
       {children}
     </div>

@@ -35,16 +35,16 @@ function RootComponent() {
   );
 }
 
-const serverURL = must(
-  import.meta.env.VITE_PUBLIC_SERVER,
-  'VITE_PUBLIC_SERVER is required',
+const zeroCacheURL = must(
+  import.meta.env.VITE_PUBLIC_ZERO_CACHE_URL,
+  'VITE_PUBLIC_ZERO_CACHE_URL is required',
 );
 
 function RootDocument({children}: Readonly<{children: ReactNode}>) {
   return (
     <html>
       <head>
-        <link rel="preconnect" href={serverURL} />
+        <link rel="preconnect" href={zeroCacheURL} />
         <style
           dangerouslySetInnerHTML={{
             __html: `

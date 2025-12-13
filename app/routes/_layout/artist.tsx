@@ -2,6 +2,7 @@ import {useQuery} from '@rocicorp/zero/react';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {Button} from 'app/components/button';
 import {authClient} from 'auth/client';
+import {mutators} from 'zero/mutators';
 import {queries} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/artist')({
@@ -9,7 +10,7 @@ export const Route = createFileRoute('/_layout/artist')({
   ssr: false,
   loaderDeps: ({search}) => ({artistId: search.id}),
   loader: async ({context, deps: {artistId}}) => {
-    context.zero.run(queries.getArtist(artistId ?? ''));
+    context.zero.run(queries.getArtist({artistId}));
   },
   validateSearch: (search: Record<string, unknown>) => {
     return {
@@ -21,13 +22,13 @@ export const Route = createFileRoute('/_layout/artist')({
 function RouteComponent() {
   const session = authClient.useSession();
   const {zero} = useRouter().options.context;
-  const {id} = Route.useSearch();
+  const {id: artistId} = Route.useSearch();
 
-  if (!id) {
+  if (!artistId) {
     return <div>Missing required search parameter id</div>;
   }
 
-  const [artist, {type}] = useQuery(queries.getArtist(id));
+  const [artist, {type}] = useQuery(queries.getArtist({artistId}));
 
   if (!artist && type === 'complete') {
     return <div>Artist not found</div>;
@@ -46,8 +47,11 @@ function RouteComponent() {
       album.cartItems.length > 0 ? 'Remove from cart' : 'Add to cart';
     const action =
       album.cartItems.length > 0
-        ? () => zero.mutate.cart.remove(album.id)
-        : () => zero.mutate.cart.add({albumID: album.id, addedAt: Date.now()});
+        ? () => zero.mutate(mutators.cart.remove({albumId: album.id}))
+        : () =>
+            zero.mutate(
+              mutators.cart.add({albumId: album.id, addedAt: Date.now()}),
+            );
     return <Button onPress={action}>{message}</Button>;
   };
 
