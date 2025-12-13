@@ -2,8 +2,8 @@ import {Zero} from '@rocicorp/zero';
 import {ZeroProvider} from '@rocicorp/zero/react';
 import {schema, Schema} from 'zero/schema';
 import {useMemo} from 'react';
-import {createMutators, Mutators} from 'zero/mutators';
 import {useRouter} from '@tanstack/react-router';
+import {mutators} from 'zero/mutators';
 import {must} from 'shared/must';
 import {queries} from 'zero/queries';
 import {authClient} from 'auth/client';
@@ -16,14 +16,16 @@ const serverURL = must(
 export function ZeroInit({children}: {children: React.ReactNode}) {
   const router = useRouter();
   const session = authClient.useSession();
+  const context = session.data ? {userId: session.data.user.id} : undefined;
 
   const opts = useMemo(() => {
     return {
       schema,
       userID: session.data?.user.id ?? 'anon',
+      context,
       server: serverURL,
-      mutators: createMutators(session.data?.user.id),
-      init: (zero: Zero<Schema, Mutators>) => {
+      mutators,
+      init: (zero: Zero<Schema>) => {
         router.update({
           context: {
             ...router.options.context,

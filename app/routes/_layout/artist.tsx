@@ -2,6 +2,7 @@ import {useQuery} from '@rocicorp/zero/react';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {Button} from 'app/components/button';
 import {authClient} from 'auth/client';
+import {mutators} from 'zero/mutators';
 import {queries} from 'zero/queries';
 
 export const Route = createFileRoute('/_layout/artist')({
@@ -46,8 +47,11 @@ function RouteComponent() {
       album.cartItems.length > 0 ? 'Remove from cart' : 'Add to cart';
     const action =
       album.cartItems.length > 0
-        ? () => zero.mutate.cart.remove(album.id)
-        : () => zero.mutate.cart.add({albumID: album.id, addedAt: Date.now()});
+        ? () => zero.mutate(mutators.cart.remove({albumId: album.id}))
+        : () =>
+            zero.mutate(
+              mutators.cart.add({albumId: album.id, addedAt: Date.now()}),
+            );
     return <Button onPress={action}>{message}</Button>;
   };
 
