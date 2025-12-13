@@ -13,7 +13,7 @@ export const Route = createFileRoute('/_layout/cart')({
     const {zero} = context;
     const userID = session.data?.user.id;
     if (userID) {
-      zero.run(queries.getCartItems());
+      zero.run(queries.getCartItems(userID));
     }
   },
 });

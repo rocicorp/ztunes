@@ -4,9 +4,7 @@ import z from 'zod';
 import {Context} from './auth';
 
 export const queries = defineQueries({
-  user: defineQuery(({ctx}) =>
-    zql.user.where('id', ctx?.userId ?? '').one(),
-  ),
+  user: defineQuery(({ctx}) => zql.user.where('id', ctx?.userId ?? '').one()),
 
   artistPreload: defineQuery(() =>
     zql.artist.orderBy('popularity', 'desc').limit(1_000),
