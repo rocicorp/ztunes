@@ -44,7 +44,7 @@ In production, point it at any Postgres database using the `ZERO_UPSTREAM_DB` an
 
 The schema is managed using Drizzle (see `db/schema.ts`).
 
-[`drizzle-zero`](https://github.com/BriefHQ/drizzle-zero) is used to generate the Zero schema (in `zero/schema.gen.ts`). You do not need to worry about the Zero schema at all - it is completely automated. The only exception is to set up read permissions (see `zero/schema.ts`).
+[`drizzle-zero`](https://github.com/BriefHQ/drizzle-zero) is used to generate the Zero schema (in `zero/schema.gen.ts`). You do not need to worry about the Zero schema at all - it is completely automated.
 
 The Zero schema is auto-generated during dev when the Drizzle schema changes.
 
@@ -66,9 +66,9 @@ The Zero team is working on improving this and getting the same perf w/o needing
 
 ## Zero
 
-This app uses custom mutators (see `zero/mutators.ts`) to enforce that a user can only add items to their own cart. Note that there is no need for an explicit permission check anywhere. Instead, the mutator gets the `userID` out of the session and only writes to that users' data. There is no need for a check because there is no way for the client to specify a different `userID`. Basically it works just like a normal web app would.
+This app uses Zero mutators (see `zero/mutators.ts`) to enforce that a user can only add items to their own cart. Note that there is no need for an explicit permission check anywhere. Instead, the mutator gets the `userID` out of the session and only writes to that users' data. There is no need for a check because there is no way for the client to specify a different `userID`. Basically it works just like a normal web app would.
 
-Zero read permissions are used for the corresponding cart read permissions (see `zero/schema.ts`).
+Read permissions are implemented similarly: the userID is used to generate a query that filters cart items to only the allowed rows.
 
 ## Link Preloading
 
@@ -164,12 +164,9 @@ We continuously deploy ztunes using Github CI. See `deploy.yml` for how this is 
 One important thing to observe here is that the order of updates does matter. We recommend, as a default:
 
 1. Update Postgres schema
-2. Update Zero permissions
-3. Update `zero-cache`
-4. Update UI in Vercel
+2. Update `zero-cache`
+3. Update UI in Vercel
 
-Because of (2) being after (1) a permission change can be done atomically in the same deploy with schema changes it relies on.
-
-Because of (4) being at the end UI changes can be deployed atomically that depend on new schema, new permissions, or new version of `zero-cache`.
+Because of (3) being at the end, UI changes can be deployed atomically that depend on new pg schema or new version of `zero-cache`.
 
 In the case of removing features from your schema you must roll out the UI first, wait for users to update, then separately roll out the schema change. See [the Zero docs](https://zero.rocicorp.dev/docs/zero-schema#schema-change-process) for more information on schema changes.
