@@ -3,7 +3,7 @@ name: Database Migrations
 on:
   push:
     branches:
-      - main
+      - cz
 
 jobs:
   migrate:
@@ -12,6 +12,7 @@ jobs:
       PG_URL: ${{ secrets.PG_URL }}
       ZERO_UPSTREAM_DB: ${{ secrets.ZERO_UPSTREAM_DB }}
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ENV: preview
 
     steps:
       - uses: actions/checkout@v4
@@ -24,50 +25,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Setup Flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@v1
-
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
 
-      - name: Deploy zero-cache to Fly if necessary
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        run: |
-          set -e
-          # Generate current (local) config JSON from fly.toml
-          flyctl config show --local > local.json
-          # Fetch last deployed (remote) config JSON
-          flyctl config show > remote.json || true
-          # Deploy only when the configs differ
-          if ! diff -q remote.json local.json > /dev/null; then
-            echo "🔥 fly.toml change detected – deploying…"
-            flyctl deploy
-          else
-            echo "✅ fly.toml unchanged – skipping deploy."
-          fi
-
-      - name: Update DB schema
-        run: |
-          set -o pipefail
-
-          # Run drizzle-kit, capture stdout and stderr separately
-          npx drizzle-kit push --force >stdout.log 2>stderr.log
-
-          echo "STDOUT:"
-          cat stdout.log
-
-          echo "STDERR:"
-          cat stderr.log
-
-          # If stderr is not empty, fail
-          if [ -s stderr.log ]; then
-            echo "❌ drizzle-kit emitted errors to stderr"
-            exit 1
-          fi
-
       - name: Deploy to Vercel
         run: |
-          vercel deploy --prod --yes \
-            --token $VERCEL_TOKEN \
+          vercel deploy --yes \
+            --token ${{ secrets.VERCEL_TOKEN }} \
             --meta githubCommitSha=${{ github.sha }}
