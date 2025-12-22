@@ -12,7 +12,6 @@ jobs:
       PG_URL: ${{ secrets.PG_URL }}
       ZERO_UPSTREAM_DB: ${{ secrets.ZERO_UPSTREAM_DB }}
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_ENV: preview
 
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +29,6 @@ jobs:
 
       - name: Deploy to Vercel
         run: |
-          vercel deploy --yes \
+          vercel deploy --prod --yes \
             --token ${{ secrets.VERCEL_TOKEN }} \
             --meta githubCommitSha=${{ github.sha }}
