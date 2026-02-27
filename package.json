@@ -14,7 +14,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@rocicorp/zero": "0.25.2",
+    "@rocicorp/zero": "0.26.1",
     "@tanstack/react-router": "^1.120.20",
     "@tanstack/react-start": "^1.120.20",
     "@tanstack/react-virtual": "^3.13.9",
@@ -38,7 +38,7 @@
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.1.2",
     "drizzle-kit": "^0.31.1",
-    "drizzle-zero": "0.17.0",
+    "drizzle-zero": "0.17.4",
     "prettier": "^3.5.3",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
