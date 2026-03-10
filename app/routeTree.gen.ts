@@ -17,6 +17,7 @@ import { Route as LayoutCartRouteImport } from './routes/_layout/cart'
 import { Route as LayoutArtistRouteImport } from './routes/_layout/artist'
 import { ServerRoute as ApiZeroQueryServerRouteImport } from './routes/api/zero/query'
 import { ServerRoute as ApiZeroMutateServerRouteImport } from './routes/api/zero/mutate'
+import { ServerRoute as ApiMutatorsSplatServerRouteImport } from './routes/api/mutators/$'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -48,6 +49,11 @@ const ApiZeroQueryServerRoute = ApiZeroQueryServerRouteImport.update({
 const ApiZeroMutateServerRoute = ApiZeroMutateServerRouteImport.update({
   id: '/api/zero/mutate',
   path: '/api/zero/mutate',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiMutatorsSplatServerRoute = ApiMutatorsSplatServerRouteImport.update({
+  id: '/api/mutators/$',
+  path: '/api/mutators/$',
   getParentRoute: () => rootServerRouteImport,
 } as any)
 const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
@@ -91,30 +97,43 @@ export interface RootRouteChildren {
 }
 export interface FileServerRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/mutators/$': typeof ApiMutatorsSplatServerRoute
   '/api/zero/mutate': typeof ApiZeroMutateServerRoute
   '/api/zero/query': typeof ApiZeroQueryServerRoute
 }
 export interface FileServerRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/mutators/$': typeof ApiMutatorsSplatServerRoute
   '/api/zero/mutate': typeof ApiZeroMutateServerRoute
   '/api/zero/query': typeof ApiZeroQueryServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
   '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/mutators/$': typeof ApiMutatorsSplatServerRoute
   '/api/zero/mutate': typeof ApiZeroMutateServerRoute
   '/api/zero/query': typeof ApiZeroQueryServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/auth/$' | '/api/zero/mutate' | '/api/zero/query'
+  fullPaths:
+    | '/api/auth/$'
+    | '/api/mutators/$'
+    | '/api/zero/mutate'
+    | '/api/zero/query'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/auth/$' | '/api/zero/mutate' | '/api/zero/query'
-  id: '__root__' | '/api/auth/$' | '/api/zero/mutate' | '/api/zero/query'
+  to: '/api/auth/$' | '/api/mutators/$' | '/api/zero/mutate' | '/api/zero/query'
+  id:
+    | '__root__'
+    | '/api/auth/$'
+    | '/api/mutators/$'
+    | '/api/zero/mutate'
+    | '/api/zero/query'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
   ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
+  ApiMutatorsSplatServerRoute: typeof ApiMutatorsSplatServerRoute
   ApiZeroMutateServerRoute: typeof ApiZeroMutateServerRoute
   ApiZeroQueryServerRoute: typeof ApiZeroQueryServerRoute
 }
@@ -167,6 +186,13 @@ declare module '@tanstack/react-start/server' {
       preLoaderRoute: typeof ApiZeroMutateServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
+    '/api/mutators/$': {
+      id: '/api/mutators/$'
+      path: '/api/mutators/$'
+      fullPath: '/api/mutators/$'
+      preLoaderRoute: typeof ApiMutatorsSplatServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -201,6 +227,7 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
   ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
+  ApiMutatorsSplatServerRoute: ApiMutatorsSplatServerRoute,
   ApiZeroMutateServerRoute: ApiZeroMutateServerRoute,
   ApiZeroQueryServerRoute: ApiZeroQueryServerRoute,
 }
