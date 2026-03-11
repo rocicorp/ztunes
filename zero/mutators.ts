@@ -2,10 +2,17 @@ import {zql} from './schema';
 import z from 'zod';
 import {defineMutator, defineMutators} from '@rocicorp/zero';
 
+export const mutatorValidators = {
+  cart: {
+    add: z.object({albumId: z.string(), addedAt: z.number()}),
+    remove: z.object({albumId: z.string()}),
+  },
+} as const;
+
 export const mutators = defineMutators({
   cart: {
     add: defineMutator(
-      z.object({albumId: z.string(), addedAt: z.number()}),
+      mutatorValidators.cart.add,
       async ({tx, ctx, args: {albumId, addedAt}}) => {
         if (!ctx) {
           throw new Error('Not authenticated');
@@ -20,7 +27,7 @@ export const mutators = defineMutators({
     ),
 
     remove: defineMutator(
-      z.object({albumId: z.string()}),
+      mutatorValidators.cart.remove,
       async ({tx, ctx, args: {albumId}}) => {
         if (!ctx) {
           throw new Error('Not authenticated');

@@ -15,8 +15,11 @@ import { Route as LayoutRouteRouteImport } from './routes/_layout/route'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as LayoutCartRouteImport } from './routes/_layout/cart'
 import { Route as LayoutArtistRouteImport } from './routes/_layout/artist'
+import { ServerRoute as ApiOpenapiDotjsonServerRouteImport } from './routes/api/openapi[.]json'
+import { ServerRoute as ApiDocsServerRouteImport } from './routes/api/docs'
 import { ServerRoute as ApiZeroQueryServerRouteImport } from './routes/api/zero/query'
 import { ServerRoute as ApiZeroMutateServerRouteImport } from './routes/api/zero/mutate'
+import { ServerRoute as ApiMutatorsSplatServerRouteImport } from './routes/api/mutators/$'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -40,6 +43,16 @@ const LayoutArtistRoute = LayoutArtistRouteImport.update({
   path: '/artist',
   getParentRoute: () => LayoutRouteRoute,
 } as any)
+const ApiOpenapiDotjsonServerRoute = ApiOpenapiDotjsonServerRouteImport.update({
+  id: '/api/openapi.json',
+  path: '/api/openapi.json',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiDocsServerRoute = ApiDocsServerRouteImport.update({
+  id: '/api/docs',
+  path: '/api/docs',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
 const ApiZeroQueryServerRoute = ApiZeroQueryServerRouteImport.update({
   id: '/api/zero/query',
   path: '/api/zero/query',
@@ -48,6 +61,11 @@ const ApiZeroQueryServerRoute = ApiZeroQueryServerRouteImport.update({
 const ApiZeroMutateServerRoute = ApiZeroMutateServerRouteImport.update({
   id: '/api/zero/mutate',
   path: '/api/zero/mutate',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiMutatorsSplatServerRoute = ApiMutatorsSplatServerRouteImport.update({
+  id: '/api/mutators/$',
+  path: '/api/mutators/$',
   getParentRoute: () => rootServerRouteImport,
 } as any)
 const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
@@ -90,31 +108,62 @@ export interface RootRouteChildren {
   LayoutRouteRoute: typeof LayoutRouteRouteWithChildren
 }
 export interface FileServerRoutesByFullPath {
+  '/api/docs': typeof ApiDocsServerRoute
+  '/api/openapi.json': typeof ApiOpenapiDotjsonServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/mutators/$': typeof ApiMutatorsSplatServerRoute
   '/api/zero/mutate': typeof ApiZeroMutateServerRoute
   '/api/zero/query': typeof ApiZeroQueryServerRoute
 }
 export interface FileServerRoutesByTo {
+  '/api/docs': typeof ApiDocsServerRoute
+  '/api/openapi.json': typeof ApiOpenapiDotjsonServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/mutators/$': typeof ApiMutatorsSplatServerRoute
   '/api/zero/mutate': typeof ApiZeroMutateServerRoute
   '/api/zero/query': typeof ApiZeroQueryServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
+  '/api/docs': typeof ApiDocsServerRoute
+  '/api/openapi.json': typeof ApiOpenapiDotjsonServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/mutators/$': typeof ApiMutatorsSplatServerRoute
   '/api/zero/mutate': typeof ApiZeroMutateServerRoute
   '/api/zero/query': typeof ApiZeroQueryServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/auth/$' | '/api/zero/mutate' | '/api/zero/query'
+  fullPaths:
+    | '/api/docs'
+    | '/api/openapi.json'
+    | '/api/auth/$'
+    | '/api/mutators/$'
+    | '/api/zero/mutate'
+    | '/api/zero/query'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/auth/$' | '/api/zero/mutate' | '/api/zero/query'
-  id: '__root__' | '/api/auth/$' | '/api/zero/mutate' | '/api/zero/query'
+  to:
+    | '/api/docs'
+    | '/api/openapi.json'
+    | '/api/auth/$'
+    | '/api/mutators/$'
+    | '/api/zero/mutate'
+    | '/api/zero/query'
+  id:
+    | '__root__'
+    | '/api/docs'
+    | '/api/openapi.json'
+    | '/api/auth/$'
+    | '/api/mutators/$'
+    | '/api/zero/mutate'
+    | '/api/zero/query'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
+  ApiDocsServerRoute: typeof ApiDocsServerRoute
+  ApiOpenapiDotjsonServerRoute: typeof ApiOpenapiDotjsonServerRoute
   ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
+  ApiMutatorsSplatServerRoute: typeof ApiMutatorsSplatServerRoute
   ApiZeroMutateServerRoute: typeof ApiZeroMutateServerRoute
   ApiZeroQueryServerRoute: typeof ApiZeroQueryServerRoute
 }
@@ -153,6 +202,20 @@ declare module '@tanstack/react-router' {
 }
 declare module '@tanstack/react-start/server' {
   interface ServerFileRoutesByPath {
+    '/api/openapi.json': {
+      id: '/api/openapi.json'
+      path: '/api/openapi.json'
+      fullPath: '/api/openapi.json'
+      preLoaderRoute: typeof ApiOpenapiDotjsonServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/docs': {
+      id: '/api/docs'
+      path: '/api/docs'
+      fullPath: '/api/docs'
+      preLoaderRoute: typeof ApiDocsServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
     '/api/zero/query': {
       id: '/api/zero/query'
       path: '/api/zero/query'
@@ -165,6 +228,13 @@ declare module '@tanstack/react-start/server' {
       path: '/api/zero/mutate'
       fullPath: '/api/zero/mutate'
       preLoaderRoute: typeof ApiZeroMutateServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/mutators/$': {
+      id: '/api/mutators/$'
+      path: '/api/mutators/$'
+      fullPath: '/api/mutators/$'
+      preLoaderRoute: typeof ApiMutatorsSplatServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
     '/api/auth/$': {
@@ -200,7 +270,10 @@ export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
+  ApiDocsServerRoute: ApiDocsServerRoute,
+  ApiOpenapiDotjsonServerRoute: ApiOpenapiDotjsonServerRoute,
   ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
+  ApiMutatorsSplatServerRoute: ApiMutatorsSplatServerRoute,
   ApiZeroMutateServerRoute: ApiZeroMutateServerRoute,
   ApiZeroQueryServerRoute: ApiZeroQueryServerRoute,
 }
