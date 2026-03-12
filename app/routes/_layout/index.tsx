@@ -1,11 +1,14 @@
-import {useQuery} from '@rocicorp/zero/react';
 import {createFileRoute, useRouter} from '@tanstack/react-router';
-import {useEffect, useState} from 'react';
-import {useDebouncedCallback} from 'use-debounce';
+import {useEffect, useState, useCallback, useMemo, useRef} from 'react';
 import {Link} from 'app/components/link';
-import {queries} from 'zero/queries';
-
-const limit = 20;
+import {queries, StartRow} from 'zero/queries';
+import {
+  useHistoryPermalinkState,
+  useZeroVirtualizer,
+  type GetPageQueryOptions,
+  type GetSingleQueryOptions,
+} from '@rocicorp/zero-virtual/react';
+import {Row} from '@rocicorp/zero';
 
 export const Route = createFileRoute('/_layout/')({
   component: Home,
@@ -17,54 +20,85 @@ export const Route = createFileRoute('/_layout/')({
   },
   loaderDeps: ({search}) => ({q: search.q}),
   loader: async ({context, deps: {q}}) => {
-    context.zero.run(queries.getHomepageArtists({q}));
+    context.zero.run(queries.getHomepageArtists({search: q}));
   },
 });
 
+function getRowKey(item: Row['artist']) {
+  return item.id;
+}
+
+function toStartRow(item: Row['artist']) {
+  return {id: item.id, popularity: item.popularity};
+}
+
+function estimateSize() {
+  return 28;
+}
+
+function getOptions(settled: boolean) {
+  return {ttl: settled ? '5m' : 'none'} as const;
+}
+
 function Home() {
   const router = useRouter();
-  const {zero} = router.options.context;
 
-  const [search, setSearch] = useState('');
   const qs = Route.useSearch();
   const searchParam = qs.q ?? '';
+  const [search, setSearch] = useState(searchParam);
+
   useEffect(() => {
     setSearch(searchParam);
   }, [searchParam]);
 
-  // No need to cache the queries for each individual keystroke. Just
-  // cache them when the user has paused, which we know by when the
-  // QS matches because we already debounce the QS.
-  const opts = search !== searchParam ? undefined : ({ttl: 'none'} as const);
-  const [artists, {type}] = useQuery(
-    queries.getHomepageArtists({q: search}),
-    opts,
-  );
+  const parentRef = useRef<HTMLDivElement>(null);
+  const listContextParams = useMemo(() => ({search}), [search]);
+  const [permalinkState, setPermalinkState] =
+    useHistoryPermalinkState<StartRow>();
 
-  // Safari has a limit on how fast you can change QS. Anyway it makes no sense
-  // to have a history entry for each keystroke anyway so even without this we'd
-  // have to have some URL entries be replace and some not. Easier to just skip
-  // history entries until user pauses.
-  const setSearchParam = useDebouncedCallback((text: string) => {
-    router.navigate({
-      to: '/',
-      search: {
-        q: text,
+  const {virtualizer, rowAt, settled} = useZeroVirtualizer({
+    listContextParams,
+    getScrollElement: useCallback(() => parentRef.current, []),
+    estimateSize,
+    getRowKey,
+    toStartRow,
+    getPageQuery: useCallback(
+      ({limit, start, dir, settled}: GetPageQueryOptions<StartRow>) => {
+        return {
+          query: queries.getHomepageArtists({search, limit, start, dir}),
+          options: getOptions(settled),
+        };
       },
-    });
-  }, 500);
+      [search],
+    ),
+    getSingleQuery: useCallback(({id, settled}: GetSingleQueryOptions) => {
+      return {
+        query: queries.getSingleArtist({artistId: id}),
+        options: getOptions(settled),
+      };
+    }, []),
+    permalinkState,
+    onPermalinkStateChange: setPermalinkState,
+    settleTime: 1000,
+    onSettled: useCallback(() => {
+      const currentQ = router.state.location.search.q ?? '';
+      if (search !== currentQ) {
+        router.navigate({
+          to: '/',
+          search: {q: search || undefined},
+        });
+      }
+    }, [router, search]),
+  });
 
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-    setSearchParam(e.target.value);
   };
 
-  // If the typing has settled, use the default preload behavior.
-  // Otherwise, don't preload.
-  const preload = search === searchParam ? undefined : false;
+  const virtualItems = virtualizer.getVirtualItems();
 
   return (
-    <>
+    <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
       <div style={{display: 'flex', flexDirection: 'column'}}>
         <h3 style={{margin: '1em 0 0.2em 0'}}>
           Search 85,000 artists from the 1990s...
@@ -73,19 +107,41 @@ function Home() {
           type="text"
           value={search}
           onChange={onSearchChange}
-          style={{fontSize: '125%'}}
+          style={{fontSize: '125%', width: '100%', boxSizing: 'border-box'}}
         />
       </div>
-      <ul style={{listStyle: 'none', padding: 0}}>
-        {artists.map(artist => (
-          <li key={artist.id} style={{marginBottom: '0.2em'}}>
-            <Link to="/artist" search={{id: artist.id}} preload={preload}>
-              {artist.name}
-            </Link>
-          </li>
-        ))}
-        {type === 'unknown' && artists.length < limit && <div>Loading...</div>}
-      </ul>
-    </>
+      <div
+        ref={parentRef}
+        style={{flex: 1, minHeight: 0, marginTop: 12, overflow: 'auto'}}
+      >
+        <div style={{height: virtualizer.getTotalSize(), position: 'relative'}}>
+          {virtualItems.map(virtualRow => {
+            const row = rowAt(virtualRow.index);
+            return (
+              <div
+                key={virtualRow.key}
+                data-index={virtualRow.index}
+                style={{
+                  position: 'absolute',
+                  transform: `translateY(${virtualRow.start}px)`,
+                }}
+              >
+                {row ? (
+                  <Link
+                    to="/artist"
+                    search={{id: row.id}}
+                    preload={settled ? 'viewport' : false}
+                  >
+                    {row.name}
+                  </Link>
+                ) : (
+                  <div>Loading...</div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }
