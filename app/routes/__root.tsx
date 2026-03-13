@@ -48,7 +48,9 @@ function RootDocument({children}: Readonly<{children: ReactNode}>) {
         <style
           dangerouslySetInnerHTML={{
             __html: `
-          html {
+          html, body {
+            height: 100%;
+            margin: 0;
             font-family: sans-serif;
             font-optical-sizing: auto;
             font-weight: 400;
