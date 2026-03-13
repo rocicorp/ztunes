@@ -5,7 +5,15 @@ import {Status} from './status';
 
 export function SiteLayout({children}: {children: React.ReactNode}) {
   return (
-    <div style={{padding: '10px 5px'}}>
+    <div
+      style={{
+        padding: '12px',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        boxSizing: 'border-box',
+      }}
+    >
       <div
         style={{
           display: 'flex',
@@ -22,7 +30,7 @@ export function SiteLayout({children}: {children: React.ReactNode}) {
         <LoginButton />
         <Status />
       </div>
-      {children}
+      <div style={{flex: 1, minHeight: 0}}>{children}</div>
     </div>
   );
 }
