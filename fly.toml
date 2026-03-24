@@ -2,7 +2,7 @@ app = "aa-zero-records"
 primary_region = 'iad'
 
 [build]
-image = "registry.hub.docker.com/rocicorp/zero:0.26.1"
+image = "registry.hub.docker.com/rocicorp/zero:1.0.0-canary.0"
 
 [http_service]
 internal_port = 4848
