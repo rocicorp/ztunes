@@ -10,11 +10,12 @@
     "dev:ui": "tsx scripts/dev-ui.ts",
     "dev:clean": "tsx scripts/clean.ts",
     "seed": "tsx scripts/seed.ts",
+    "analyze": "tsx scripts/analyze.ts",
     "generate-zero-schema": "drizzle-zero generate -f -o zero/schema.ts",
     "build": "vite build"
   },
   "dependencies": {
-    "@rocicorp/zero": "^1.0.0",
+    "@rocicorp/zero": "1.4.0-canary.1",
     "@rocicorp/zero-virtual": "^0.4.2",
     "@tanstack/react-router": "^1.120.20",
     "@tanstack/react-start": "^1.120.20",
