@@ -8,7 +8,6 @@ Built with:
 - [TanStack Start](https://tanstack.com/)
 - [Drizzle](https://orm.drizzle.team/)
 - [Better Auth](https://www.better-auth.com/)
-- [Fly.io](https://fly.io/)
 
 Live demo: https://ztunes.rocicorp.dev
 
@@ -151,11 +150,7 @@ If you apply this pattern to your own apps keep in mind this performance quirk. 
 
 ## Deployment
 
-We run a live deployment of ztunes, continuously updated, on Fly.io, Supabase, and Vercel.
-
-We run `zero-cache` in [single-node mode](https://zero.rocicorp.dev/docs/deployment#guide-single-node-on-flyio), which is easy and fine for a small app.
-
-See `fly.toml` to deploy to your own account.
+We run a live deployment of ztunes, continuously updated, on Supabase, Vercel, and [Cloud Zero](https://zero.rocicorp.dev/#pricing).
 
 ## Continuous Integration
 
