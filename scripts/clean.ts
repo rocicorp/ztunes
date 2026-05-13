@@ -1,9 +1,11 @@
+import 'shared/env';
 import {exec} from 'shared/exec';
 
 console.log('Cleaning up resources...');
 
 try {
-  exec('rm -f /tmp/ztunes.db*');
+  const replicaFile = process.env.ZERO_REPLICA_FILE ?? 'zero.db';
+  exec(`rm -f ${JSON.stringify(replicaFile)}*`);
 } catch (err) {
   console.info(err.message);
 }

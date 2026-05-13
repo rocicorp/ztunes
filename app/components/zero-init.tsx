@@ -19,7 +19,7 @@ export function ZeroInit({children}: {children: React.ReactNode}) {
   const router = useRouter();
   const session = authClient.useSession();
   const context = session.data ? {userId: session.data.user.id} : undefined;
-  const userID = session.data?.user.id ?? 'anon';
+  const userID = session.data?.user.id ?? null;
 
   const init = useCallback(
     (zero: Zero) => {

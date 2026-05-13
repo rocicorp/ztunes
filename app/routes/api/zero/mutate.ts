@@ -24,16 +24,17 @@ export const ServerRoute = createServerFileRoute('/api/zero/mutate').methods({
     const ctx = {userId: session.user.id};
 
     return json(
-      await handleMutateRequest(
+      await handleMutateRequest({
         dbProvider,
-        async transact => {
+        handler: async transact => {
           return await transact(async (tx, name, args) => {
             const mutator = mustGetMutator(mutators, name);
             return await mutator.fn({tx, ctx, args});
           });
         },
         request,
-      ),
+        userID: session.user.id,
+      }),
     );
   },
 });
