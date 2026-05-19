@@ -16,19 +16,22 @@ jobs:
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '20'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
-
-      - name: Install Vercel CLI
-        run: npm i -g vercel@latest
+        run: pnpm install
 
       - name: Deploy to Vercel
         run: |
-          vercel deploy --prod --yes \
+          pnpm exec vercel deploy --prod --yes \
             --token ${{ secrets.VERCEL_TOKEN }} \
             --meta githubCommitSha=${{ github.sha }}
