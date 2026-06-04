@@ -1,5 +1,5 @@
 import {json} from '@tanstack/react-start';
-import {createServerFileRoute} from '@tanstack/react-start/server';
+import {createFileRoute} from '@tanstack/react-router';
 import {mustGetMutator} from '@rocicorp/zero';
 import {zeroPostgresJS} from '@rocicorp/zero/server/adapters/postgresjs';
 import postgres from 'postgres';
@@ -79,53 +79,60 @@ async function parseArgs(request: Request): Promise<unknown> {
   return JSON.parse(bodyText);
 }
 
-export const ServerRoute = createServerFileRoute('/api/mutators/$').methods({
-  GET: () => {
-    return json({mutators: getMutatorNames()});
-  },
+export const Route = createFileRoute('/api/mutators/$')({
+  server: {
+    handlers: {
+      GET: () => {
+        return json({mutators: getMutatorNames()});
+      },
 
-  POST: async ({request, params}) => {
-    const session = await auth.api.getSession(request);
-    if (!session) {
-      return json({error: 'Unauthorized'}, {status: 401});
-    }
+      POST: async ({request, params}) => {
+        const session = await auth.api.getSession(request);
+        if (!session) {
+          return json({error: 'Unauthorized'}, {status: 401});
+        }
 
-    const mutatorName = parseMutatorName(params._splat);
-    if (!mutatorName) {
-      return json(
-        {error: 'Mutator name required in path, e.g. /api/mutators/cart/add'},
-        {status: 400},
-      );
-    }
+        const mutatorName = parseMutatorName(params._splat);
+        if (!mutatorName) {
+          return json(
+            {
+              error:
+                'Mutator name required in path, e.g. /api/mutators/cart/add',
+            },
+            {status: 400},
+          );
+        }
 
-    let args: unknown;
-    try {
-      args = await parseArgs(request);
-    } catch {
-      return json({error: 'Invalid JSON body'}, {status: 400});
-    }
+        let args: unknown;
+        try {
+          args = await parseArgs(request);
+        } catch {
+          return json({error: 'Invalid JSON body'}, {status: 400});
+        }
 
-    let mutator;
-    try {
-      mutator = mustGetMutator(mutators, mutatorName);
-    } catch {
-      return json({error: `Unknown mutator: ${mutatorName}`}, {status: 404});
-    }
+        let mutator;
+        try {
+          mutator = mustGetMutator(mutators, mutatorName);
+        } catch {
+          return json({error: `Unknown mutator: ${mutatorName}`}, {status: 404});
+        }
 
-    try {
-      await dbProvider.transaction(async tx => {
-        await mutator.fn({
-          tx,
-          ctx: {userId: session.user.id},
-          args,
-        });
-      });
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Mutation failed';
-      return json({error: message}, {status: 400});
-    }
+        try {
+          await dbProvider.transaction(async tx => {
+            await mutator.fn({
+              tx,
+              ctx: {userId: session.user.id},
+              args,
+            });
+          });
+        } catch (error) {
+          const message =
+            error instanceof Error ? error.message : 'Mutation failed';
+          return json({error: message}, {status: 400});
+        }
 
-    return json({ok: true});
+        return json({ok: true});
+      },
+    },
   },
 });
