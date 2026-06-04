@@ -2,7 +2,7 @@
 import {defineConfig} from 'vite';
 import tsConfigPaths from 'vite-tsconfig-paths';
 import {tanstackStart} from '@tanstack/react-start/plugin/vite';
-import {tanstackRouter} from '@tanstack/router-plugin/vite';
+import viteReact from '@vitejs/plugin-react';
 
 export default defineConfig({
   server: {
@@ -12,12 +12,15 @@ export default defineConfig({
     tsConfigPaths(),
     tanstackStart({
       target: 'vercel',
-      tsr: {
-        srcDirectory: 'app',
+      srcDirectory: 'app',
+      router: {
+        routesDirectory: 'routes',
+        generatedRouteTree: 'routeTree.gen.ts',
       },
       spa: {
         enabled: true,
       },
     }),
+    viteReact(),
   ],
 });

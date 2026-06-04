@@ -1,4 +1,4 @@
-import {createServerFileRoute} from '@tanstack/react-start/server';
+import {createFileRoute} from '@tanstack/react-router';
 import z from 'zod';
 import {mutators, mutatorValidators} from 'zero/mutators';
 
@@ -142,8 +142,10 @@ function buildExampleFromSchema(schema: unknown): unknown {
   return {};
 }
 
-export const ServerRoute = createServerFileRoute('/api/openapi.json').methods({
-  GET: ({request}) => {
+export const Route = createFileRoute('/api/openapi.json')({
+  server: {
+    handlers: {
+      GET: ({request}) => {
     const url = new URL(request.url);
     const discovered: DiscoveredMutator[] = [];
     collectMutators(mutators, discovered);
@@ -286,5 +288,7 @@ export const ServerRoute = createServerFileRoute('/api/openapi.json').methods({
       ],
       paths,
     });
+      },
+    },
   },
 });

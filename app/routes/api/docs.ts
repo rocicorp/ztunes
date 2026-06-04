@@ -1,4 +1,4 @@
-import {createServerFileRoute} from '@tanstack/react-start/server';
+import {createFileRoute} from '@tanstack/react-router';
 
 const html = `<!doctype html>
 <html lang="en">
@@ -37,12 +37,16 @@ const html = `<!doctype html>
 </html>
 `;
 
-export const ServerRoute = createServerFileRoute('/api/docs').methods({
-  GET: () => {
-    return new Response(html, {
-      headers: {
-        'content-type': 'text/html; charset=utf-8',
+export const Route = createFileRoute('/api/docs')({
+  server: {
+    handlers: {
+      GET: () => {
+        return new Response(html, {
+          headers: {
+            'content-type': 'text/html; charset=utf-8',
+          },
+        });
       },
-    });
+    },
   },
 });

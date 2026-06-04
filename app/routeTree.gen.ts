@@ -8,21 +8,17 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createServerRootRoute } from '@tanstack/react-start/server'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutRouteRouteImport } from './routes/_layout/route'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as ApiOpenapiDotjsonRouteImport } from './routes/api/openapi[.]json'
+import { Route as ApiDocsRouteImport } from './routes/api/docs'
 import { Route as LayoutCartRouteImport } from './routes/_layout/cart'
 import { Route as LayoutArtistRouteImport } from './routes/_layout/artist'
-import { ServerRoute as ApiOpenapiDotjsonServerRouteImport } from './routes/api/openapi[.]json'
-import { ServerRoute as ApiDocsServerRouteImport } from './routes/api/docs'
-import { ServerRoute as ApiZeroQueryServerRouteImport } from './routes/api/zero/query'
-import { ServerRoute as ApiZeroMutateServerRouteImport } from './routes/api/zero/mutate'
-import { ServerRoute as ApiMutatorsSplatServerRouteImport } from './routes/api/mutators/$'
-import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
-
-const rootServerRouteImport = createServerRootRoute()
+import { Route as ApiZeroQueryRouteImport } from './routes/api/zero/query'
+import { Route as ApiZeroMutateRouteImport } from './routes/api/zero/mutate'
+import { Route as ApiMutatorsSplatRouteImport } from './routes/api/mutators/$'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const LayoutRouteRoute = LayoutRouteRouteImport.update({
   id: '/_layout',
@@ -32,6 +28,16 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => LayoutRouteRoute,
+} as any)
+const ApiOpenapiDotjsonRoute = ApiOpenapiDotjsonRouteImport.update({
+  id: '/api/openapi.json',
+  path: '/api/openapi.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDocsRoute = ApiDocsRouteImport.update({
+  id: '/api/docs',
+  path: '/api/docs',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutCartRoute = LayoutCartRouteImport.update({
   id: '/cart',
@@ -43,129 +49,107 @@ const LayoutArtistRoute = LayoutArtistRouteImport.update({
   path: '/artist',
   getParentRoute: () => LayoutRouteRoute,
 } as any)
-const ApiOpenapiDotjsonServerRoute = ApiOpenapiDotjsonServerRouteImport.update({
-  id: '/api/openapi.json',
-  path: '/api/openapi.json',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
-const ApiDocsServerRoute = ApiDocsServerRouteImport.update({
-  id: '/api/docs',
-  path: '/api/docs',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
-const ApiZeroQueryServerRoute = ApiZeroQueryServerRouteImport.update({
+const ApiZeroQueryRoute = ApiZeroQueryRouteImport.update({
   id: '/api/zero/query',
   path: '/api/zero/query',
-  getParentRoute: () => rootServerRouteImport,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ApiZeroMutateServerRoute = ApiZeroMutateServerRouteImport.update({
+const ApiZeroMutateRoute = ApiZeroMutateRouteImport.update({
   id: '/api/zero/mutate',
   path: '/api/zero/mutate',
-  getParentRoute: () => rootServerRouteImport,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ApiMutatorsSplatServerRoute = ApiMutatorsSplatServerRouteImport.update({
+const ApiMutatorsSplatRoute = ApiMutatorsSplatRouteImport.update({
   id: '/api/mutators/$',
   path: '/api/mutators/$',
-  getParentRoute: () => rootServerRouteImport,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
-  getParentRoute: () => rootServerRouteImport,
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof LayoutIndexRoute
   '/artist': typeof LayoutArtistRoute
   '/cart': typeof LayoutCartRoute
-  '/': typeof LayoutIndexRoute
+  '/api/docs': typeof ApiDocsRoute
+  '/api/openapi.json': typeof ApiOpenapiDotjsonRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/mutators/$': typeof ApiMutatorsSplatRoute
+  '/api/zero/mutate': typeof ApiZeroMutateRoute
+  '/api/zero/query': typeof ApiZeroQueryRoute
 }
 export interface FileRoutesByTo {
   '/artist': typeof LayoutArtistRoute
   '/cart': typeof LayoutCartRoute
+  '/api/docs': typeof ApiDocsRoute
+  '/api/openapi.json': typeof ApiOpenapiDotjsonRoute
   '/': typeof LayoutIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/mutators/$': typeof ApiMutatorsSplatRoute
+  '/api/zero/mutate': typeof ApiZeroMutateRoute
+  '/api/zero/query': typeof ApiZeroQueryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_layout': typeof LayoutRouteRouteWithChildren
   '/_layout/artist': typeof LayoutArtistRoute
   '/_layout/cart': typeof LayoutCartRoute
+  '/api/docs': typeof ApiDocsRoute
+  '/api/openapi.json': typeof ApiOpenapiDotjsonRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/mutators/$': typeof ApiMutatorsSplatRoute
+  '/api/zero/mutate': typeof ApiZeroMutateRoute
+  '/api/zero/query': typeof ApiZeroQueryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/artist' | '/cart' | '/'
+  fullPaths:
+    | '/'
+    | '/artist'
+    | '/cart'
+    | '/api/docs'
+    | '/api/openapi.json'
+    | '/api/auth/$'
+    | '/api/mutators/$'
+    | '/api/zero/mutate'
+    | '/api/zero/query'
   fileRoutesByTo: FileRoutesByTo
-  to: '/artist' | '/cart' | '/'
+  to:
+    | '/artist'
+    | '/cart'
+    | '/api/docs'
+    | '/api/openapi.json'
+    | '/'
+    | '/api/auth/$'
+    | '/api/mutators/$'
+    | '/api/zero/mutate'
+    | '/api/zero/query'
   id:
     | '__root__'
     | '/_layout'
     | '/_layout/artist'
     | '/_layout/cart'
+    | '/api/docs'
+    | '/api/openapi.json'
     | '/_layout/'
+    | '/api/auth/$'
+    | '/api/mutators/$'
+    | '/api/zero/mutate'
+    | '/api/zero/query'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   LayoutRouteRoute: typeof LayoutRouteRouteWithChildren
-}
-export interface FileServerRoutesByFullPath {
-  '/api/docs': typeof ApiDocsServerRoute
-  '/api/openapi.json': typeof ApiOpenapiDotjsonServerRoute
-  '/api/auth/$': typeof ApiAuthSplatServerRoute
-  '/api/mutators/$': typeof ApiMutatorsSplatServerRoute
-  '/api/zero/mutate': typeof ApiZeroMutateServerRoute
-  '/api/zero/query': typeof ApiZeroQueryServerRoute
-}
-export interface FileServerRoutesByTo {
-  '/api/docs': typeof ApiDocsServerRoute
-  '/api/openapi.json': typeof ApiOpenapiDotjsonServerRoute
-  '/api/auth/$': typeof ApiAuthSplatServerRoute
-  '/api/mutators/$': typeof ApiMutatorsSplatServerRoute
-  '/api/zero/mutate': typeof ApiZeroMutateServerRoute
-  '/api/zero/query': typeof ApiZeroQueryServerRoute
-}
-export interface FileServerRoutesById {
-  __root__: typeof rootServerRouteImport
-  '/api/docs': typeof ApiDocsServerRoute
-  '/api/openapi.json': typeof ApiOpenapiDotjsonServerRoute
-  '/api/auth/$': typeof ApiAuthSplatServerRoute
-  '/api/mutators/$': typeof ApiMutatorsSplatServerRoute
-  '/api/zero/mutate': typeof ApiZeroMutateServerRoute
-  '/api/zero/query': typeof ApiZeroQueryServerRoute
-}
-export interface FileServerRouteTypes {
-  fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths:
-    | '/api/docs'
-    | '/api/openapi.json'
-    | '/api/auth/$'
-    | '/api/mutators/$'
-    | '/api/zero/mutate'
-    | '/api/zero/query'
-  fileServerRoutesByTo: FileServerRoutesByTo
-  to:
-    | '/api/docs'
-    | '/api/openapi.json'
-    | '/api/auth/$'
-    | '/api/mutators/$'
-    | '/api/zero/mutate'
-    | '/api/zero/query'
-  id:
-    | '__root__'
-    | '/api/docs'
-    | '/api/openapi.json'
-    | '/api/auth/$'
-    | '/api/mutators/$'
-    | '/api/zero/mutate'
-    | '/api/zero/query'
-  fileServerRoutesById: FileServerRoutesById
-}
-export interface RootServerRouteChildren {
-  ApiDocsServerRoute: typeof ApiDocsServerRoute
-  ApiOpenapiDotjsonServerRoute: typeof ApiOpenapiDotjsonServerRoute
-  ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
-  ApiMutatorsSplatServerRoute: typeof ApiMutatorsSplatServerRoute
-  ApiZeroMutateServerRoute: typeof ApiZeroMutateServerRoute
-  ApiZeroQueryServerRoute: typeof ApiZeroQueryServerRoute
+  ApiDocsRoute: typeof ApiDocsRoute
+  ApiOpenapiDotjsonRoute: typeof ApiOpenapiDotjsonRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiMutatorsSplatRoute: typeof ApiMutatorsSplatRoute
+  ApiZeroMutateRoute: typeof ApiZeroMutateRoute
+  ApiZeroQueryRoute: typeof ApiZeroQueryRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -173,7 +157,7 @@ declare module '@tanstack/react-router' {
     '/_layout': {
       id: '/_layout'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof LayoutRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -183,6 +167,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof LayoutRouteRoute
+    }
+    '/api/openapi.json': {
+      id: '/api/openapi.json'
+      path: '/api/openapi.json'
+      fullPath: '/api/openapi.json'
+      preLoaderRoute: typeof ApiOpenapiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/docs': {
+      id: '/api/docs'
+      path: '/api/docs'
+      fullPath: '/api/docs'
+      preLoaderRoute: typeof ApiDocsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_layout/cart': {
       id: '/_layout/cart'
@@ -198,51 +196,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutArtistRouteImport
       parentRoute: typeof LayoutRouteRoute
     }
-  }
-}
-declare module '@tanstack/react-start/server' {
-  interface ServerFileRoutesByPath {
-    '/api/openapi.json': {
-      id: '/api/openapi.json'
-      path: '/api/openapi.json'
-      fullPath: '/api/openapi.json'
-      preLoaderRoute: typeof ApiOpenapiDotjsonServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
-    '/api/docs': {
-      id: '/api/docs'
-      path: '/api/docs'
-      fullPath: '/api/docs'
-      preLoaderRoute: typeof ApiDocsServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
     '/api/zero/query': {
       id: '/api/zero/query'
       path: '/api/zero/query'
       fullPath: '/api/zero/query'
-      preLoaderRoute: typeof ApiZeroQueryServerRouteImport
-      parentRoute: typeof rootServerRouteImport
+      preLoaderRoute: typeof ApiZeroQueryRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/zero/mutate': {
       id: '/api/zero/mutate'
       path: '/api/zero/mutate'
       fullPath: '/api/zero/mutate'
-      preLoaderRoute: typeof ApiZeroMutateServerRouteImport
-      parentRoute: typeof rootServerRouteImport
+      preLoaderRoute: typeof ApiZeroMutateRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/mutators/$': {
       id: '/api/mutators/$'
       path: '/api/mutators/$'
       fullPath: '/api/mutators/$'
-      preLoaderRoute: typeof ApiMutatorsSplatServerRouteImport
-      parentRoute: typeof rootServerRouteImport
+      preLoaderRoute: typeof ApiMutatorsSplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatServerRouteImport
-      parentRoute: typeof rootServerRouteImport
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -265,18 +245,22 @@ const LayoutRouteRouteWithChildren = LayoutRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRouteRoute: LayoutRouteRouteWithChildren,
+  ApiDocsRoute: ApiDocsRoute,
+  ApiOpenapiDotjsonRoute: ApiOpenapiDotjsonRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiMutatorsSplatRoute: ApiMutatorsSplatRoute,
+  ApiZeroMutateRoute: ApiZeroMutateRoute,
+  ApiZeroQueryRoute: ApiZeroQueryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-const rootServerRouteChildren: RootServerRouteChildren = {
-  ApiDocsServerRoute: ApiDocsServerRoute,
-  ApiOpenapiDotjsonServerRoute: ApiOpenapiDotjsonServerRoute,
-  ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
-  ApiMutatorsSplatServerRoute: ApiMutatorsSplatServerRoute,
-  ApiZeroMutateServerRoute: ApiZeroMutateServerRoute,
-  ApiZeroQueryServerRoute: ApiZeroQueryServerRoute,
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
 }
-export const serverRouteTree = rootServerRouteImport
-  ._addFileChildren(rootServerRouteChildren)
-  ._addFileTypes<FileServerRouteTypes>()

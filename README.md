@@ -27,8 +27,8 @@ Live demo: https://ztunes.rocicorp.dev
 3. Run:
 
 ```bash
-npm install
-npm run dev
+pnpm i
+pnpm dev
 ```
 
 # Tour of the code
