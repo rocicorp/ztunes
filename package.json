@@ -24,6 +24,7 @@
     "dotenv-expand": "^12.0.2",
     "drizzle-orm": "^0.44.1",
     "nanoid": "^5.1.5",
+    "nitro": "3.0.260603-beta",
     "pg": "^8.16.0",
     "postgres": "^3.4.7",
     "react": "^19.1.0",
