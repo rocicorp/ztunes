@@ -4,7 +4,7 @@ import {routeTree} from './routeTree.gen';
 import {Zero} from '@rocicorp/zero';
 
 export interface RouterContext {
-  zero: Zero;
+  zero?: Zero;
 }
 
 export function createRouter() {
@@ -19,9 +19,7 @@ export function createRouter() {
     // preload every link. This is fine because Zero has its own internal
     // deduping and caching.
     defaultPreloadGcTime: 0,
-    context: {
-      zero: undefined as unknown as Zero, // populated in ZeroInit,
-    } satisfies RouterContext,
+    context: {} satisfies RouterContext,
   });
 
   return router;

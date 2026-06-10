@@ -1,5 +1,5 @@
-import {useQuery} from '@rocicorp/zero/react';
-import {createFileRoute, useRouter} from '@tanstack/react-router';
+import {useQuery, useZero} from '@rocicorp/zero/react';
+import {createFileRoute} from '@tanstack/react-router';
 import {Button} from 'app/components/button';
 import {authClient} from 'auth/client';
 import {mutators} from 'zero/mutators';
@@ -10,7 +10,7 @@ export const Route = createFileRoute('/_layout/artist')({
   ssr: false,
   loaderDeps: ({search}) => ({artistId: search.id}),
   loader: async ({context, deps: {artistId}}) => {
-    context.zero.run(queries.getArtist({artistId}));
+    context.zero?.run(queries.getArtist({artistId}));
   },
   validateSearch: (search: Record<string, unknown>) => {
     return {
@@ -21,7 +21,7 @@ export const Route = createFileRoute('/_layout/artist')({
 
 function RouteComponent() {
   const session = authClient.useSession();
-  const {zero} = useRouter().options.context;
+  const zero = useZero();
   const {id: artistId} = Route.useSearch();
 
   if (!artistId) {

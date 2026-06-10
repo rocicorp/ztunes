@@ -20,7 +20,7 @@ export const Route = createFileRoute('/_layout/')({
   },
   loaderDeps: ({search}) => ({q: search.q}),
   loader: async ({context, deps: {q}}) => {
-    context.zero.run(queries.getHomepageArtists({search: q}));
+    context.zero?.run(queries.getHomepageArtists({search: q}));
   },
 });
 

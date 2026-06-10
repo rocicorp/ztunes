@@ -1,5 +1,5 @@
-import {useQuery} from '@rocicorp/zero/react';
-import {createFileRoute, useRouter} from '@tanstack/react-router';
+import {useQuery, useZero} from '@rocicorp/zero/react';
+import {createFileRoute} from '@tanstack/react-router';
 import {Button} from 'app/components/button';
 import {authClient} from 'auth/client';
 import {mutators} from 'zero/mutators';
@@ -12,7 +12,7 @@ export const Route = createFileRoute('/_layout/cart')({
     const session = await authClient.getSession();
     const {zero} = context;
     const userID = session.data?.user.id;
-    if (userID) {
+    if (zero && userID) {
       zero.run(queries.getCartItems(userID));
     }
   },
@@ -20,7 +20,7 @@ export const Route = createFileRoute('/_layout/cart')({
 
 function RouteComponent() {
   const session = authClient.useSession();
-  const {zero} = useRouter().options.context;
+  const zero = useZero();
   const [cartItems, {type: resultType}] = useQuery(queries.getCartItems());
 
   if (!session.data?.user) {
