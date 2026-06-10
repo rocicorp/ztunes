@@ -21,3 +21,5 @@ Things to improve in Zero:
   - queries api is changing
 - conditional query (for when session is null and using userID in query)
   - queries api is changing
+
+bump
