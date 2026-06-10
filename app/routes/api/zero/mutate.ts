@@ -8,6 +8,7 @@ import {createFileRoute} from '@tanstack/react-router';
 import {auth} from 'auth/auth';
 import {mutators} from 'zero/mutators';
 import {mustGetMutator} from '@rocicorp/zero';
+import {createRequestContext} from 'zero/request-context';
 
 const pgURL = must(process.env.PG_URL, 'PG_URL is required');
 
@@ -23,7 +24,10 @@ export const Route = createFileRoute('/api/zero/mutate')({
           return json({error: 'Unauthorized'}, {status: 401});
         }
 
-        const ctx = {userId: session.user.id};
+        const ctx = createRequestContext({
+          request,
+          userId: session.user.id,
+        });
 
         return json(
           await handleMutateRequest({

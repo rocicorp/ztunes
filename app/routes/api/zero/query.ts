@@ -5,13 +5,16 @@ import {auth} from 'auth/auth';
 import {handleQueryRequest} from '@rocicorp/zero/server';
 import {mustGetQuery} from '@rocicorp/zero';
 import {queries} from 'zero/queries';
+import {createRequestContext} from 'zero/request-context';
 
 export const Route = createFileRoute('/api/zero/query')({
   server: {
     handlers: {
       POST: async ({request}) => {
         const session = await auth.api.getSession(request);
-        const ctx = session ? {userId: session.user.id} : undefined;
+        const ctx = session
+          ? createRequestContext({request, userId: session.user.id})
+          : undefined;
         return json(
           await handleQueryRequest({
             handler: (name, args) => {

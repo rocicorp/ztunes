@@ -1,6 +1,7 @@
 export type Context =
   | {
       userId: string;
+      clientIP: string | undefined;
     }
   | undefined;
 

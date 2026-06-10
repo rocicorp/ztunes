@@ -6,6 +6,7 @@ import postgres from 'postgres';
 import {auth} from 'auth/auth';
 import {must} from 'shared/must';
 import {mutators} from 'zero/mutators';
+import {createRequestContext} from 'zero/request-context';
 import {schema} from 'zero/schema';
 
 const pgURL = must(process.env.PG_URL, 'PG_URL is required');
@@ -114,14 +115,17 @@ export const Route = createFileRoute('/api/mutators/$')({
         try {
           mutator = mustGetMutator(mutators, mutatorName);
         } catch {
-          return json({error: `Unknown mutator: ${mutatorName}`}, {status: 404});
+          return json(
+            {error: `Unknown mutator: ${mutatorName}`},
+            {status: 404},
+          );
         }
 
         try {
           await dbProvider.transaction(async tx => {
             await mutator.fn({
               tx,
-              ctx: {userId: session.user.id},
+              ctx: createRequestContext({request, userId: session.user.id}),
               args,
             });
           });
