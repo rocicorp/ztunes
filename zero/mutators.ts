@@ -1,6 +1,7 @@
 import {zql} from './schema';
 import z from 'zod';
 import {defineMutator, defineMutators} from '@rocicorp/zero';
+import type {Context} from './auth';
 
 export const mutatorValidators = {
   cart: {
@@ -14,10 +15,10 @@ export const mutators = defineMutators({
     add: defineMutator(
       mutatorValidators.cart.add,
       async ({tx, ctx, args: {albumId, addedAt}}) => {
-        if (!ctx) {
-          throw new Error('Not authenticated');
+        const {userId, clientIP} = requireAuthContext(ctx);
+        if (tx.location === 'server') {
+          auditCartMutation({action: 'add', userId, clientIP});
         }
-        const {userId} = ctx;
         await tx.mutate.cartItem.insert({
           userId,
           albumId,
@@ -29,10 +30,10 @@ export const mutators = defineMutators({
     remove: defineMutator(
       mutatorValidators.cart.remove,
       async ({tx, ctx, args: {albumId}}) => {
-        if (!ctx) {
-          throw new Error('Not authenticated');
+        const {userId, clientIP} = requireAuthContext(ctx);
+        if (tx.location === 'server') {
+          auditCartMutation({action: 'remove', userId, clientIP});
         }
-        const {userId} = ctx;
         const cartItem = await tx.run(
           zql.cartItem.where('userId', userId).where('albumId', albumId).one(),
         );
@@ -47,3 +48,22 @@ export const mutators = defineMutators({
     ),
   },
 });
+
+function requireAuthContext(ctx: Context): NonNullable<Context> {
+  if (!ctx) {
+    throw new Error('Not authenticated');
+  }
+  return ctx;
+}
+
+function auditCartMutation({
+  action,
+  userId,
+  clientIP,
+}: {
+  action: 'add' | 'remove';
+  userId: string;
+  clientIP: string | undefined;
+}) {
+  console.info('cart mutation', {action, userId, clientIP});
+}

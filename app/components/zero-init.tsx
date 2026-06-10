@@ -18,7 +18,9 @@ const logLevel = import.meta.env.VITE_PUBLIC_ZERO_LOG_LEVEL;
 export function ZeroInit({children}: {children: React.ReactNode}) {
   const router = useRouter();
   const session = authClient.useSession();
-  const context = session.data ? {userId: session.data.user.id} : undefined;
+  const context = session.data
+    ? {userId: session.data.user.id, clientIP: undefined}
+    : undefined;
   const userID = session.data?.user.id ?? null;
 
   const init = useCallback(
