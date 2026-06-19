@@ -1,4 +1,3 @@
-import {json} from '@tanstack/react-start';
 import {schema} from 'zero/schema';
 import {createFileRoute} from '@tanstack/react-router';
 import {auth} from 'auth/auth';
@@ -12,7 +11,7 @@ export const Route = createFileRoute('/api/zero/query')({
       POST: async ({request}) => {
         const session = await auth.api.getSession(request);
         const ctx = session ? {userId: session.user.id} : undefined;
-        return json(
+        return Response.json(
           await handleQueryRequest({
             handler: (name, args) => {
               const query = mustGetQuery(queries, name);

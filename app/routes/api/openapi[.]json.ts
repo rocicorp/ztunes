@@ -146,148 +146,148 @@ export const Route = createFileRoute('/api/openapi.json')({
   server: {
     handlers: {
       GET: ({request}) => {
-    const url = new URL(request.url);
-    const discovered: DiscoveredMutator[] = [];
-    collectMutators(mutators, discovered);
-    discovered.sort((a, b) => a.name.localeCompare(b.name));
+        const url = new URL(request.url);
+        const discovered: DiscoveredMutator[] = [];
+        collectMutators(mutators, discovered);
+        discovered.sort((a, b) => a.name.localeCompare(b.name));
 
-    const paths = Object.fromEntries(
-      discovered.map(({name}) => {
-        const mutatorPath = `/api/mutators/${name.replaceAll('.', '/')}`;
-        const inputSchema = toInputSchema(name);
-        const inputExample = buildExampleFromSchema(inputSchema);
-        return [
-          mutatorPath,
-          {
-            post: {
-              operationId: name,
-              summary: `Run Zero mutator ${name}`,
-              tags: ['mutators'],
-              security: [{cookieAuth: []}],
-              requestBody: {
-                required: false,
-                content: {
-                  'application/json': {
-                    schema: inputSchema,
-                    examples: {
-                      example: {
-                        summary: `${name} request`,
-                        value: inputExample,
+        const paths = Object.fromEntries(
+          discovered.map(({name}) => {
+            const mutatorPath = `/api/mutators/${name.replaceAll('.', '/')}`;
+            const inputSchema = toInputSchema(name);
+            const inputExample = buildExampleFromSchema(inputSchema);
+            return [
+              mutatorPath,
+              {
+                post: {
+                  operationId: name,
+                  summary: `Run Zero mutator ${name}`,
+                  tags: ['mutators'],
+                  security: [{cookieAuth: []}],
+                  requestBody: {
+                    required: false,
+                    content: {
+                      'application/json': {
+                        schema: inputSchema,
+                        examples: {
+                          example: {
+                            summary: `${name} request`,
+                            value: inputExample,
+                          },
+                        },
+                      },
+                    },
+                  },
+                  responses: {
+                    '200': {
+                      description: 'Mutation applied',
+                      content: {
+                        'application/json': {
+                          schema: {
+                            type: 'object',
+                            properties: {
+                              ok: {const: true},
+                            },
+                            required: ['ok'],
+                            additionalProperties: false,
+                          },
+                          examples: {
+                            success: {
+                              value: {ok: true},
+                            },
+                          },
+                        },
+                      },
+                    },
+                    '400': {
+                      description: 'Validation or mutation error',
+                      content: {
+                        'application/json': {
+                          schema: {
+                            type: 'object',
+                            properties: {
+                              error: {type: 'string'},
+                            },
+                            required: ['error'],
+                            additionalProperties: false,
+                          },
+                          examples: {
+                            error: {
+                              value: {error: 'Invalid JSON body'},
+                            },
+                          },
+                        },
+                      },
+                    },
+                    '401': {
+                      description: 'Unauthorized',
+                      content: {
+                        'application/json': {
+                          schema: {
+                            type: 'object',
+                            properties: {
+                              error: {type: 'string'},
+                            },
+                            required: ['error'],
+                            additionalProperties: false,
+                          },
+                          examples: {
+                            unauthorized: {
+                              value: {error: 'Unauthorized'},
+                            },
+                          },
+                        },
+                      },
+                    },
+                    '404': {
+                      description: 'Mutator not found',
+                      content: {
+                        'application/json': {
+                          schema: {
+                            type: 'object',
+                            properties: {
+                              error: {type: 'string'},
+                            },
+                            required: ['error'],
+                            additionalProperties: false,
+                          },
+                          examples: {
+                            notFound: {
+                              value: {error: 'Unknown mutator: cart.unknown'},
+                            },
+                          },
+                        },
                       },
                     },
                   },
                 },
               },
-              responses: {
-                '200': {
-                  description: 'Mutation applied',
-                  content: {
-                    'application/json': {
-                      schema: {
-                        type: 'object',
-                        properties: {
-                          ok: {const: true},
-                        },
-                        required: ['ok'],
-                        additionalProperties: false,
-                      },
-                      examples: {
-                        success: {
-                          value: {ok: true},
-                        },
-                      },
-                    },
-                  },
-                },
-                '400': {
-                  description: 'Validation or mutation error',
-                  content: {
-                    'application/json': {
-                      schema: {
-                        type: 'object',
-                        properties: {
-                          error: {type: 'string'},
-                        },
-                        required: ['error'],
-                        additionalProperties: false,
-                      },
-                      examples: {
-                        error: {
-                          value: {error: 'Invalid JSON body'},
-                        },
-                      },
-                    },
-                  },
-                },
-                '401': {
-                  description: 'Unauthorized',
-                  content: {
-                    'application/json': {
-                      schema: {
-                        type: 'object',
-                        properties: {
-                          error: {type: 'string'},
-                        },
-                        required: ['error'],
-                        additionalProperties: false,
-                      },
-                      examples: {
-                        unauthorized: {
-                          value: {error: 'Unauthorized'},
-                        },
-                      },
-                    },
-                  },
-                },
-                '404': {
-                  description: 'Mutator not found',
-                  content: {
-                    'application/json': {
-                      schema: {
-                        type: 'object',
-                        properties: {
-                          error: {type: 'string'},
-                        },
-                        required: ['error'],
-                        additionalProperties: false,
-                      },
-                      examples: {
-                        notFound: {
-                          value: {error: 'Unknown mutator: cart.unknown'},
-                        },
-                      },
-                    },
-                  },
-                },
+            ];
+          }),
+        );
+
+        return Response.json({
+          openapi: '3.1.0',
+          info: {
+            title: 'ztunes Mutator API',
+            version: '1.0.0',
+          },
+          components: {
+            securitySchemes: {
+              cookieAuth: {
+                type: 'apiKey',
+                in: 'cookie',
+                name: 'better-auth.session_token',
               },
             },
           },
-        ];
-      }),
-    );
-
-    return Response.json({
-      openapi: '3.1.0',
-      info: {
-        title: 'ztunes Mutator API',
-        version: '1.0.0',
-      },
-      components: {
-        securitySchemes: {
-          cookieAuth: {
-            type: 'apiKey',
-            in: 'cookie',
-            name: 'better-auth.session_token',
-          },
-        },
-      },
-      servers: [
-        {
-          url: url.origin,
-        },
-      ],
-      paths,
-    });
+          servers: [
+            {
+              url: url.origin,
+            },
+          ],
+          paths,
+        });
       },
     },
   },

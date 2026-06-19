@@ -1,4 +1,3 @@
-import {json} from '@tanstack/react-start';
 import {handleMutateRequest} from '@rocicorp/zero/server';
 import {zeroPostgresJS} from '@rocicorp/zero/server/adapters/postgresjs';
 import postgres from 'postgres';
@@ -20,12 +19,12 @@ export const Route = createFileRoute('/api/zero/mutate')({
         const session = await auth.api.getSession(request);
 
         if (!session) {
-          return json({error: 'Unauthorized'}, {status: 401});
+          return Response.json({error: 'Unauthorized'}, {status: 401});
         }
 
         const ctx = {userId: session.user.id};
 
-        return json(
+        return Response.json(
           await handleMutateRequest({
             dbProvider,
             handler: async transact => {

@@ -1,9 +1,8 @@
-import {json} from '@tanstack/react-start';
-import {createFileRoute} from '@tanstack/react-router';
-import {mustGetMutator} from '@rocicorp/zero';
+import {mustGetMutator, ReadonlyJSONValue} from '@rocicorp/zero';
 import {zeroPostgresJS} from '@rocicorp/zero/server/adapters/postgresjs';
-import postgres from 'postgres';
+import {createFileRoute} from '@tanstack/react-router';
 import {auth} from 'auth/auth';
+import postgres from 'postgres';
 import {must} from 'shared/must';
 import {mutators} from 'zero/mutators';
 import {schema} from 'zero/schema';
@@ -64,7 +63,9 @@ function parseMutatorName(splat: string | undefined): string | undefined {
   return decodedParts.join('.');
 }
 
-async function parseArgs(request: Request): Promise<unknown> {
+async function parseArgs(
+  request: Request,
+): Promise<ReadonlyJSONValue | undefined> {
   const contentType = request.headers.get('content-type');
 
   if (!contentType || !contentType.includes('application/json')) {
@@ -83,18 +84,18 @@ export const Route = createFileRoute('/api/mutators/$')({
   server: {
     handlers: {
       GET: () => {
-        return json({mutators: getMutatorNames()});
+        return Response.json({mutators: getMutatorNames()});
       },
 
       POST: async ({request, params}) => {
         const session = await auth.api.getSession(request);
         if (!session) {
-          return json({error: 'Unauthorized'}, {status: 401});
+          return Response.json({error: 'Unauthorized'}, {status: 401});
         }
 
         const mutatorName = parseMutatorName(params._splat);
         if (!mutatorName) {
-          return json(
+          return Response.json(
             {
               error:
                 'Mutator name required in path, e.g. /api/mutators/cart/add',
@@ -103,18 +104,21 @@ export const Route = createFileRoute('/api/mutators/$')({
           );
         }
 
-        let args: unknown;
+        let args: ReadonlyJSONValue | undefined;
         try {
           args = await parseArgs(request);
         } catch {
-          return json({error: 'Invalid JSON body'}, {status: 400});
+          return Response.json({error: 'Invalid JSON body'}, {status: 400});
         }
 
         let mutator;
         try {
           mutator = mustGetMutator(mutators, mutatorName);
         } catch {
-          return json({error: `Unknown mutator: ${mutatorName}`}, {status: 404});
+          return Response.json(
+            {error: `Unknown mutator: ${mutatorName}`},
+            {status: 404},
+          );
         }
 
         try {
@@ -128,10 +132,10 @@ export const Route = createFileRoute('/api/mutators/$')({
         } catch (error) {
           const message =
             error instanceof Error ? error.message : 'Mutation failed';
-          return json({error: message}, {status: 400});
+          return Response.json({error: message}, {status: 400});
         }
 
-        return json({ok: true});
+        return Response.json({ok: true});
       },
     },
   },
