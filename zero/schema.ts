@@ -345,6 +345,29 @@ const verificationTable = {
   },
   primaryKey: ['id'],
 } as const;
+const zeroOnlyProbeTable = {
+  name: 'zeroOnlyProbe',
+  columns: {
+    id: {
+      type: 'string',
+      optional: false,
+      customType: null as unknown as string,
+    },
+    label: {
+      type: 'string',
+      optional: true,
+      customType: null as unknown as string,
+    },
+    createdAt: {
+      type: 'number',
+      optional: false,
+      customType: null as unknown as number,
+      serverName: 'created_at',
+    },
+  },
+  primaryKey: ['id'],
+  serverName: 'zero_only_probe',
+} as const;
 const albumRelationships = {
   artist: [
     {
@@ -415,6 +438,7 @@ export const schema = {
     session: sessionTable,
     user: userTable,
     verification: verificationTable,
+    zeroOnlyProbe: zeroOnlyProbeTable,
   },
   relationships: {
     album: albumRelationships,
@@ -487,6 +511,13 @@ export type User = Row['user'];
  * @deprecated Use Row["verification"] instead from "@rocicorp/zero".
  */
 export type Verification = Row['verification'];
+/**
+ * Represents a row from the "zeroOnlyProbe" table.
+ * This type is hand-added to test Zero/client schema divergence.
+ *
+ * @deprecated Use Row["zeroOnlyProbe"] instead from "@rocicorp/zero".
+ */
+export type ZeroOnlyProbe = Row['zeroOnlyProbe'];
 
 /**
  * Represents the ZQL query builder.
