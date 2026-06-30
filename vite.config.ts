@@ -1,9 +1,8 @@
-// vite.config.ts
-import {defineConfig} from 'vite';
-import {nitro} from 'nitro/vite';
-import tsConfigPaths from 'vite-tsconfig-paths';
 import {tanstackStart} from '@tanstack/react-start/plugin/vite';
 import viteReact from '@vitejs/plugin-react';
+import {nitro} from 'nitro/vite';
+import {defineConfig} from 'vite';
+import tsConfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   server: {
@@ -12,7 +11,6 @@ export default defineConfig({
   plugins: [
     tsConfigPaths(),
     tanstackStart({
-      target: 'vercel',
       srcDirectory: 'app',
       router: {
         routesDirectory: 'routes',

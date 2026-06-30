@@ -1,12 +1,12 @@
 import {Zero} from '@rocicorp/zero';
 import {ZeroProvider} from '@rocicorp/zero/react';
-import {schema} from 'zero/schema';
-import {useCallback} from 'react';
 import {useRouter} from '@tanstack/react-router';
-import {mutators} from 'zero/mutators';
-import {must} from 'shared/must';
-import {queries} from 'zero/queries';
 import {authClient} from 'auth/client';
+import {useCallback, useMemo} from 'react';
+import {must} from 'shared/must';
+import {mutators} from 'zero/mutators';
+import {queries} from 'zero/queries';
+import {schema} from 'zero/schema';
 
 const cacheURL = must(
   import.meta.env.VITE_PUBLIC_ZERO_CACHE_URL,
@@ -18,8 +18,11 @@ const logLevel = import.meta.env.VITE_PUBLIC_ZERO_LOG_LEVEL;
 export function ZeroInit({children}: {children: React.ReactNode}) {
   const router = useRouter();
   const session = authClient.useSession();
-  const context = session.data ? {userId: session.data.user.id} : undefined;
   const userID = session.data?.user.id ?? null;
+  const context = useMemo(
+    () => (userID === null ? undefined : {userId: userID}),
+    [userID],
+  );
 
   const init = useCallback(
     (zero: Zero) => {
