@@ -17,6 +17,8 @@ export const queries = defineQueries({
     zql.artist.orderBy('popularity', 'desc').limit(1_000),
   ),
 
+  zeroOnlyProbe: defineQuery(() => zql.zeroOnlyProbe.limit(1)),
+
   getHomepageArtists: defineQuery(
     z.object({
       search: z.string().optional(),

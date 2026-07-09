@@ -2,6 +2,7 @@ import {createFileRoute, useRouter} from '@tanstack/react-router';
 import {useEffect, useState, useCallback, useMemo, useRef} from 'react';
 import {Link} from 'app/components/link';
 import {queries, StartRow} from 'zero/queries';
+import {useQuery} from '@rocicorp/zero/react';
 import {
   useHistoryScrollState,
   useZeroVirtualizer,
@@ -20,6 +21,7 @@ export const Route = createFileRoute('/_layout/')({
   },
   loaderDeps: ({search}) => ({q: search.q}),
   loader: async ({context, deps: {q}}) => {
+    context.zero?.run(queries.zeroOnlyProbe());
     context.zero?.run(queries.getHomepageArtists({search: q}));
   },
 });
@@ -42,6 +44,7 @@ function getOptions(settled: boolean) {
 
 function Home() {
   const router = useRouter();
+  useQuery(queries.zeroOnlyProbe());
 
   const qs = Route.useSearch();
   const searchParam = qs.q ?? '';
