@@ -5,3 +5,4 @@ allowBuilds:
   protobufjs: true
 minimumReleaseAgeExclude:
   - '@rocicorp/zero'
+  - drizzle-zero@0.20.0

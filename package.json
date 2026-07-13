@@ -14,7 +14,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@rocicorp/zero": "1.7.0",
+    "@rocicorp/zero": "1.8.0",
     "@rocicorp/zero-virtual": "^0.4.2",
     "@tanstack/react-router": "1.170.4",
     "@tanstack/react-start": "1.168.6",
@@ -22,7 +22,7 @@
     "better-auth": "^1.2.8",
     "dotenv": "^16.5.0",
     "dotenv-expand": "^12.0.2",
-    "drizzle-orm": "^0.44.1",
+    "drizzle-orm": "^0.45.2",
     "nanoid": "^5.1.5",
     "nitro": "3.0.260603-beta",
     "pg": "^8.16.0",
@@ -40,7 +40,7 @@
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.1.2",
     "drizzle-kit": "^0.31.1",
-    "drizzle-zero": "0.17.4",
+    "drizzle-zero": "0.20.0",
     "prettier": "^3.5.3",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
