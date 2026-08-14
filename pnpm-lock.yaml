@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@rocicorp/zero':
-        specifier: 1.9.0-canary.10
-        version: 1.9.0-canary.10(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))
+        specifier: 1.9.0
+        version: 1.9.0(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))
       '@rocicorp/zero-virtual':
         specifier: ^0.4.2
-        version: 0.4.2(@rocicorp/zero@1.9.0-canary.10(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@tanstack/react-virtual@3.13.24(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@tanstack/virtual-core@3.14.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: 0.4.2(@rocicorp/zero@1.9.0(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@tanstack/react-virtual@3.13.24(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@tanstack/virtual-core@3.14.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@tanstack/react-router':
         specifier: 1.170.4
         version: 1.170.4(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -83,7 +83,7 @@ importers:
         version: 0.31.10
       drizzle-zero:
         specifier: 0.20.0
-        version: 0.20.0(@rocicorp/zero@1.9.0-canary.10(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@types/pg@8.20.0)(drizzle-orm@0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(kysely@0.28.17)(pg@8.20.0)(postgres@3.4.7))(pg@8.20.0)(postgres@3.4.7)(prettier@3.8.3)
+        version: 0.20.0(@rocicorp/zero@1.9.0(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@types/pg@8.20.0)(drizzle-orm@0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(kysely@0.28.17)(pg@8.20.0)(postgres@3.4.7))(pg@8.20.0)(postgres@3.4.7)(prettier@3.8.3)
       prettier:
         specifier: ^3.5.3
         version: 3.8.3
@@ -1736,8 +1736,8 @@ packages:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
 
-  '@rocicorp/zero@1.9.0-canary.10':
-    resolution: {integrity: sha512-FKTyB2ouydfW1TqSzOfRS5KR0Bvgb/H/V7VyqD80qf/NgmURtrij7s+8I9GngaSMVCc/oOg37CzjOPUeFTP4yg==}
+  '@rocicorp/zero@1.9.0':
+    resolution: {integrity: sha512-2huSS0rHOEfzjPP5K7SrndBuJfchhBCW3VHiSnPhTpmtH9ivvA44jqbBygCN9/d44pP9T2dzNxghiYiIWGMn5A==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -5755,15 +5755,15 @@ snapshots:
     dependencies:
       node-gyp-build: 4.8.4
 
-  '@rocicorp/zero-virtual@0.4.2(@rocicorp/zero@1.9.0-canary.10(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@tanstack/react-virtual@3.13.24(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@tanstack/virtual-core@3.14.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@rocicorp/zero-virtual@0.4.2(@rocicorp/zero@1.9.0(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@tanstack/react-virtual@3.13.24(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@tanstack/virtual-core@3.14.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
-      '@rocicorp/zero': 1.9.0-canary.10(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))
+      '@rocicorp/zero': 1.9.0(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))
       '@tanstack/react-virtual': 3.13.24(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@tanstack/virtual-core': 3.14.0
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
 
-  '@rocicorp/zero@1.9.0-canary.10(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))':
+  '@rocicorp/zero@1.9.0(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))':
     dependencies:
       '@badrap/valita': 0.3.11
       '@databases/escape-identifier': 1.0.3
@@ -6690,9 +6690,9 @@ snapshots:
       pg: 8.20.0
       postgres: 3.4.7
 
-  drizzle-zero@0.20.0(@rocicorp/zero@1.9.0-canary.10(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@types/pg@8.20.0)(drizzle-orm@0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(kysely@0.28.17)(pg@8.20.0)(postgres@3.4.7))(pg@8.20.0)(postgres@3.4.7)(prettier@3.8.3):
+  drizzle-zero@0.20.0(@rocicorp/zero@1.9.0(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@types/pg@8.20.0)(drizzle-orm@0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(kysely@0.28.17)(pg@8.20.0)(postgres@3.4.7))(pg@8.20.0)(postgres@3.4.7)(prettier@3.8.3):
     dependencies:
-      '@rocicorp/zero': 1.9.0-canary.10(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))
+      '@rocicorp/zero': 1.9.0(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))
       camelcase: 9.0.0
       commander: 14.0.3
       drizzle-orm: 0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(kysely@0.28.17)(pg@8.20.0)(postgres@3.4.7)
