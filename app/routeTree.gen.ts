@@ -11,14 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutRouteRouteImport } from './routes/_layout/route'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
-import { Route as ApiOpenapiDotjsonRouteImport } from './routes/api/openapi[.]json'
-import { Route as ApiDocsRouteImport } from './routes/api/docs'
-import { Route as LayoutCartRouteImport } from './routes/_layout/cart'
 import { Route as LayoutArtistRouteImport } from './routes/_layout/artist'
-import { Route as ApiZeroQueryRouteImport } from './routes/api/zero/query'
-import { Route as ApiZeroMutateRouteImport } from './routes/api/zero/mutate'
-import { Route as ApiMutatorsSplatRouteImport } from './routes/api/mutators/$'
+import { Route as LayoutCartRouteImport } from './routes/_layout/cart'
+import { Route as ApiDocsRouteImport } from './routes/api/docs'
+import { Route as ApiOpenapiDotjsonRouteImport } from './routes/api/openapi[.]json'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiMutatorsSplatRouteImport } from './routes/api/mutators/$'
+import { Route as ApiZeroMutateRouteImport } from './routes/api/zero/mutate'
+import { Route as ApiZeroQueryRouteImport } from './routes/api/zero/query'
 
 const LayoutRouteRoute = LayoutRouteRouteImport.update({
   id: '/_layout',
@@ -29,34 +29,29 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LayoutRouteRoute,
 } as any)
-const ApiOpenapiDotjsonRoute = ApiOpenapiDotjsonRouteImport.update({
-  id: '/api/openapi.json',
-  path: '/api/openapi.json',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiDocsRoute = ApiDocsRouteImport.update({
-  id: '/api/docs',
-  path: '/api/docs',
-  getParentRoute: () => rootRouteImport,
+const LayoutArtistRoute = LayoutArtistRouteImport.update({
+  id: '/artist',
+  path: '/artist',
+  getParentRoute: () => LayoutRouteRoute,
 } as any)
 const LayoutCartRoute = LayoutCartRouteImport.update({
   id: '/cart',
   path: '/cart',
   getParentRoute: () => LayoutRouteRoute,
 } as any)
-const LayoutArtistRoute = LayoutArtistRouteImport.update({
-  id: '/artist',
-  path: '/artist',
-  getParentRoute: () => LayoutRouteRoute,
-} as any)
-const ApiZeroQueryRoute = ApiZeroQueryRouteImport.update({
-  id: '/api/zero/query',
-  path: '/api/zero/query',
+const ApiDocsRoute = ApiDocsRouteImport.update({
+  id: '/api/docs',
+  path: '/api/docs',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiZeroMutateRoute = ApiZeroMutateRouteImport.update({
-  id: '/api/zero/mutate',
-  path: '/api/zero/mutate',
+const ApiOpenapiDotjsonRoute = ApiOpenapiDotjsonRouteImport.update({
+  id: '/api/openapi.json',
+  path: '/api/openapi.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiMutatorsSplatRoute = ApiMutatorsSplatRouteImport.update({
@@ -64,9 +59,14 @@ const ApiMutatorsSplatRoute = ApiMutatorsSplatRouteImport.update({
   path: '/api/mutators/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
+const ApiZeroMutateRoute = ApiZeroMutateRouteImport.update({
+  id: '/api/zero/mutate',
+  path: '/api/zero/mutate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiZeroQueryRoute = ApiZeroQueryRouteImport.update({
+  id: '/api/zero/query',
+  path: '/api/zero/query',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -168,19 +168,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof LayoutRouteRoute
     }
-    '/api/openapi.json': {
-      id: '/api/openapi.json'
-      path: '/api/openapi.json'
-      fullPath: '/api/openapi.json'
-      preLoaderRoute: typeof ApiOpenapiDotjsonRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/docs': {
-      id: '/api/docs'
-      path: '/api/docs'
-      fullPath: '/api/docs'
-      preLoaderRoute: typeof ApiDocsRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_layout/artist': {
+      id: '/_layout/artist'
+      path: '/artist'
+      fullPath: '/artist'
+      preLoaderRoute: typeof LayoutArtistRouteImport
+      parentRoute: typeof LayoutRouteRoute
     }
     '/_layout/cart': {
       id: '/_layout/cart'
@@ -189,25 +182,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutCartRouteImport
       parentRoute: typeof LayoutRouteRoute
     }
-    '/_layout/artist': {
-      id: '/_layout/artist'
-      path: '/artist'
-      fullPath: '/artist'
-      preLoaderRoute: typeof LayoutArtistRouteImport
-      parentRoute: typeof LayoutRouteRoute
-    }
-    '/api/zero/query': {
-      id: '/api/zero/query'
-      path: '/api/zero/query'
-      fullPath: '/api/zero/query'
-      preLoaderRoute: typeof ApiZeroQueryRouteImport
+    '/api/docs': {
+      id: '/api/docs'
+      path: '/api/docs'
+      fullPath: '/api/docs'
+      preLoaderRoute: typeof ApiDocsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/zero/mutate': {
-      id: '/api/zero/mutate'
-      path: '/api/zero/mutate'
-      fullPath: '/api/zero/mutate'
-      preLoaderRoute: typeof ApiZeroMutateRouteImport
+    '/api/openapi.json': {
+      id: '/api/openapi.json'
+      path: '/api/openapi.json'
+      fullPath: '/api/openapi.json'
+      preLoaderRoute: typeof ApiOpenapiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/mutators/$': {
@@ -217,11 +210,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiMutatorsSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatRouteImport
+    '/api/zero/mutate': {
+      id: '/api/zero/mutate'
+      path: '/api/zero/mutate'
+      fullPath: '/api/zero/mutate'
+      preLoaderRoute: typeof ApiZeroMutateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/zero/query': {
+      id: '/api/zero/query'
+      path: '/api/zero/query'
+      fullPath: '/api/zero/query'
+      preLoaderRoute: typeof ApiZeroQueryRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
